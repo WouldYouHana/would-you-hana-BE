@@ -172,15 +172,21 @@ public class QnaService {
         commentRepository.delete(comment);
     }
 
-    // 질문 목록
+    // 질문 전체 목록
     public List<Question> getAllQuestions() {
         return questionRepository.findAll();
     }
 
+    // 카테고리별 질문 전체 목록
+//    public List<Question> getAllQuestionsByCategory(Long categoryId) {
+//        return questionRepository.findByCategory_id(categoryId)
+//                .orElseThrow(() -> new EntityNotFoundException("No Question for category"));
+//    }
+
     // 질문 상세
     public QuestionResponseDTO getOneQuestion(Long questionId) {
         Question foundQuestion = questionRepository.findById(questionId)
-                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Question not found"));
         return new QuestionResponseDTO(
                 foundQuestion.getQuestion_id(),
                 foundQuestion.getCustomer_id(),

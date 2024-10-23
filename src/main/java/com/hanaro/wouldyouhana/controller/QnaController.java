@@ -90,7 +90,14 @@ public class QnaController {
         return new ResponseEntity<>(questionList, HttpStatus.OK);
     }
 
-    @GetMapping("/qnalist/{question_id}")
+    // 카테고리별 게시물 전체 조회
+//    @GetMapping("/qnalist/{category_id}")
+//    public ResponseEntity<List<Question>> getAllQuestionsByCategory(@RequestParam Long category_id) {
+//        List<Question> questionByCategoryList = qnaService.getAllQuestionsByCategory(category_id);
+//        return new ResponseEntity<>(questionByCategoryList, HttpStatus.OK);
+//    }
+
+    @GetMapping("/posts/{question_id}")
     public ResponseEntity<QuestionResponseDTO> getOneQuestion(@RequestParam Long question_id) {
         QuestionResponseDTO questionResponseDTO = qnaService.getOneQuestion(question_id);
         return new ResponseEntity<>(questionResponseDTO, HttpStatus.OK);
