@@ -17,7 +17,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long question_id;
+    private Long id;
 
     private Long customer_id;
     private Long category_id;
@@ -32,14 +32,14 @@ public class Question {
     private Integer viewCount;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "question_id")  // 외래 키 설정
+    //@JoinColumn(name = "question_id")  // 외래 키 설정
     private List<Answer> answers;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "question_id")  // 외래 키 설정
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    //@JoinColumn(name = "question_id")  // 외래 키 설정
     private List<Comment> comments;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "question_id")  // 외래 키 설정
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    //@JoinColumn(name = "question_id")  // 외래 키 설정
     private List<Image> images;
 }

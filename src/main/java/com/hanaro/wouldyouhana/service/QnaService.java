@@ -72,7 +72,7 @@ public class QnaService {
 
         // 최종적으로 반환할 DTO 생성
         return new QuestionAllResponseDTO(
-                savedQuestion.getQuestion_id(),
+                savedQuestion.getId(),
                 savedQuestion.getCustomer_id(),
                 savedQuestion.getCategory_id(),
                 savedQuestion.getTitle(),
@@ -124,7 +124,7 @@ public class QnaService {
 
         // 최종적으로 반환할 DTO 생성
         return new QuestionAllResponseDTO(
-                updatedQuestion.getQuestion_id(),
+                updatedQuestion.getId(),
                 updatedQuestion.getCustomer_id(),
                 updatedQuestion.getCategory_id(),
                 updatedQuestion.getTitle(),
@@ -188,7 +188,7 @@ public class QnaService {
         Question foundQuestion = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
         return new QuestionResponseDTO(
-                foundQuestion.getQuestion_id(),
+                foundQuestion.getId(),
                 foundQuestion.getCustomer_id(),
                 foundQuestion.getCategory_id(),
                 foundQuestion.getTitle(),

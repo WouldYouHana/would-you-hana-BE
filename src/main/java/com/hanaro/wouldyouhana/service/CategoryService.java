@@ -24,7 +24,7 @@ public class CategoryService {
 
         // Category를 CategoryDTO로 변환
         return categories.stream()
-                .map(category -> new CategoryDTO(category.getCategory_id(), category.getName()))
+                .map(category -> new CategoryDTO(category.getId(), category.getName()))
                 .collect(Collectors.toList());
     }
 

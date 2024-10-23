@@ -16,7 +16,7 @@ import java.util.List;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long comment_id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "question_id")

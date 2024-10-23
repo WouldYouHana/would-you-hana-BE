@@ -15,14 +15,14 @@ import java.util.List;
 public class Banker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bankerId;
+    private Long id;
 
     private String name;
     private String email;
     private String password;
     private String branchName;
 
-    @OneToMany(mappedBy = "comment_id")
+    @OneToMany(mappedBy = "id")
     private List<Comment> answers;
 
     @ManyToMany
