@@ -23,7 +23,7 @@ public class Image {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    private byte[] field;
+    private String file_path;
 
     // Getters and Setters
 }

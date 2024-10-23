@@ -1,34 +1,64 @@
 package com.hanaro.wouldyouhana.controller;
 
+import com.hanaro.wouldyouhana.domain.Question;
+import com.hanaro.wouldyouhana.dto.ImageResponseDTO;
 import com.hanaro.wouldyouhana.dto.QuestionAddRequest;
 import com.hanaro.wouldyouhana.dto.QuestionResponseDTO;
+import com.hanaro.wouldyouhana.service.ImageService;
 import com.hanaro.wouldyouhana.service.QnaService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 @Controller
 @Slf4j
 public class QnaController {
 
     private final QnaService qnaService;
+    private final ImageService imageService;
 
     @Autowired
-    public QnaController(QnaService qnaService) {
+    public QnaController(QnaService qnaService, ImageService imageService) {
         this.qnaService = qnaService;
+        this.imageService = imageService;
     }
 
+    /**
+     * 질문(게시글) 등록
+     * */
     @PostMapping("/posts")
     public ResponseEntity<QuestionResponseDTO> addNewQuestion(@Valid @RequestBody QuestionAddRequest questionAddRequest) {
         log.info("executed");
         QuestionResponseDTO createdPost = qnaService.addQuestion(questionAddRequest);
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
+
+    /**
+     * 질문(게시글) 사진 등록
+     * */
+    @PostMapping("/posts/image/{question_id}")
+    public ResponseEntity<List<ImageResponseDTO>> uploadImage(
+            @PathVariable Long question_id,
+            @RequestParam("file") List<MultipartFile> file) throws IOException {
+
+        List<ImageResponseDTO> savedImg = imageService.saveImages(file, question_id);
+
+        return new ResponseEntity<>(savedImg, HttpStatus.CREATED);
+    }
+
+
 
     // 댓글 추가
 
