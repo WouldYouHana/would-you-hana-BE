@@ -27,18 +27,13 @@ public class Question {
     private String location;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
+    private Integer likeCount;
+    private Integer scrapCount;
+    private Integer viewCount;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "question_id")  // 외래 키 설정
     private List<Answer> answers;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "question_id")  // 외래 키 설정
-    private List<Likes> likes;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "question_id")  // 외래 키 설정
-    private List<Scrap> scraps;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "question_id")  // 외래 키 설정
