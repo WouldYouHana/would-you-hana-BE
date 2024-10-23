@@ -48,6 +48,19 @@ public class QnaController {
     }
 
     /**
+     * 질문(게시글) 수정
+     * */
+    @PostMapping("/post/modify/{question_id}")
+    public ResponseEntity<QuestionAllResponseDTO> modifyQuestion(@PathVariable Long question_id,
+                                                                 @RequestBody QuestionAddRequest questionAddRequest){
+
+        QuestionAllResponseDTO modifiedPost = qnaService.addQuestion(questionAddRequest);
+        return new ResponseEntity<>(modifiedPost, HttpStatus.CREATED);
+
+    }
+
+
+    /**
      * 질문(게시글) 사진 등록
      * */
 //    @PostMapping("/posts/image/{question_id}")
@@ -58,14 +71,6 @@ public class QnaController {
 //        List<ImageResponseDTO> savedImg = imageService.saveImages(file, question_id);
 //
 //        return new ResponseEntity<>(savedImg, HttpStatus.CREATED);
-//    }
-
-    /**
-     * 질문(게시글) 수정
-     * */
-//    @PostMapping("/post/modify/{question_id}")
-//    public ResponseEntity<QuestionResponseDTO> modifyQuestion(@PathVariable Long question_id,
-//                                                              @RequestBody QuestionAddRequest questionAddRequest){
 //    }
 
 
