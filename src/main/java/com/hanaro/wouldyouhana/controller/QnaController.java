@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @Slf4j
@@ -34,10 +35,8 @@ public class QnaController {
         this.qnaService = qnaService;
         this.imageService = imageService;
     }
-
-    /**
-     * 질문(게시글) 등록
-     * */
+    
+    // 질문 추가
     @PostMapping("/posts")
     public ResponseEntity<QuestionResponseDTO> addNewQuestion(@Valid @RequestBody QuestionAddRequest questionAddRequest) {
         log.info("executed");
@@ -57,9 +56,7 @@ public class QnaController {
 
         return new ResponseEntity<>(savedImg, HttpStatus.CREATED);
     }
-
-
-
+    
     // 댓글 추가
 
 
@@ -67,4 +64,17 @@ public class QnaController {
 
 
     // 댓글 삭제
+
+    // 게시물 전체 조회
+    @GetMapping("/qnalist")
+    public ResponseEntity<List<Question>> getAllQuestions() {
+        List<Question> questionList = qnaService.getAllQuestions();
+        return new ResponseEntity<>(questionList, HttpStatus.OK);
+    }
+
+    @GetMapping("/qnalist/{question_id}")
+    public ResponseEntity<QuestionResponseDTO> getOneQuestion(@RequestParam Long question_id) {
+        QuestionResponseDTO questionResponseDTO = qnaService.getOneQuestion(question_id);
+        return new ResponseEntity<>(questionResponseDTO, HttpStatus.OK);
+    }
 }
