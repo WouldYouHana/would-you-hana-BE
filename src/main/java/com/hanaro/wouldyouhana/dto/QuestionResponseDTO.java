@@ -1,22 +1,20 @@
 package com.hanaro.wouldyouhana.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.validation.constraints.*;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class QuestionAddRequest {
-
-    @NotNull
-    private String title;
-    @NotNull
+@AllArgsConstructor
+public class QuestionResponseDTO {
+    private Long question_id;
     private Long customer_id;
-    @NotNull
     private Long category_id;
-    @NotNull
+    private String title;
     private String content;
-    @NotNull
     private String location;
-
+    private LocalDateTime created_at;
 }

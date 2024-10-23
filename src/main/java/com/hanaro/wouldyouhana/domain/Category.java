@@ -3,8 +3,6 @@ package com.hanaro.wouldyouhana.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
@@ -15,7 +13,7 @@ import java.util.List;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer category_id;
+    private Long category_id;
 
     private String name;
 

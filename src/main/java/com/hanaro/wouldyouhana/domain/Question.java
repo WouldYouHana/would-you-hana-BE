@@ -1,6 +1,5 @@
 package com.hanaro.wouldyouhana.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,7 +17,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer question_id;
+    private Long question_id;
 
     private Long customer_id;
 

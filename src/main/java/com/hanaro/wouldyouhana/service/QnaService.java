@@ -5,6 +5,7 @@ import com.hanaro.wouldyouhana.domain.Comment;
 import com.hanaro.wouldyouhana.domain.Question;
 import com.hanaro.wouldyouhana.domain.Customer;
 import com.hanaro.wouldyouhana.dto.QuestionAddRequest;
+import com.hanaro.wouldyouhana.dto.QuestionResponseDTO;
 import com.hanaro.wouldyouhana.repository.CategoryRepository;
 import com.hanaro.wouldyouhana.repository.CommentRepository;
 import com.hanaro.wouldyouhana.repository.CustomerRepository;
@@ -33,14 +34,12 @@ public class QnaService {
         this.commentRepository = commentRepository;
     }
 
-
-    public List<Question> getAllPosts() {
-    return questionRepository.findAll();
-    }
-
-    public Question addQuestion(QuestionAddRequest questionAddRequest) {
+    /**
+     * 질문 등록
+     * */
+    public QuestionResponseDTO addQuestion(QuestionAddRequest questionAddRequest) {
         // 고객과 카테고리를 데이터베이스에서 조회
-        Category category = categoryRepository.findById(1L) // 예시로 1L 사용
+        Category category = categoryRepository.findById(questionAddRequest.getCategory_id())
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
         Question question = Question.builder()
@@ -48,11 +47,21 @@ public class QnaService {
                 .category(category)
                 .title(questionAddRequest.getTitle())
                 .content(questionAddRequest.getContent())
-                .location("서울시 성북구")
+                .location(questionAddRequest.getLocation())
                 .created_at(LocalDateTime.now())
                 .build();
 
-        return questionRepository.save(question);
+        Question savedQuestion = questionRepository.save(question);
+
+        return new QuestionResponseDTO(
+                savedQuestion.getQuestion_id(),
+                savedQuestion.getCustomer_id(),
+                savedQuestion.getCategory().getCategory_id(),
+                savedQuestion.getTitle(),
+                savedQuestion.getContent(),
+                savedQuestion.getLocation(),
+                savedQuestion.getCreated_at()
+        );
     }
 
     // 댓글 추가
