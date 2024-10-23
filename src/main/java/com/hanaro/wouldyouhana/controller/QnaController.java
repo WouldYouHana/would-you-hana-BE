@@ -3,6 +3,7 @@ package com.hanaro.wouldyouhana.controller;
 import com.hanaro.wouldyouhana.domain.Question;
 import com.hanaro.wouldyouhana.dto.ImageResponseDTO;
 import com.hanaro.wouldyouhana.dto.QuestionAddRequest;
+import com.hanaro.wouldyouhana.dto.QuestionAllResponseDTO;
 import com.hanaro.wouldyouhana.dto.QuestionResponseDTO;
 import com.hanaro.wouldyouhana.service.ImageService;
 import com.hanaro.wouldyouhana.service.QnaService;
@@ -35,28 +36,39 @@ public class QnaController {
         this.qnaService = qnaService;
         this.imageService = imageService;
     }
-    
-    // 질문 추가
+
+    /**
+     * 질문(게시글) 등록
+     * */
     @PostMapping("/posts")
-    public ResponseEntity<QuestionResponseDTO> addNewQuestion(@Valid @RequestBody QuestionAddRequest questionAddRequest) {
+    public ResponseEntity<QuestionAllResponseDTO> addNewQuestion(@Valid @RequestBody QuestionAddRequest questionAddRequest) {
         log.info("executed");
-        QuestionResponseDTO createdPost = qnaService.addQuestion(questionAddRequest);
+        QuestionAllResponseDTO createdPost = qnaService.addQuestion(questionAddRequest);
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
 
     /**
      * 질문(게시글) 사진 등록
      * */
-    @PostMapping("/posts/image/{question_id}")
-    public ResponseEntity<List<ImageResponseDTO>> uploadImage(
-            @PathVariable Long question_id,
-            @RequestParam("file") List<MultipartFile> file) throws IOException {
+//    @PostMapping("/posts/image/{question_id}")
+//    public ResponseEntity<List<ImageResponseDTO>> uploadImage(
+//            @PathVariable Long question_id,
+//            @RequestParam("file") List<MultipartFile> file) throws IOException {
+//
+//        List<ImageResponseDTO> savedImg = imageService.saveImages(file, question_id);
+//
+//        return new ResponseEntity<>(savedImg, HttpStatus.CREATED);
+//    }
 
-        List<ImageResponseDTO> savedImg = imageService.saveImages(file, question_id);
+    /**
+     * 질문(게시글) 수정
+     * */
+//    @PostMapping("/post/modify/{question_id}")
+//    public ResponseEntity<QuestionResponseDTO> modifyQuestion(@PathVariable Long question_id,
+//                                                              @RequestBody QuestionAddRequest questionAddRequest){
+//    }
 
-        return new ResponseEntity<>(savedImg, HttpStatus.CREATED);
-    }
-    
+
     // 댓글 추가
 
 
@@ -64,6 +76,7 @@ public class QnaController {
 
 
     // 댓글 삭제
+
 
     // 게시물 전체 조회
     @GetMapping("/qnalist")

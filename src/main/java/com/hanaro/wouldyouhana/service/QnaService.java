@@ -1,15 +1,14 @@
 package com.hanaro.wouldyouhana.service;
 
 import com.hanaro.wouldyouhana.domain.Comment;
+import com.hanaro.wouldyouhana.domain.Image;
 import com.hanaro.wouldyouhana.domain.Question;
 import com.hanaro.wouldyouhana.domain.Customer;
 import com.hanaro.wouldyouhana.dto.ImageResponseDTO;
 import com.hanaro.wouldyouhana.dto.QuestionAddRequest;
+import com.hanaro.wouldyouhana.dto.QuestionAllResponseDTO;
 import com.hanaro.wouldyouhana.dto.QuestionResponseDTO;
-import com.hanaro.wouldyouhana.repository.CategoryRepository;
-import com.hanaro.wouldyouhana.repository.CommentRepository;
-import com.hanaro.wouldyouhana.repository.CustomerRepository;
-import com.hanaro.wouldyouhana.repository.QuestionRepository;
+import com.hanaro.wouldyouhana.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,20 +26,23 @@ public class QnaService {
     private final CustomerRepository customerRepository;
     private final CategoryRepository categoryRepository;
     private final CommentRepository commentRepository;
+    private final ImageRepository imageRepository;
 
     @Autowired
-    public QnaService(QuestionRepository questionRepository, CustomerRepository customerRepository, CategoryRepository categoryRepository, CommentRepository commentRepository) {
+    public QnaService(QuestionRepository questionRepository, CustomerRepository customerRepository, CategoryRepository categoryRepository, CommentRepository commentRepository,
+                      ImageRepository imageRepository) {
         this.questionRepository = questionRepository;
         this.customerRepository = customerRepository;
         this.categoryRepository = categoryRepository;
         this.commentRepository = commentRepository;
+        this.imageRepository = imageRepository;
     }
 
     /**
      * 질문(게시글) 등록
      * */
-    public QuestionResponseDTO addQuestion(QuestionAddRequest questionAddRequest) {
-      
+    public QuestionAllResponseDTO addQuestion(QuestionAddRequest questionAddRequest) {
+        // 질문 엔티티 생성
         Question question = Question.builder()
                 .customer_id(questionAddRequest.getCustomer_id())
                 .category_id(questionAddRequest.getCategory_id())
@@ -50,19 +52,90 @@ public class QnaService {
                 .created_at(LocalDateTime.now())
                 .build();
 
+        // 질문 저장
         Question savedQuestion = questionRepository.save(question);
 
-        return new QuestionResponseDTO(
+        // 이미지 파일 경로가 있을 경우
+        if (questionAddRequest.getFile() != null) {
+            for (String filePath : questionAddRequest.getFile()) {
+                Image image = Image.builder()
+                        .file_path(filePath) // 파일 경로 설정
+                        .question(savedQuestion) // 질문과 연결
+                        .build();
+                // 이미지 저장
+                imageRepository.save(image);
+            }
+        }
+
+        // 최종적으로 반환할 DTO 생성
+        return new QuestionAllResponseDTO(
                 savedQuestion.getQuestion_id(),
                 savedQuestion.getCustomer_id(),
                 savedQuestion.getCategory_id(),
                 savedQuestion.getTitle(),
                 savedQuestion.getContent(),
                 savedQuestion.getLocation(),
-                savedQuestion.getCreated_at()
+                savedQuestion.getCreated_at(),
+                savedQuestion.getUpdated_at(), // 추가: 업데이트 시간
+                0, // likeCount (초기값)
+                0, // scrapCount (초기값)
+                0, // viewCount (초기값)
+                questionAddRequest.getFile() // 파일 경로 리스트 추가
         );
     }
 
+
+    /**
+     * 질문(게시글) 수정
+     * */
+//    public QuestionAllResponseDTO modifyQuestion(QuestionAddRequest questionAddRequest, Long question_id){
+//
+//        // 기존 질문 엔티티 조회
+//        Question question = questionRepository.findById(question_id)
+//                .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+//
+//        // 질문 정보 수정
+//        question.setTitle(questionAddRequest.getTitle());
+//        question.setContent(questionAddRequest.getContent());
+//        question.setLocation(questionAddRequest.getLocation());
+//        question.setUpdated_at(LocalDateTime.now()); // 수정 시간 업데이트
+//
+//        // 질문 저장
+//        Question updatedQuestion = questionRepository.save(question);
+//
+//        // 기존 이미지 삭제 (선택적으로, 모든 이미지를 삭제하려는 경우)
+//        imageRepository.deleteAllByQuestionId(question_id);
+//
+//        // 새로운 이미지 파일 경로가 있을 경우
+//        if (questionAddRequest.getFile() != null) {
+//            for (String filePath : questionAddRequest.getFile()) {
+//                Image image = Image.builder()
+//                        .file_path(filePath) // 파일 경로 설정
+//                        .question(updatedQuestion) // 질문과 연결
+//                        .build();
+//                // 이미지 저장
+//                imageRepository.save(image);
+//            }
+//        }
+//
+//        // 최종적으로 반환할 DTO 생성
+//        return new QuestionAllResponseDTO(
+//                updatedQuestion.getQuestion_id(),
+//                updatedQuestion.getCustomer_id(),
+//                updatedQuestion.getCategory_id(),
+//                updatedQuestion.getTitle(),
+//                updatedQuestion.getContent(),
+//                updatedQuestion.getLocation(),
+//                updatedQuestion.getCreated_at(),
+//                updatedQuestion.getUpdated_at(), // 업데이트 시간
+//                updatedQuestion.getLikes(), // likeCount (초기값)
+//                0, // scrapCount (초기값)
+//                0, // viewCount (초기값)
+//                questionAddRequest.getFile() // 파일 경로 리스트 추가
+//        );
+//
+//
+//    }
 
 
     // 댓글 추가
@@ -115,4 +188,5 @@ public class QnaService {
                 foundQuestion.getCreated_at()
         );
     }
+
 }

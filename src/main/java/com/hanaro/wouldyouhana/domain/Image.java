@@ -24,6 +24,4 @@ public class Image {
     private Customer customer;
 
     private String file_path;
-
-    // Getters and Setters
 }

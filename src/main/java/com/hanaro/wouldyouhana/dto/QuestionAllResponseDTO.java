@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class QuestionResponseDTO {
+public class QuestionAllResponseDTO {
+
     private Long question_id;
     private Long customer_id;
     private Long category_id;
@@ -17,6 +19,10 @@ public class QuestionResponseDTO {
     private String content;
     private String location;
     private LocalDateTime created_at;
-
+    private LocalDateTime updated_at;
+    private Integer likeCount;
+    private Integer scrapCount;
+    private Integer viewCount;
+    private List<String> file;
 
 }
