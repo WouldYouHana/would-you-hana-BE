@@ -27,15 +27,17 @@ public class QnaService {
     private final CategoryRepository categoryRepository;
     private final CommentRepository commentRepository;
     private final ImageRepository imageRepository;
+    private final FileStorageService fileStorageService;
 
     @Autowired
     public QnaService(QuestionRepository questionRepository, CustomerRepository customerRepository, CategoryRepository categoryRepository, CommentRepository commentRepository,
-                      ImageRepository imageRepository) {
+                      ImageRepository imageRepository, FileStorageService fileStorageService) {
         this.questionRepository = questionRepository;
         this.customerRepository = customerRepository;
         this.categoryRepository = categoryRepository;
         this.commentRepository = commentRepository;
         this.imageRepository = imageRepository;
+        this.fileStorageService = fileStorageService;
     }
 
     /**
@@ -55,9 +57,10 @@ public class QnaService {
         // 질문 저장
         Question savedQuestion = questionRepository.save(question);
 
-        // 이미지 파일 경로가 있을 경우
         if (questionAddRequest.getFile() != null) {
-            for (String filePath : questionAddRequest.getFile()) {
+            for (MultipartFile file : questionAddRequest.getFile()) {
+                // 파일 시스템에 저장 로직 추가
+                String filePath = fileStorageService.saveFile(file); // 파일 저장 후 경로를 반환하는 메서드
                 Image image = Image.builder()
                         .file_path(filePath) // 파일 경로 설정
                         .question(savedQuestion) // 질문과 연결
@@ -80,7 +83,7 @@ public class QnaService {
                 0, // likeCount (초기값)
                 0, // scrapCount (초기값)
                 0, // viewCount (초기값)
-                questionAddRequest.getFile() // 파일 경로 리스트 추가
+                questionAddRequest.getFile().stream().map(MultipartFile::getOriginalFilename).toList()
         );
     }
 
@@ -88,8 +91,7 @@ public class QnaService {
     /**
      * 질문(게시글) 수정
      * */
-    public QuestionAllResponseDTO modifyQuestion(QuestionAddRequest questionAddRequest, Long question_id){
-
+    public QuestionAllResponseDTO modifyQuestion(QuestionAddRequest questionAddRequest, Long question_id) {
         // 기존 질문 엔티티 조회
         Question question = questionRepository.findById(question_id)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
@@ -103,12 +105,14 @@ public class QnaService {
         // 질문 저장
         Question updatedQuestion = questionRepository.save(question);
 
-        // 기존 이미지 삭제 (선택적으로, 모든 이미지를 삭제하려는 경우)
+        // 기존 이미지 삭제
         imageRepository.deleteAllByQuestionId(question_id);
 
-        // 새로운 이미지 파일 경로가 있을 경우
+        // 새로운 이미지 파일 처리
         if (questionAddRequest.getFile() != null) {
-            for (String filePath : questionAddRequest.getFile()) {
+            for (MultipartFile file : questionAddRequest.getFile()) {
+                // 파일 시스템에 저장 로직 추가
+                String filePath = fileStorageService.saveFile(file); // 파일 저장 후 경로를 반환하는 메서드
                 Image image = Image.builder()
                         .file_path(filePath) // 파일 경로 설정
                         .question(updatedQuestion) // 질문과 연결
@@ -131,11 +135,10 @@ public class QnaService {
                 updatedQuestion.getLikeCount(), // likeCount (초기값)
                 updatedQuestion.getScrapCount(), // scrapCount (초기값)
                 updatedQuestion.getViewCount(), // viewCount (초기값)
-                questionAddRequest.getFile() // 파일 경로 리스트 추가
+                questionAddRequest.getFile().stream().map(MultipartFile::getOriginalFilename).toList() // 파일 이름 리스트 추가
         );
-
-
     }
+
 
 
     // 댓글 추가
