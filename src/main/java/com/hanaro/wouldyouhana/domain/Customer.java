@@ -14,13 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name="Customer")
+@Table(name="customer")
 public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // 고객id
-    private Integer customer_id;
+    private Long customer_id;
 
     // 이메일
     @Column
@@ -48,7 +48,7 @@ public class Customer {
 
     // 경험치
     @Column
-    private Integer experience_points;
+    private Long experience_points;
 
     // 가입일자
     @CreatedDate
@@ -63,13 +63,13 @@ public class Customer {
     @Column
     private String birth_date;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer_id")
     @JsonManagedReference
     private List<Question> questions;
 
     @ManyToMany
     @JoinTable(
-            name = "CustomerSpecialization",
+            name = "customerSpecialization",
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "specialization_id")
     )
