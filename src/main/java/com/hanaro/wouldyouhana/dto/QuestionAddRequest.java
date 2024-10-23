@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.validation.constraints.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,6 +24,6 @@ public class QuestionAddRequest {
     @NotNull
     private String content;
 
-    private List<String> file;
+    private List<MultipartFile> file;
 
 }
