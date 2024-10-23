@@ -4,6 +4,7 @@ import com.hanaro.wouldyouhana.domain.Category;
 import com.hanaro.wouldyouhana.domain.Comment;
 import com.hanaro.wouldyouhana.domain.Question;
 import com.hanaro.wouldyouhana.domain.Customer;
+import com.hanaro.wouldyouhana.dto.ImageResponseDTO;
 import com.hanaro.wouldyouhana.dto.QuestionAddRequest;
 import com.hanaro.wouldyouhana.dto.QuestionResponseDTO;
 import com.hanaro.wouldyouhana.repository.CategoryRepository;
@@ -14,6 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,7 +37,7 @@ public class QnaService {
     }
 
     /**
-     * 질문 등록
+     * 질문(게시글) 등록
      * */
     public QuestionResponseDTO addQuestion(QuestionAddRequest questionAddRequest) {
         // 고객과 카테고리를 데이터베이스에서 조회
@@ -64,8 +66,10 @@ public class QnaService {
         );
     }
 
+
+
     // 댓글 추가
-    public Comment addComment(Integer questionId, Long customerId, String content) {
+    public Comment addComment(Long questionId, Long customerId, String content) {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
@@ -83,7 +87,7 @@ public class QnaService {
     }
 
     // 게시글에 대한 댓글 가져오기
-    public List<Comment> getCommentsByQuestionId(Integer questionId) {
+    public List<Comment> getCommentsByQuestionId(Long questionId) {
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new EntityNotFoundException("question not found"));
         return commentRepository.findByQuestion(question);
     }

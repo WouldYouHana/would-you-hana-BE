@@ -17,4 +17,5 @@ public class QuestionResponseDTO {
     private String content;
     private String location;
     private LocalDateTime created_at;
+
 }

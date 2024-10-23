@@ -18,7 +18,5 @@ public class QuestionAddRequest {
     private String location;
     @NotNull
     private String content;
-    @NotNull
-    private String location;
 
 }
