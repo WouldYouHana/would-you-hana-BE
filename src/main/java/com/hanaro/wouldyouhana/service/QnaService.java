@@ -88,54 +88,54 @@ public class QnaService {
     /**
      * 질문(게시글) 수정
      * */
-//    public QuestionAllResponseDTO modifyQuestion(QuestionAddRequest questionAddRequest, Long question_id){
-//
-//        // 기존 질문 엔티티 조회
-//        Question question = questionRepository.findById(question_id)
-//                .orElseThrow(() -> new EntityNotFoundException("Question not found"));
-//
-//        // 질문 정보 수정
-//        question.setTitle(questionAddRequest.getTitle());
-//        question.setContent(questionAddRequest.getContent());
-//        question.setLocation(questionAddRequest.getLocation());
-//        question.setUpdated_at(LocalDateTime.now()); // 수정 시간 업데이트
-//
-//        // 질문 저장
-//        Question updatedQuestion = questionRepository.save(question);
-//
-//        // 기존 이미지 삭제 (선택적으로, 모든 이미지를 삭제하려는 경우)
-//        imageRepository.deleteAllByQuestionId(question_id);
-//
-//        // 새로운 이미지 파일 경로가 있을 경우
-//        if (questionAddRequest.getFile() != null) {
-//            for (String filePath : questionAddRequest.getFile()) {
-//                Image image = Image.builder()
-//                        .file_path(filePath) // 파일 경로 설정
-//                        .question(updatedQuestion) // 질문과 연결
-//                        .build();
-//                // 이미지 저장
-//                imageRepository.save(image);
-//            }
-//        }
-//
-//        // 최종적으로 반환할 DTO 생성
-//        return new QuestionAllResponseDTO(
-//                updatedQuestion.getQuestion_id(),
-//                updatedQuestion.getCustomer_id(),
-//                updatedQuestion.getCategory_id(),
-//                updatedQuestion.getTitle(),
-//                updatedQuestion.getContent(),
-//                updatedQuestion.getLocation(),
-//                updatedQuestion.getCreated_at(),
-//                updatedQuestion.getUpdated_at(), // 업데이트 시간
-//                updatedQuestion.getLikes(), // likeCount (초기값)
-//                0, // scrapCount (초기값)
-//                0, // viewCount (초기값)
-//                questionAddRequest.getFile() // 파일 경로 리스트 추가
-//        );
-//
-//
-//    }
+    public QuestionAllResponseDTO modifyQuestion(QuestionAddRequest questionAddRequest, Long question_id){
+
+        // 기존 질문 엔티티 조회
+        Question question = questionRepository.findById(question_id)
+                .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+
+        // 질문 정보 수정
+        question.setTitle(questionAddRequest.getTitle());
+        question.setContent(questionAddRequest.getContent());
+        question.setLocation(questionAddRequest.getLocation());
+        question.setUpdated_at(LocalDateTime.now()); // 수정 시간 업데이트
+
+        // 질문 저장
+        Question updatedQuestion = questionRepository.save(question);
+
+        // 기존 이미지 삭제 (선택적으로, 모든 이미지를 삭제하려는 경우)
+        imageRepository.deleteAllByQuestionId(question_id);
+
+        // 새로운 이미지 파일 경로가 있을 경우
+        if (questionAddRequest.getFile() != null) {
+            for (String filePath : questionAddRequest.getFile()) {
+                Image image = Image.builder()
+                        .file_path(filePath) // 파일 경로 설정
+                        .question(updatedQuestion) // 질문과 연결
+                        .build();
+                // 이미지 저장
+                imageRepository.save(image);
+            }
+        }
+
+        // 최종적으로 반환할 DTO 생성
+        return new QuestionAllResponseDTO(
+                updatedQuestion.getQuestion_id(),
+                updatedQuestion.getCustomer_id(),
+                updatedQuestion.getCategory_id(),
+                updatedQuestion.getTitle(),
+                updatedQuestion.getContent(),
+                updatedQuestion.getLocation(),
+                updatedQuestion.getCreated_at(),
+                updatedQuestion.getUpdated_at(), // 업데이트 시간
+                updatedQuestion.getLikeCount(), // likeCount (초기값)
+                updatedQuestion.getScrapCount(), // scrapCount (초기값)
+                updatedQuestion.getViewCount(), // viewCount (초기값)
+                questionAddRequest.getFile() // 파일 경로 리스트 추가
+        );
+
+
+    }
 
 
     // 댓글 추가
