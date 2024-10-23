@@ -13,7 +13,7 @@ import lombok.*;
 public class Scrap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer scrap_id;
+    private Long scrap_id;
 
     @ManyToOne
     @JoinColumn(name = "question_id")

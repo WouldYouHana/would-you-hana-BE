@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class Likes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer like_id;
+    private Long like_id;
 
     @ManyToOne
     @JoinColumn(name = "question_id")  // 게시글 ID

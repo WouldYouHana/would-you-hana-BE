@@ -15,6 +15,8 @@ public class QuestionAddRequest {
     @NotNull
     private Long category_id;
     @NotNull
+    private String location;
+    @NotNull
     private String content;
 
 }
