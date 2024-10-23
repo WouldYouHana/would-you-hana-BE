@@ -1,6 +1,5 @@
 package com.hanaro.wouldyouhana.service;
 
-import com.hanaro.wouldyouhana.domain.Category;
 import com.hanaro.wouldyouhana.domain.Comment;
 import com.hanaro.wouldyouhana.domain.Question;
 import com.hanaro.wouldyouhana.domain.Customer;
@@ -41,10 +40,10 @@ public class QnaService {
         // 고객과 카테고리를 데이터베이스에서 조회
         Category category = categoryRepository.findById(questionAddRequest.getCategory_id())
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
-
+      
         Question question = Question.builder()
                 .customer_id(questionAddRequest.getCustomer_id())
-                .category(category)
+                .category_id(questionAddRequest.getCategory_id())
                 .title(questionAddRequest.getTitle())
                 .content(questionAddRequest.getContent())
                 .location(questionAddRequest.getLocation())

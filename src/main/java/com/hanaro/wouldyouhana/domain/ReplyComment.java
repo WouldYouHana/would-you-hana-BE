@@ -13,7 +13,7 @@ import lombok.*;
 public class ReplyComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer replyId;
+    private Long replyId;
 
     @ManyToOne
     @JoinColumn(name = "comment_id")

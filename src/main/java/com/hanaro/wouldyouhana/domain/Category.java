@@ -17,8 +17,8 @@ public class Category {
 
     private String name;
 
-//    @OneToMany(mappedBy = "question_id", cascade = CascadeType.ALL)
-//    private List<Question> questions;
+    @OneToMany(mappedBy = "question_id", cascade = CascadeType.ALL)
+    private List<Question> questions;
 
     // Getters and Setters
 }

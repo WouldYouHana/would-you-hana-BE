@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "Post")
+@Table(name = "Question")
 public class Question {
 
     @Id
@@ -20,10 +20,7 @@ public class Question {
     private Long question_id;
 
     private Long customer_id;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    private Long category_id;
 
     private String title;
     private String content;
@@ -31,18 +28,23 @@ public class Question {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
-    @OneToMany(mappedBy="question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "question_id")  // 외래 키 설정
     private List<Answer> answers;
 
-    @OneToMany(mappedBy="question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "question_id")  // 외래 키 설정
     private List<Likes> likes;
 
-    @OneToMany(mappedBy="question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "question_id")  // 외래 키 설정
     private List<Scrap> scraps;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "question_id")  // 외래 키 설정
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "question_id")  // 외래 키 설정
     private List<Image> images;
 }
