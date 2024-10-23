@@ -1,5 +1,6 @@
 package com.hanaro.wouldyouhana.service;
 
+import com.hanaro.wouldyouhana.domain.Category;
 import com.hanaro.wouldyouhana.domain.Comment;
 import com.hanaro.wouldyouhana.domain.Question;
 import com.hanaro.wouldyouhana.domain.Customer;
@@ -55,7 +56,7 @@ public class QnaService {
         return new QuestionResponseDTO(
                 savedQuestion.getQuestion_id(),
                 savedQuestion.getCustomer_id(),
-                savedQuestion.getCategory().getCategory_id(),
+                savedQuestion.getCategory_id(),
                 savedQuestion.getTitle(),
                 savedQuestion.getContent(),
                 savedQuestion.getLocation(),
