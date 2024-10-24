@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -44,19 +45,19 @@ public class LikesScrapController {
     /**
      * 스크랩 게시글 조회 (최신순)
      * */
-    @GetMapping("mypage/getScrap")
-    public ResponseEntity<List<LikesScrapResponseDTO>> getScrap(@RequestBody Long customner_id){
+    @GetMapping("mypage/getScrap/{customerId}")
+    public ResponseEntity<List<LikesScrapResponseDTO>> getScrap(@PathVariable Long customerId){
 
-        return ResponseEntity.ok(likesScrapService.getScrap(customner_id));
+        return ResponseEntity.ok(likesScrapService.getScrap(customerId));
     }
 
     /**
      * 좋아요 게시글 조회 (최신순)
      * */
-    @GetMapping("mypage/getLikes")
-    public ResponseEntity<List<LikesScrapResponseDTO>> getLikes(@RequestBody Long customner_id){
+    @GetMapping("mypage/getLikes/{customerId}")
+    public ResponseEntity<List<LikesScrapResponseDTO>> getLikes(@PathVariable Long customerId){
 
-        return ResponseEntity.ok(likesScrapService.getLikes(customner_id));
+        return ResponseEntity.ok(likesScrapService.getLikes(customerId));
     }
 
 

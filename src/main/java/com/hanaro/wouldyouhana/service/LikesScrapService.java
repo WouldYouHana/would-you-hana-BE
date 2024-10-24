@@ -50,16 +50,15 @@ public class LikesScrapService {
 
             // 이미 같은 question과 customer로 좋아요 존재하는지 확인 (중복 확인)
             boolean alreadyExists = scrapRepository.existsByQuestionAndCustomer(question, customer);
-            if (alreadyExists) {
-                throw new IllegalArgumentException("Already scraped this question by the customer.");
+            if (!alreadyExists) {
+                // Scrap 객체 생성 및 저장
+                Scrap scrap = new Scrap();
+                scrap.setQuestion(question);
+                scrap.setCustomer(customer);
+
+                scrapRepository.save(scrap);
             }
 
-            // Scrap 객체 생성 및 저장
-            Scrap scrap = new Scrap();
-            scrap.setQuestion(question);
-            scrap.setCustomer(customer);
-
-            scrapRepository.save(scrap);
         }else{ //스크랩 취소
 
             // 해당 Scrap 객체 찾기
@@ -84,16 +83,15 @@ public class LikesScrapService {
 
             // 이미 같은 question과 customer로 좋아요 존재하는지 확인 (중복 확인)
             boolean alreadyExists = likesRepository.existsByQuestionAndCustomer(question, customer);
-            if (alreadyExists) {
-                throw new IllegalArgumentException("Already scraped this question by the customer.");
+            if (!alreadyExists) {
+                // Likes 객체 생성 및 저장
+                Likes likes = new Likes();
+                likes.setQuestion(question);
+                likes.setCustomer(customer);
+
+                likesRepository.save(likes);
             }
 
-            // Likes 객체 생성 및 저장
-            Likes likes = new Likes();
-            likes.setQuestion(question);
-            likes.setCustomer(customer);
-
-            likesRepository.save(likes);
         }else{ //좋아요 취소
 
             // 해당 Likes 객체 찾기
