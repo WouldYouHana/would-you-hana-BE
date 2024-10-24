@@ -40,38 +40,38 @@ public class QnaController {
     /**
      * 질문(게시글) 등록
      * */
-//    @PostMapping("/posts")
-//    public ResponseEntity<QuestionAllResponseDTO> addNewQuestion(@Valid @RequestBody QuestionAddRequest questionAddRequest) {
-//        log.info("executed");
-//        QuestionAllResponseDTO createdPost = qnaService.addQuestion(questionAddRequest);
-//        return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
-//    }
-//
-//    /**
-//     * 질문(게시글) 수정
-//     * */
-//    @PostMapping("/post/modify/{question_id}")
-//    public ResponseEntity<QuestionAllResponseDTO> modifyQuestion(@PathVariable Long question_id,
-//                                                                 @RequestBody QuestionAddRequest questionAddRequest){
-//
-//        QuestionAllResponseDTO modifiedPost = qnaService.addQuestion(questionAddRequest);
-//        return new ResponseEntity<>(modifiedPost, HttpStatus.CREATED);
-//
-//    }
+    @PostMapping("/posts")
+    public ResponseEntity<QuestionAllResponseDTO> addNewQuestion(@Valid @RequestBody QuestionAddRequest questionAddRequest) {
+        log.info("executed");
+        QuestionAllResponseDTO createdPost = qnaService.addQuestion(questionAddRequest);
+        return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
+    }
+
+    /**
+     * 질문(게시글) 수정
+     * */
+    @PostMapping("/post/modify/{question_id}")
+    public ResponseEntity<QuestionAllResponseDTO> modifyQuestion(@PathVariable Long question_id,
+                                                                 @RequestBody QuestionAddRequest questionAddRequest){
+
+        QuestionAllResponseDTO modifiedPost = qnaService.addQuestion(questionAddRequest);
+        return new ResponseEntity<>(modifiedPost, HttpStatus.CREATED);
+
+    }
 
 
     /**
      * 질문(게시글) 사진 등록
      * */
-//    @PostMapping("/posts/image/{question_id}")
-//    public ResponseEntity<List<ImageResponseDTO>> uploadImage(
-//            @PathVariable Long question_id,
-//            @RequestParam("file") List<MultipartFile> file) throws IOException {
-//
-//        List<ImageResponseDTO> savedImg = imageService.saveImages(file, question_id);
-//
-//        return new ResponseEntity<>(savedImg, HttpStatus.CREATED);
-//    }
+    @PostMapping("/posts/image/{question_id}")
+    public ResponseEntity<List<ImageResponseDTO>> uploadImage(
+            @PathVariable Long question_id,
+            @RequestParam("file") List<MultipartFile> file) throws IOException {
+
+        List<ImageResponseDTO> savedImg = imageService.saveImages(file, question_id);
+
+        return new ResponseEntity<>(savedImg, HttpStatus.CREATED);
+    }
 
 
     // 댓글 추가
@@ -91,15 +91,15 @@ public class QnaController {
     }
 
     // 카테고리별 게시물 전체 조회
-//    @GetMapping("/qnalist/{category_id}")
-//    public ResponseEntity<List<Question>> getAllQuestionsByCategory(@RequestParam Long category_id) {
-//        List<Question> questionByCategoryList = qnaService.getAllQuestionsByCategory(category_id);
-//        return new ResponseEntity<>(questionByCategoryList, HttpStatus.OK);
-//    }
+    @GetMapping("/qnalist/{category_id}")
+    public ResponseEntity<List<Question>> getAllQuestionsByCategory(@RequestParam Long category_id) {
+        List<Question> questionByCategoryList = qnaService.getAllQuestionsByCategory(category_id);
+        return new ResponseEntity<>(questionByCategoryList, HttpStatus.OK);
+    }
 
-//    @GetMapping("/posts/{question_id}")
-//    public ResponseEntity<QuestionResponseDTO> getOneQuestion(@RequestParam Long question_id) {
-//        QuestionResponseDTO questionResponseDTO = qnaService.getOneQuestion(question_id);
-//        return new ResponseEntity<>(questionResponseDTO, HttpStatus.OK);
-//    }
+    @GetMapping("/posts/{question_id}")
+    public ResponseEntity<QuestionResponseDTO> getOneQuestion(@RequestParam Long question_id) {
+        QuestionResponseDTO questionResponseDTO = qnaService.getOneQuestion(question_id);
+        return new ResponseEntity<>(questionResponseDTO, HttpStatus.OK);
+    }
 }
