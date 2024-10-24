@@ -116,9 +116,6 @@ public class LikesScrapService {
         // 고객의 스크랩 조회
         List<Scrap> scraps = scrapRepository.findByCustomer(customer);
 
-        // 스크랩한 게시글 리스트
-        Question scrapedQuestion = new Question();
-
         // Scrap 객체를 ScrapResponseDTO로 변환해서 최신순으로 정렬하여 반환
         return scraps.stream()
                 .sorted(Comparator.comparing(scrap -> scrap.getQuestion().getId(), Comparator.reverseOrder())) // ID 기준으로 내림차순 정렬
