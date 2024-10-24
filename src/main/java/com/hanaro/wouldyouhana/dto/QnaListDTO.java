@@ -1,17 +1,18 @@
 package com.hanaro.wouldyouhana.dto;
 
-import com.hanaro.wouldyouhana.domain.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class QuestionResponseDTO {
+@NoArgsConstructor
+public class QnaListDTO {
+
     private Long question_id;
     private Long customer_id;
     private Long category_id;
@@ -19,6 +20,7 @@ public class QuestionResponseDTO {
     private String content;
     private String location;
     private LocalDateTime created_at;
-    private List<CommentDTO> commentList;
-
+    private Long commentCount;
+    private Long likeCount;
+    private Long viewCount;
 }

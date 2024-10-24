@@ -1,10 +1,7 @@
 package com.hanaro.wouldyouhana.service;
 
 import com.hanaro.wouldyouhana.domain.*;
-import com.hanaro.wouldyouhana.dto.ImageResponseDTO;
-import com.hanaro.wouldyouhana.dto.QuestionAddRequest;
-import com.hanaro.wouldyouhana.dto.QuestionAllResponseDTO;
-import com.hanaro.wouldyouhana.dto.QuestionResponseDTO;
+import com.hanaro.wouldyouhana.dto.*;
 import com.hanaro.wouldyouhana.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @Transactional
@@ -40,27 +37,27 @@ public class QnaService {
     /**
      * 질문(게시글) 등록
      * */
-    public QuestionAllResponseDTO addQuestion(QuestionAddRequest questionAddRequest) {
+    public QuestionAllResponseDTO addQuestion(QuestionAddRequestDTO questionAddRequestDTO) {
 
         // 카테고리 ID로 카테고리 객체 가져오기
-        Category category = categoryRepository.findById(questionAddRequest.getCategory_id())
+        Category category = categoryRepository.findById(questionAddRequestDTO.getCategory_id())
                 .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다.")); // 예외 처리 추가
 
         // 질문 엔티티 생성
         Question question = Question.builder()
-                .customer_id(questionAddRequest.getCustomer_id())
+                .customer_id(questionAddRequestDTO.getCustomer_id())
                 .category(category)
-                .title(questionAddRequest.getTitle())
-                .content(questionAddRequest.getContent())
-                .location(questionAddRequest.getLocation())
+                .title(questionAddRequestDTO.getTitle())
+                .content(questionAddRequestDTO.getContent())
+                .location(questionAddRequestDTO.getLocation())
                 .created_at(LocalDateTime.now())
                 .build();
 
         // 질문 저장
         Question savedQuestion = questionRepository.save(question);
 
-        if (questionAddRequest.getFile() != null) {
-            for (MultipartFile file : questionAddRequest.getFile()) {
+        if (questionAddRequestDTO.getFile() != null) {
+            for (MultipartFile file : questionAddRequestDTO.getFile()) {
                 // 파일 시스템에 저장 로직 추가
                 String filePath = fileStorageService.saveFile(file); // 파일 저장 후 경로를 반환하는 메서드
                 Image image = Image.builder()
@@ -85,7 +82,7 @@ public class QnaService {
                 0, // likeCount (초기값)
                 0, // scrapCount (초기값)
                 0, // viewCount (초기값)
-                questionAddRequest.getFile().stream().map(MultipartFile::getOriginalFilename).toList()
+                questionAddRequestDTO.getFile().stream().map(MultipartFile::getOriginalFilename).toList()
         );
     }
 
@@ -93,15 +90,15 @@ public class QnaService {
     /**
      * 질문(게시글) 수정
      * */
-    public QuestionAllResponseDTO modifyQuestion(QuestionAddRequest questionAddRequest, Long question_id) {
+    public QuestionAllResponseDTO modifyQuestion(QuestionAddRequestDTO questionAddRequestDTO, Long question_id) {
         // 기존 질문 엔티티 조회
         Question question = questionRepository.findById(question_id)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
         // 질문 정보 수정
-        question.setTitle(questionAddRequest.getTitle());
-        question.setContent(questionAddRequest.getContent());
-        question.setLocation(questionAddRequest.getLocation());
+        question.setTitle(questionAddRequestDTO.getTitle());
+        question.setContent(questionAddRequestDTO.getContent());
+        question.setLocation(questionAddRequestDTO.getLocation());
         question.setUpdated_at(LocalDateTime.now()); // 수정 시간 업데이트
 
         // 질문 저장
@@ -111,8 +108,8 @@ public class QnaService {
         imageRepository.deleteAllByQuestionId(question_id);
 
         // 새로운 이미지 파일 처리
-        if (questionAddRequest.getFile() != null) {
-            for (MultipartFile file : questionAddRequest.getFile()) {
+        if (questionAddRequestDTO.getFile() != null) {
+            for (MultipartFile file : questionAddRequestDTO.getFile()) {
                 // 파일 시스템에 저장 로직 추가
                 String filePath = fileStorageService.saveFile(file); // 파일 저장 후 경로를 반환하는 메서드
                 Image image = Image.builder()
@@ -137,28 +134,34 @@ public class QnaService {
                 updatedQuestion.getLikeCount(), // likeCount (초기값)
                 updatedQuestion.getScrapCount(), // scrapCount (초기값)
                 updatedQuestion.getViewCount(), // viewCount (초기값)
-                questionAddRequest.getFile().stream().map(MultipartFile::getOriginalFilename).toList() // 파일 이름 리스트 추가
+                questionAddRequestDTO.getFile().stream().map(MultipartFile::getOriginalFilename).toList() // 파일 이름 리스트 추가
         );
     }
 
-
-
     // 댓글 추가
-    public Comment addComment(Long questionId, Long customerId, String content) {
+    public CommentResponseDTO addComment(Long questionId, CommentAddRequestDTO commentAddRequestDTO) {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
-        Customer customer = customerRepository.findById(customerId)
+        Customer customer = customerRepository.findById(commentAddRequestDTO.getCustomer_id())
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
         Comment comment = Comment.builder()
                 .question(question)
                 .customer(customer)
-                .content(content)
+                .content(commentAddRequestDTO.getContent())
                 .created_at(LocalDateTime.now())
                 .build();
 
-        return commentRepository.save(comment);
+        question.addComments(comment);
+        Comment addedComment = commentRepository.save(comment);
+
+        return new CommentResponseDTO(
+                addedComment.getCustomer().getId(),
+                addedComment.getQuestion().getId(),
+                addedComment.getContent(),
+                addedComment.getCreated_at()
+        );
     }
 
     // 게시글에 대한 댓글 가져오기
@@ -168,27 +171,63 @@ public class QnaService {
     }
 
     // 댓글 삭제
-    public void deleteComment(Long commentId) {
+    public void deleteComment(Long questionId, Long commentId) {
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new EntityNotFoundException("Question not found"));
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
+
+        question.removeComments(comment);
         commentRepository.delete(comment);
     }
 
+    // 질문 글 목록 DTO(QnaListDTO) 만드는 공통 메서드
+    // 질문 전체 목록, 카테고리별 질문 전체 목록에서 사용
+    public List<QnaListDTO> makeQnaListDTO(List<Question> fql) {
+        List<QnaListDTO> foundQuestionListDTO = fql.stream().map(question -> {
+            QnaListDTO qnaListDTO = new QnaListDTO();
+            qnaListDTO.setQuestion_id(question.getId());
+            qnaListDTO.setCustomer_id(question.getCustomer_id());
+            qnaListDTO.setCategory_id(question.getCategory().getId());
+            qnaListDTO.setTitle((question.getTitle()));
+            qnaListDTO.setContent(question.getContent());
+            qnaListDTO.setLocation(question.getLocation());
+            qnaListDTO.setCreated_at(question.getCreated_at());
+            qnaListDTO.setCommentCount(Long.valueOf(question.getComments().size()));
+            qnaListDTO.setLikeCount(Long.valueOf(question.getLikeCount()));
+
+            return qnaListDTO;
+        }).collect(Collectors.toList());
+        return foundQuestionListDTO;
+    }
+
     // 질문 전체 목록
-    public List<Question> getAllQuestions() {
-        return questionRepository.findAll();
+    public List<QnaListDTO> getAllQuestions() {
+        List<Question> foundQuestionList = questionRepository.findAll();
+        return makeQnaListDTO(foundQuestionList);
     }
 
     // 카테고리별 질문 전체 목록
-    public List<Question> getAllQuestionsByCategory(Long categoryId) {
-        return questionRepository.findByCategory_id(categoryId)
+    public List<QnaListDTO> getAllQuestionsByCategory(Long categoryId) {
+        List<Question> foundQuestionList = questionRepository.findByCategory_id(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("No Question for category"));
+        return makeQnaListDTO(foundQuestionList);
     }
 
     // 질문 상세
     public QuestionResponseDTO getOneQuestion(Long questionId) {
         Question foundQuestion = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+
+        List<CommentDTO> commentDTOS = foundQuestion.getComments().stream().map(comment ->
+        {
+            CommentDTO commentDTO = new CommentDTO();
+            commentDTO.setId(comment.getId());
+            commentDTO.setContent(comment.getContent());
+            commentDTO.setCustomer_id(comment.getCustomer().getId());
+            commentDTO.setCreated_at(LocalDateTime.now());
+            return commentDTO;
+        }).collect(Collectors.toList());
+
         return new QuestionResponseDTO(
                 foundQuestion.getId(),
                 foundQuestion.getCustomer_id(),
@@ -196,7 +235,8 @@ public class QnaService {
                 foundQuestion.getTitle(),
                 foundQuestion.getContent(),
                 foundQuestion.getLocation(),
-                foundQuestion.getCreated_at()
+                foundQuestion.getCreated_at(),
+                commentDTOS
         );
     }
 

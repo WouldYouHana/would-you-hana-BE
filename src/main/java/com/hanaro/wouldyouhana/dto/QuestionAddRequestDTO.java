@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class QuestionAddRequest {
+public class QuestionAddRequestDTO {
 
     @NotNull
     private String title;

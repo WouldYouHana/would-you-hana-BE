@@ -1,5 +1,6 @@
 package com.hanaro.wouldyouhana.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "question_id")
+    @JsonBackReference // 순환 참조 방지
     private Question question;
 
     @ManyToOne
