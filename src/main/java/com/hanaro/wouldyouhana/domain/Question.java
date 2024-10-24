@@ -20,7 +20,10 @@ public class Question {
     private Long id;
 
     private Long customer_id;
-    private Long category_id;
+
+    @ManyToOne // 다대일 관계 설정
+    @JoinColumn(name = "category_id", nullable = false) // 외래 키 설정
+    private Category category; // Category 객체 추가
 
     private String title;
     private String content;

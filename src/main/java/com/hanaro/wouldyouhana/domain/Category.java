@@ -19,8 +19,5 @@ public class Category {
 
     private String name;
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
-    private List<Question> questions;
-
     // Getters and Setters
 }

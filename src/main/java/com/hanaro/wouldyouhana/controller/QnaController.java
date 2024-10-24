@@ -40,24 +40,24 @@ public class QnaController {
     /**
      * 질문(게시글) 등록
      * */
-    @PostMapping("/posts")
-    public ResponseEntity<QuestionAllResponseDTO> addNewQuestion(@Valid @RequestBody QuestionAddRequest questionAddRequest) {
-        log.info("executed");
-        QuestionAllResponseDTO createdPost = qnaService.addQuestion(questionAddRequest);
-        return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
-    }
-
-    /**
-     * 질문(게시글) 수정
-     * */
-    @PostMapping("/post/modify/{question_id}")
-    public ResponseEntity<QuestionAllResponseDTO> modifyQuestion(@PathVariable Long question_id,
-                                                                 @RequestBody QuestionAddRequest questionAddRequest){
-
-        QuestionAllResponseDTO modifiedPost = qnaService.addQuestion(questionAddRequest);
-        return new ResponseEntity<>(modifiedPost, HttpStatus.CREATED);
-
-    }
+//    @PostMapping("/posts")
+//    public ResponseEntity<QuestionAllResponseDTO> addNewQuestion(@Valid @RequestBody QuestionAddRequest questionAddRequest) {
+//        log.info("executed");
+//        QuestionAllResponseDTO createdPost = qnaService.addQuestion(questionAddRequest);
+//        return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
+//    }
+//
+//    /**
+//     * 질문(게시글) 수정
+//     * */
+//    @PostMapping("/post/modify/{question_id}")
+//    public ResponseEntity<QuestionAllResponseDTO> modifyQuestion(@PathVariable Long question_id,
+//                                                                 @RequestBody QuestionAddRequest questionAddRequest){
+//
+//        QuestionAllResponseDTO modifiedPost = qnaService.addQuestion(questionAddRequest);
+//        return new ResponseEntity<>(modifiedPost, HttpStatus.CREATED);
+//
+//    }
 
 
     /**
@@ -97,9 +97,9 @@ public class QnaController {
 //        return new ResponseEntity<>(questionByCategoryList, HttpStatus.OK);
 //    }
 
-    @GetMapping("/posts/{question_id}")
-    public ResponseEntity<QuestionResponseDTO> getOneQuestion(@RequestParam Long question_id) {
-        QuestionResponseDTO questionResponseDTO = qnaService.getOneQuestion(question_id);
-        return new ResponseEntity<>(questionResponseDTO, HttpStatus.OK);
-    }
+//    @GetMapping("/posts/{question_id}")
+//    public ResponseEntity<QuestionResponseDTO> getOneQuestion(@RequestParam Long question_id) {
+//        QuestionResponseDTO questionResponseDTO = qnaService.getOneQuestion(question_id);
+//        return new ResponseEntity<>(questionResponseDTO, HttpStatus.OK);
+//    }
 }
