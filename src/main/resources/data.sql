@@ -13,3 +13,7 @@ INSERT INTO banker (branch_name, email, name, password) values ("구의역지점
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (1, 1, "안녕하세요!", "안녕하세요, 처음 가입했습니다. 반가워요!!", "서울시 성동구", "2024-10-23 10:00:00", null, 0, 0, 0);
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 2, "주택청약종합저축에 대해 여쭈어볼게 있습니다.", "이번에 주택청약종합저축 월 납입 한도가 25만원으로 올랐잖아요? ... ", "서울시 성동구", "2024-10-23 14:00:00", null, 0, 0, 0);
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (3, 3, "제 대략적인 대출 한도가 궁금합니다.", "재직중인 26살 남자입니다. ...", "서울시 성동구", "2024-10-23 15:00:00", null, 0, 0, 0);
+
+INSERT INTO Banker (name, email, password, branch_name) VALUES ('John Doe', 'john.doe@example.com', 'securepassword', 'Main Branch');
+
+INSERT INTO Answer (banker_id, question_id, content, created_at, updated_at) VALUES (1, 1, 'This is an answer', "2024-10-21 10:00:00", "2024-10-21 10:00:00");

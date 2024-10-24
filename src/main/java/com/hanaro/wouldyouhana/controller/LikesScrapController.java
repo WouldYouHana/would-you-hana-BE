@@ -53,7 +53,7 @@ public class LikesScrapController {
     /**
      * 좋아요 게시글 조회 (최신순)
      * */
-    @GetMapping("mypage/getScrap")
+    @GetMapping("mypage/getLikes")
     public ResponseEntity<List<LikesScrapResponseDTO>> getLikes(@RequestBody Long customner_id){
 
         return ResponseEntity.ok(likesScrapService.getLikes(customner_id));
