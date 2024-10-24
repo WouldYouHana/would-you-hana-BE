@@ -15,5 +15,12 @@ INSERT INTO question (customer_id, category_id, title, content, location, create
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (3, 3, "제 대략적인 대출 한도가 궁금합니다.", "재직중인 26살 남자입니다. ...", "서울시 성동구", "2024-10-23 15:00:00", null, 0, 0, 0);
 
 INSERT INTO Banker (name, email, password, branch_name) VALUES ('John Doe', 'john.doe@example.com', 'securepassword', 'Main Branch');
-
 INSERT INTO Answer (banker_id, question_id, content, created_at, updated_at) VALUES (1, 1, 'This is an answer', "2024-10-21 10:00:00", "2024-10-21 10:00:00");
+
+INSERT INTO comment (customer_id, question_id, content, created_at) values (1, 1,"반갑습니다!","2024-10-21 10:05:00" );
+INSERT INTO comment (customer_id, question_id, content, created_at) values (2, 1,"어서오세요!","2024-10-21 10:07:00" );
+INSERT INTO comment (customer_id, question_id, content, created_at) values (1, 2,"저도 헷갈리네요...","2024-10-21 14:05:00" );
+INSERT INTO comment (customer_id, question_id, content, created_at) values (2, 2,"자세히 알려주실 분 계신가요?","2024-10-21 14:15:00" );
+INSERT INTO comment (customer_id, question_id, content, created_at) values (1, 3,"실례지만 대략적인 연봉이 어떻게 되시나요?","2024-10-21 15:23:00" );
+INSERT INTO comment (customer_id, question_id, content, created_at) values (2, 3,"저도 궁금합니다!","2024-10-21 15:31:00" );
+
