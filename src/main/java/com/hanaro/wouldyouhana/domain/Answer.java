@@ -18,7 +18,9 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long banker_id;
+    @ManyToOne // 다대일 관계
+    @JoinColumn(name = "banker_id") // 외래 키 설정
+    private Banker banker;
 
     @JoinColumn(name = "question_id")  // 외래 키 설정
     private Long question_id;
