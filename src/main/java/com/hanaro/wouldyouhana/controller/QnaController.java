@@ -54,7 +54,7 @@ public class QnaController {
     public ResponseEntity<QuestionAllResponseDTO> modifyQuestion(@PathVariable Long question_id,
                                                                  @RequestBody QuestionAddRequest questionAddRequest){
 
-        QuestionAllResponseDTO modifiedPost = qnaService.addQuestion(questionAddRequest);
+        QuestionAllResponseDTO modifiedPost = qnaService.modifyQuestion(questionAddRequest, question_id);
         return new ResponseEntity<>(modifiedPost, HttpStatus.CREATED);
 
     }
