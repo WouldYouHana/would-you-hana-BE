@@ -22,8 +22,9 @@ public class Answer {
     @JoinColumn(name = "banker_id") // 외래 키 설정
     private Banker banker;
 
-    @JoinColumn(name = "question_id")  // 외래 키 설정
-    private Long question_id;
+    @OneToOne // 하나의 질문에 하나의 답변
+    @JoinColumn(name = "question_id")  // 외래 키 설정  // 외래 키 설정
+    private Question question;
     private String content;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;

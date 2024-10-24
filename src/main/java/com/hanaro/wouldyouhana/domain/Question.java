@@ -34,7 +34,7 @@ public class Question {
     private Integer scrapCount;
     private Integer viewCount;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     //@JoinColumn(name = "question_id")  // 외래 키 설정
     private Answer answers;
 
