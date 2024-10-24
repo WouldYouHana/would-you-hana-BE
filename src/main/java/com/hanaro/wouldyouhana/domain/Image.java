@@ -13,7 +13,7 @@ import lombok.*;
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long image_id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "question_id")

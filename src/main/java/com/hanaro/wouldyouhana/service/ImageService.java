@@ -64,7 +64,7 @@ public class ImageService {
             Image savedImage = imageRepository.save(image);
 
             // 응답 DTO 생성
-            ImageResponseDTO responseDTO = new ImageResponseDTO(savedImage.getImage_id(), savedImage.getFile_path());
+            ImageResponseDTO responseDTO = new ImageResponseDTO(savedImage.getId(), savedImage.getFile_path());
             responseDTOs.add(responseDTO);
         }
 

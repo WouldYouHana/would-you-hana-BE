@@ -13,7 +13,7 @@ import lombok.*;
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long locationId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")

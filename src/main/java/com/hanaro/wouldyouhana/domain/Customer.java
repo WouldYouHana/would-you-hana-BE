@@ -20,7 +20,7 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // 고객id
-    private Long customer_id;
+    private Long id;
 
     // 이메일
     @Column

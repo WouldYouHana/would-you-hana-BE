@@ -15,7 +15,7 @@ import java.util.List;
 public class Specialization {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long specializationId;
+    private Long id;
 
     private String name;
 

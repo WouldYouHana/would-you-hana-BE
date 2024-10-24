@@ -16,9 +16,11 @@ public class Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long answer_id;
+    private Long id;
 
     private Long banker_id;
+
+    @JoinColumn(name = "question_id")  // 외래 키 설정
     private Long question_id;
     private String content;
     private LocalDateTime created_at;
