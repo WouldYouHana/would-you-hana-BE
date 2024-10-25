@@ -3,6 +3,7 @@ package com.hanaro.wouldyouhana.controller;
 import com.hanaro.wouldyouhana.domain.Question;
 import com.hanaro.wouldyouhana.dto.*;
 import com.hanaro.wouldyouhana.repository.CommentRepository;
+import com.hanaro.wouldyouhana.service.CommentService;
 import com.hanaro.wouldyouhana.service.ImageService;
 import com.hanaro.wouldyouhana.service.QnaService;
 import jakarta.validation.Valid;
@@ -24,13 +25,13 @@ public class QnaController {
 
     private final QnaService qnaService;
     private final ImageService imageService;
-    private final CommentRepository commentRepository;
+    private final CommentService commentService;
 
     @Autowired
-    public QnaController(QnaService qnaService, ImageService imageService, CommentRepository commentRepository) {
+    public QnaController(QnaService qnaService, ImageService imageService, CommentService commentService) {
         this.qnaService = qnaService;
         this.imageService = imageService;
-        this.commentRepository = commentRepository;
+        this.commentService = commentService;
     }
 
     /**
@@ -54,6 +55,11 @@ public class QnaController {
         return new ResponseEntity<>(modifiedPost, HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/post/delete/{question_id}")
+    public ResponseEntity deleteQuestion(@PathVariable Long question_id) {
+        qnaService.deleteQuestion(question_id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
     /**
      * 질문(게시글) 사진 등록
@@ -70,10 +76,17 @@ public class QnaController {
 
 
     // 댓글 추가
-    @PostMapping("/post/{question_id}/comment")
+    @PostMapping("/post/comment/{question_id}/")
     public ResponseEntity<CommentResponseDTO> addComment(@PathVariable Long question_id,
                                                          @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
-        CommentResponseDTO addedComment = qnaService.addComment(question_id, commentAddRequestDTO);
+        CommentResponseDTO addedComment = commentService.addComment(question_id, null, commentAddRequestDTO);
+        return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
+    }
+
+    // 대댓글 추가
+    @PostMapping("/post/replycomment/{question_id}/{parentComment_Id}")
+    public ResponseEntity<CommentResponseDTO> createReply(@PathVariable Long question_id, @PathVariable Long parentComment_Id, @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
+        CommentResponseDTO addedComment = commentService.addComment(question_id, parentComment_Id, commentAddRequestDTO);
         return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
     }
 
@@ -81,9 +94,9 @@ public class QnaController {
 
 
     // 댓글 삭제
-    @DeleteMapping("/post/{question_id}/{comment_id}")
+    @DeleteMapping("/post/comment/{question_id}/{comment_id}")
     public ResponseEntity deleteComment(@PathVariable Long question_id, @PathVariable Long comment_id) {
-        qnaService.deleteComment(question_id, comment_id);
+        commentService.deleteComment(question_id, comment_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

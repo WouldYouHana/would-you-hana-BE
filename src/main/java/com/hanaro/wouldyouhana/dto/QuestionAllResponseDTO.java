@@ -20,9 +20,9 @@ public class QuestionAllResponseDTO {
     private String location;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
-    private Integer likeCount;
-    private Integer scrapCount;
-    private Integer viewCount;
+    private Long likeCount;
+    private Long scrapCount;
+    private Long viewCount;
     private List<String> file;
 
 }

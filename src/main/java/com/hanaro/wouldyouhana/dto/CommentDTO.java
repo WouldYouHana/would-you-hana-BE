@@ -1,5 +1,6 @@
 package com.hanaro.wouldyouhana.dto;
 
+import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 public class CommentDTO {
 
     private Long id;
+    private Long parentComment_id;
     private String content;
     private Long customer_id;
     private LocalDateTime created_at;
