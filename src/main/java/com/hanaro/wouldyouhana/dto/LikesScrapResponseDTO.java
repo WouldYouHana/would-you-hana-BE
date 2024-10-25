@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class LikesScrapResponseDTO {
 
-    private Long scrapId;
+    private Long requestId;
     private Long questionId;
 
     // 화면에 보여지는 내용
