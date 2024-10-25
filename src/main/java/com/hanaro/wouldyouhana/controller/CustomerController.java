@@ -2,14 +2,18 @@ package com.hanaro.wouldyouhana.controller;
 
 import com.hanaro.wouldyouhana.domain.Customer;
 import com.hanaro.wouldyouhana.dto.CustomerSignUpDto;
+import com.hanaro.wouldyouhana.forSignIn.JwtToken;
+import com.hanaro.wouldyouhana.forSignIn.SecurityUtil;
+import com.hanaro.wouldyouhana.forSignIn.SignInDto;
 import com.hanaro.wouldyouhana.repository.CustomerRepository;
 import com.hanaro.wouldyouhana.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDateTime;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
@@ -54,4 +58,5 @@ public class CustomerController {
         Customer savedCustomer = customerService.registerCustomer(customer);
         return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
     }
+
 }
