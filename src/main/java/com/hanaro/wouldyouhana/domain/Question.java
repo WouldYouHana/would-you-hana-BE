@@ -48,13 +48,13 @@ public class Question {
     //@JoinColumn(name = "question_id")  // 외래 키 설정
     private List<Image> images;
 
-    public void addAnswers(Answer answer) {
-        answers.add(answer);
-    }
-
-    public void removeAnswers(Answer answer) {
-        answers.remove(answer);
-    }
+//    public void addAnswers(Answer answer) {
+//        answers.add(answer);
+//    }
+//
+//    public void removeAnswers(Answer answer) {
+//        answers.remove(answer);
+//    }
 
     public void addComments(Comment comment) {
         comments.add(comment);
