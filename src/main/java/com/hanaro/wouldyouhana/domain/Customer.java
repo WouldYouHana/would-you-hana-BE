@@ -69,7 +69,7 @@ public class Customer implements UserDetails {
     @Column
     private String birth_date;
 
-    @OneToMany(mappedBy = "customer_id")
+    @OneToMany(mappedBy = "customerId")
     @JsonManagedReference
     private List<Question> questions;
 

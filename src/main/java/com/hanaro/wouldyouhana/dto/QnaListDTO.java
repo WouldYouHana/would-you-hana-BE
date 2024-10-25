@@ -21,5 +21,7 @@ public class QnaListDTO {
     private LocalDateTime created_at;
     private Long commentCount;
     private Long likeCount;
+    private Long scrapCount;
     private Long viewCount;
+
 }

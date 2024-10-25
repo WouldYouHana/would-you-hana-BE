@@ -20,7 +20,8 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long customer_id;
+    @Column(name="customer_id")
+    private Long customerId;
 
     @ManyToOne // 다대일 관계 설정
     @JoinColumn(name = "category_id", nullable = false) // 외래 키 설정

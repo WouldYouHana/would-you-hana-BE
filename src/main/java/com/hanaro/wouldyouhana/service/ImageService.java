@@ -38,7 +38,7 @@ public class ImageService {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
-        Customer customer = customerRepository.findById(question.getCustomer_id())
+        Customer customer = customerRepository.findById(question.getCustomerId())
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
         for (MultipartFile file : files) {

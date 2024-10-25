@@ -47,7 +47,7 @@ public class QnaService {
 
         // 질문 엔티티 생성
         Question question = Question.builder()
-                .customer_id(questionAddRequestDTO.getCustomer_id())
+                .customerId(questionAddRequestDTO.getCustomer_id())
                 .category(category)
                 .title(questionAddRequestDTO.getTitle())
                 .content(questionAddRequestDTO.getContent())
@@ -74,7 +74,7 @@ public class QnaService {
         // 최종적으로 반환할 DTO 생성
         return new QuestionAllResponseDTO(
                 savedQuestion.getId(),
-                savedQuestion.getCustomer_id(),
+                savedQuestion.getCustomerId(),
                 savedQuestion.getCategory().getId(),
                 savedQuestion.getTitle(),
                 savedQuestion.getContent(),
@@ -87,7 +87,6 @@ public class QnaService {
                 questionAddRequestDTO.getFile().stream().map(MultipartFile::getOriginalFilename).toList()
         );
     }
-
 
     /**
      * 질문(게시글) 수정
@@ -126,7 +125,7 @@ public class QnaService {
         // 최종적으로 반환할 DTO 생성
         return new QuestionAllResponseDTO(
                 updatedQuestion.getId(),
-                updatedQuestion.getCustomer_id(),
+                updatedQuestion.getCustomerId(),
                 updatedQuestion.getCategory().getId(),
                 updatedQuestion.getTitle(),
                 updatedQuestion.getContent(),
@@ -143,38 +142,6 @@ public class QnaService {
     // 질문 삭제
     public void deleteQuestion(Long questionId) {
         questionRepository.deleteById(questionId);
-    }
-
-    // 질문 글 목록 DTO(QnaListDTO) 만드는 공통 메서드
-    // 질문 전체 목록, 카테고리별 질문 전체 목록에서 사용
-    public List<QnaListDTO> makeQnaListDTO(List<Question> fql) {
-        List<QnaListDTO> foundQuestionListDTO = fql.stream().map(question -> {
-            QnaListDTO qnaListDTO = new QnaListDTO();
-            qnaListDTO.setQuestion_id(question.getId());
-            qnaListDTO.setCustomer_id(question.getCustomer_id());
-            qnaListDTO.setCategory_id(question.getCategory().getId());
-            qnaListDTO.setTitle((question.getTitle()));
-            qnaListDTO.setLocation(question.getLocation());
-            qnaListDTO.setCreated_at(question.getCreated_at());
-            qnaListDTO.setCommentCount(Long.valueOf(question.getComments().size()));
-            qnaListDTO.setLikeCount(Long.valueOf(question.getLikeCount()));
-
-            return qnaListDTO;
-        }).collect(Collectors.toList());
-        return foundQuestionListDTO;
-    }
-
-    // 질문 전체 목록
-    public List<QnaListDTO> getAllQuestions() {
-        List<Question> foundQuestionList = questionRepository.findAll();
-        return makeQnaListDTO(foundQuestionList);
-    }
-
-    // 카테고리별 질문 전체 목록
-    public List<QnaListDTO> getAllQuestionsByCategory(Long categoryId) {
-        List<Question> foundQuestionList = questionRepository.findByCategory_id(categoryId)
-                .orElseThrow(() -> new EntityNotFoundException("No Question for category"));
-        return makeQnaListDTO(foundQuestionList);
     }
 
     // 질문 상세
@@ -202,7 +169,7 @@ public class QnaService {
 
         return new QuestionResponseDTO(
                 foundQuestion.getId(),
-                foundQuestion.getCustomer_id(),
+                foundQuestion.getCustomerId(),
                 foundQuestion.getCategory().getId(),
                 foundQuestion.getTitle(),
                 foundQuestion.getContent(),
@@ -216,8 +183,46 @@ public class QnaService {
         );
     }
 
-//    public Long getLikeCountsforQuestion(Long question_id) {
-//        return likesRepository.getLikesByQuestionId()
-//    }
+    // 질문 글 목록 DTO(QnaListDTO) 만드는 공통 메서드
+    // 질문 전체 목록, 카테고리별 질문 전체 목록, 고객별 질문 전체 목록에서 사용
+    public List<QnaListDTO> makeQnaListDTO(List<Question> fql) {
+        List<QnaListDTO> foundQuestionListDTO = fql.stream().map(question -> {
+            QnaListDTO qnaListDTO = new QnaListDTO();
+            qnaListDTO.setQuestion_id(question.getId());
+            qnaListDTO.setCustomer_id(question.getCustomerId());
+            qnaListDTO.setCategory_id(question.getCategory().getId());
+            qnaListDTO.setTitle((question.getTitle()));
+            qnaListDTO.setLocation(question.getLocation());
+            qnaListDTO.setCreated_at(question.getCreated_at());
+            qnaListDTO.setCommentCount(Integer.toUnsignedLong(question.getComments().size()));
+            qnaListDTO.setLikeCount(question.getLikeCount());
+            qnaListDTO.setScrapCount(question.getScrapCount());
+            qnaListDTO.setViewCount(question.getViewCount());
+
+            return qnaListDTO;
+        }).collect(Collectors.toList());
+        return foundQuestionListDTO;
+    }
+
+    // 질문 전체 목록
+    public List<QnaListDTO> getAllQuestions() {
+        List<Question> foundQuestionList = questionRepository.findAll();
+        return makeQnaListDTO(foundQuestionList);
+    }
+
+    // 카테고리별 질문 전체 목록
+    public List<QnaListDTO> getAllQuestionsByCategory(Long categoryId) {
+        List<Question> foundQuestionList = questionRepository.findByCategory_id(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException("No Question for category"));
+        return makeQnaListDTO(foundQuestionList);
+    }
+
+    // 고객별 질문 전체 목록
+    public List<QnaListDTO> getAllQuestionsByCustomerId(Long customerId) {
+        List<Question> foundQuestionList = questionRepository.findByCustomerId(customerId)
+                .orElseThrow(() -> new EntityNotFoundException("No Question for this customer"));
+        return makeQnaListDTO(foundQuestionList);
+    }
+
 
 }
