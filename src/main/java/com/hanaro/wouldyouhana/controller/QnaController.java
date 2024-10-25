@@ -1,6 +1,5 @@
 package com.hanaro.wouldyouhana.controller;
 
-import com.hanaro.wouldyouhana.domain.Comment;
 import com.hanaro.wouldyouhana.domain.Question;
 import com.hanaro.wouldyouhana.dto.*;
 import com.hanaro.wouldyouhana.repository.CommentRepository;
@@ -75,6 +74,7 @@ public class QnaController {
         return new ResponseEntity<>(savedImg, HttpStatus.CREATED);
     }
 
+
     // 댓글 추가
     @PostMapping("/post/comment/{question_id}/")
     public ResponseEntity<CommentResponseDTO> addComment(@PathVariable Long question_id,
@@ -99,6 +99,7 @@ public class QnaController {
         commentService.deleteComment(question_id, comment_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
     // 게시물 전체 조회
     @GetMapping("/qnalist")
