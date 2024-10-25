@@ -45,7 +45,6 @@ public class LikesScrapService {
         Customer customer = customerRepository.findById(likesScrapRequestDTO.getCustomerId())
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
-
         if(likesScrapRequestDTO.isSelected()){ // 스크랩
 
             // 이미 같은 question과 customer로 좋아요 존재하는지 확인 (중복 확인)
@@ -58,12 +57,17 @@ public class LikesScrapService {
 
                 scrapRepository.save(scrap);
             }
+            // 게시물의 스크랩 수 증가
+            question.incrementScrapCount();
 
         }else{ //스크랩 취소
 
             // 해당 Scrap 객체 찾기
             Scrap scrap = scrapRepository.findByQuestionAndCustomer(question, customer)
                     .orElseThrow(() -> new EntityNotFoundException("Like not found for this question and customer."));
+
+            // 게시물의 스크랩 수 감소
+            question.decrementScrapCount();
 
             // Scrap 객체 삭제
             scrapRepository.delete(scrap);
@@ -91,12 +95,17 @@ public class LikesScrapService {
 
                 likesRepository.save(likes);
             }
+            // 게시글의 좋아요 개수 증가
+            question.incrementLikesCount();
 
         }else{ //좋아요 취소
 
             // 해당 Likes 객체 찾기
             Likes likes = likesRepository.findByQuestionAndCustomer(question, customer)
                     .orElseThrow(() -> new EntityNotFoundException("Like not found for this question and customer."));
+
+            // 질문글의 좋아요 개수 감소
+            question.decrementLikesCount();
 
             // Likes 객체 삭제
             likesRepository.delete(likes);

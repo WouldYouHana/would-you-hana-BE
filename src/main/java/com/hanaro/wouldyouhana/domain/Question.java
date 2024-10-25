@@ -31,9 +31,9 @@ public class Question {
     private String location;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
-    private Integer likeCount;
-    private Integer scrapCount;
-    private Integer viewCount;
+    private Long likeCount;
+    private Long scrapCount;
+    private Long viewCount;
 
     @OneToOne(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     //@JoinColumn(name = "question_id")  // 외래 키 설정
@@ -47,6 +47,29 @@ public class Question {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     //@JoinColumn(name = "question_id")  // 외래 키 설정
     private List<Image> images;
+
+    // 조회수 증가
+    public void incrementViewCount() {
+        this.viewCount++;
+    }
+
+    // 좋아요 수 증가
+    public void incrementLikesCount() {
+        this.likeCount++;
+    }
+    // 좋아요 수 감소
+    public void decrementLikesCount() {
+        this.likeCount--;
+    }
+
+    // 스크랩 수 증가
+    public void incrementScrapCount() {
+        this.scrapCount++;
+    }
+    // 스크랩 수 감소
+    public void decrementScrapCount() {
+        this.scrapCount--;
+    }
 
 //    public void addAnswers(Answer answer) {
 //        answers.add(answer);

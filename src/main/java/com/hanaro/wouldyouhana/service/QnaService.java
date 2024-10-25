@@ -22,16 +22,18 @@ public class QnaService {
     private final CommentRepository commentRepository;
     private final ImageRepository imageRepository;
     private final FileStorageService fileStorageService;
+    private final LikesRepository likesRepository;
 
     @Autowired
     public QnaService(QuestionRepository questionRepository, CustomerRepository customerRepository, CategoryRepository categoryRepository, CommentRepository commentRepository,
-                      ImageRepository imageRepository, FileStorageService fileStorageService) {
+                      ImageRepository imageRepository, FileStorageService fileStorageService, LikesRepository likesRepository) {
         this.questionRepository = questionRepository;
         this.customerRepository = customerRepository;
         this.categoryRepository = categoryRepository;
         this.commentRepository = commentRepository;
         this.imageRepository = imageRepository;
         this.fileStorageService = fileStorageService;
+        this.likesRepository = likesRepository;
     }
 
     /**
@@ -79,9 +81,9 @@ public class QnaService {
                 savedQuestion.getLocation(),
                 savedQuestion.getCreated_at(),
                 savedQuestion.getUpdated_at(), // 추가: 업데이트 시간
-                0, // likeCount (초기값)
-                0, // scrapCount (초기값)
-                0, // viewCount (초기값)
+                Integer.toUnsignedLong(0), // likeCount (초기값)
+                Integer.toUnsignedLong(0), // scrapCount (초기값)
+                Integer.toUnsignedLong(0), // viewCount (초기값)
                 questionAddRequestDTO.getFile().stream().map(MultipartFile::getOriginalFilename).toList()
         );
     }
@@ -138,46 +140,9 @@ public class QnaService {
         );
     }
 
-    // 댓글 추가
-    public CommentResponseDTO addComment(Long questionId, CommentAddRequestDTO commentAddRequestDTO) {
-        Question question = questionRepository.findById(questionId)
-                .orElseThrow(() -> new EntityNotFoundException("Question not found"));
-
-        Customer customer = customerRepository.findById(commentAddRequestDTO.getCustomer_id())
-                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
-
-        Comment comment = Comment.builder()
-                .question(question)
-                .customer(customer)
-                .content(commentAddRequestDTO.getContent())
-                .created_at(LocalDateTime.now())
-                .build();
-
-        question.addComments(comment);
-        Comment addedComment = commentRepository.save(comment);
-
-        return new CommentResponseDTO(
-                addedComment.getCustomer().getId(),
-                addedComment.getQuestion().getId(),
-                addedComment.getContent(),
-                addedComment.getCreated_at()
-        );
-    }
-
-    // 게시글에 대한 댓글 가져오기
-    public List<Comment> getCommentsByQuestionId(Long questionId) {
-        Question question = questionRepository.findById(questionId).orElseThrow(() -> new EntityNotFoundException("question not found"));
-        return commentRepository.findByQuestion(question);
-    }
-
-    // 댓글 삭제
-    public void deleteComment(Long questionId, Long commentId) {
-        Question question = questionRepository.findById(questionId).orElseThrow(() -> new EntityNotFoundException("Question not found"));
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
-
-        question.removeComments(comment);
-        commentRepository.delete(comment);
+    // 질문 삭제
+    public void deleteQuestion(Long questionId) {
+        questionRepository.deleteById(questionId);
     }
 
     // 질문 글 목록 DTO(QnaListDTO) 만드는 공통 메서드
@@ -189,7 +154,6 @@ public class QnaService {
             qnaListDTO.setCustomer_id(question.getCustomer_id());
             qnaListDTO.setCategory_id(question.getCategory().getId());
             qnaListDTO.setTitle((question.getTitle()));
-            qnaListDTO.setContent(question.getContent());
             qnaListDTO.setLocation(question.getLocation());
             qnaListDTO.setCreated_at(question.getCreated_at());
             qnaListDTO.setCommentCount(Long.valueOf(question.getComments().size()));
@@ -222,11 +186,19 @@ public class QnaService {
         {
             CommentDTO commentDTO = new CommentDTO();
             commentDTO.setId(comment.getId());
+            if(comment.getParentComment() == null) {
+                commentDTO.setParentComment_id(null);
+            }
+            else {
+                commentDTO.setParentComment_id(comment.getParentComment().getId());
+            }
             commentDTO.setContent(comment.getContent());
             commentDTO.setCustomer_id(comment.getCustomer().getId());
             commentDTO.setCreated_at(LocalDateTime.now());
             return commentDTO;
         }).collect(Collectors.toList());
+
+        foundQuestion.incrementViewCount();
 
         return new QuestionResponseDTO(
                 foundQuestion.getId(),
@@ -236,8 +208,16 @@ public class QnaService {
                 foundQuestion.getContent(),
                 foundQuestion.getLocation(),
                 foundQuestion.getCreated_at(),
+                foundQuestion.getUpdated_at(),
+                foundQuestion.getLikeCount(),
+                foundQuestion.getScrapCount(),
+                foundQuestion.getViewCount(),
                 commentDTOS
         );
     }
+
+//    public Long getLikeCountsforQuestion(Long question_id) {
+//        return likesRepository.getLikesByQuestionId()
+//    }
 
 }

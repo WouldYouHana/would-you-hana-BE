@@ -30,8 +30,12 @@ public class Comment {
 
     private String content;
 
-    @OneToMany(mappedBy = "comment")
-    private List<ReplyComment> replies;
+    @ManyToOne
+    @JoinColumn(name="parent_id")
+    private Comment parentComment;
+
+    @OneToMany(mappedBy = "parentComment")
+    private List<Comment> replies;
 
     private LocalDateTime created_at;
 
