@@ -36,7 +36,7 @@ public class QnaController {
     /**
      * 질문(게시글) 등록
      * */
-    @PostMapping("/posts")
+    @PostMapping("/post")
     public ResponseEntity<QuestionAllResponseDTO> addNewQuestion(@Valid @RequestBody QuestionAddRequestDTO questionAddRequestDTO) {
         log.info("executed");
         QuestionAllResponseDTO createdPost = qnaService.addQuestion(questionAddRequestDTO);
@@ -58,7 +58,7 @@ public class QnaController {
     /**
      * 질문(게시글) 사진 등록
      * */
-    @PostMapping("/posts/image/{question_id}")
+    @PostMapping("/post/image/{question_id}")
     public ResponseEntity<List<ImageResponseDTO>> uploadImage(
             @PathVariable Long question_id,
             @RequestParam("file") List<MultipartFile> file) throws IOException {
@@ -70,7 +70,7 @@ public class QnaController {
 
 
     // 댓글 추가
-    @PostMapping("/posts/{question_id}/comment")
+    @PostMapping("/post/{question_id}/comment")
     public ResponseEntity<CommentResponseDTO> addComment(@PathVariable Long question_id,
                                                          @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
         CommentResponseDTO addedComment = qnaService.addComment(question_id, commentAddRequestDTO);
@@ -81,7 +81,7 @@ public class QnaController {
 
 
     // 댓글 삭제
-    @DeleteMapping("/posts/{question_id}/{comment_id}")
+    @DeleteMapping("/post/{question_id}/{comment_id}")
     public ResponseEntity deleteComment(@PathVariable Long question_id, @PathVariable Long comment_id) {
         qnaService.deleteComment(question_id, comment_id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -103,7 +103,7 @@ public class QnaController {
     }
 
     // 게시물 상세 조회
-    @GetMapping("/posts/{question_id}")
+    @GetMapping("/post/{question_id}")
     public ResponseEntity<QuestionResponseDTO> getOneQuestion(@PathVariable Long question_id) {
         QuestionResponseDTO questionResponseDTO = qnaService.getOneQuestion(question_id);
         return new ResponseEntity<>(questionResponseDTO, HttpStatus.OK);
