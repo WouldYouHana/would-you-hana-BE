@@ -17,7 +17,6 @@ public class QnaListDTO {
     private Long customer_id;
     private Long category_id;
     private String title;
-    private String content;
     private String location;
     private LocalDateTime created_at;
     private Long commentCount;

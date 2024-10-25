@@ -19,6 +19,10 @@ public class QuestionResponseDTO {
     private String content;
     private String location;
     private LocalDateTime created_at;
+    private LocalDateTime updated_at;
+    private Long like_count;
+    private Long scrap_count;
+    private Long view_count;
     private List<CommentDTO> commentList;
 
 }
