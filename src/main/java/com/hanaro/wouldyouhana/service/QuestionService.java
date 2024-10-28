@@ -1,21 +1,25 @@
 package com.hanaro.wouldyouhana.service;
 
 import com.hanaro.wouldyouhana.domain.*;
-import com.hanaro.wouldyouhana.dto.*;
+import com.hanaro.wouldyouhana.dto.comment.CommentDTO;
+import com.hanaro.wouldyouhana.dto.question.QnaListDTO;
+import com.hanaro.wouldyouhana.dto.question.QuestionAddRequestDTO;
+import com.hanaro.wouldyouhana.dto.question.QuestionAllResponseDTO;
+import com.hanaro.wouldyouhana.dto.question.QuestionResponseDTO;
 import com.hanaro.wouldyouhana.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestController
+@Service
 @Transactional
-public class QnaService {
+public class QuestionService {
     private final QuestionRepository questionRepository;
     private final CustomerRepository customerRepository;
     private final CategoryRepository categoryRepository;
@@ -25,8 +29,8 @@ public class QnaService {
     private final LikesRepository likesRepository;
 
     @Autowired
-    public QnaService(QuestionRepository questionRepository, CustomerRepository customerRepository, CategoryRepository categoryRepository, CommentRepository commentRepository,
-                      ImageRepository imageRepository, FileStorageService fileStorageService, LikesRepository likesRepository) {
+    public QuestionService(QuestionRepository questionRepository, CustomerRepository customerRepository, CategoryRepository categoryRepository, CommentRepository commentRepository,
+                           ImageRepository imageRepository, FileStorageService fileStorageService, LikesRepository likesRepository) {
         this.questionRepository = questionRepository;
         this.customerRepository = customerRepository;
         this.categoryRepository = categoryRepository;
@@ -91,9 +95,9 @@ public class QnaService {
     /**
      * 질문(게시글) 수정
      * */
-    public QuestionAllResponseDTO modifyQuestion(QuestionAddRequestDTO questionAddRequestDTO, Long question_id) {
+    public QuestionAllResponseDTO modifyQuestion(QuestionAddRequestDTO questionAddRequestDTO, Long questionId) {
         // 기존 질문 엔티티 조회
-        Question question = questionRepository.findById(question_id)
+        Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
         // 질문 정보 수정
@@ -106,7 +110,7 @@ public class QnaService {
         Question updatedQuestion = questionRepository.save(question);
 
         // 기존 이미지 삭제
-        imageRepository.deleteAllByQuestionId(question_id);
+        imageRepository.deleteAllByQuestionId(questionId);
 
         // 새로운 이미지 파일 처리
         if (questionAddRequestDTO.getFile() != null) {

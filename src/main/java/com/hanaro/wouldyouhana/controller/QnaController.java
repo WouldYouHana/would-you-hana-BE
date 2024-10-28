@@ -1,17 +1,25 @@
 package com.hanaro.wouldyouhana.controller;
 
-import com.hanaro.wouldyouhana.domain.Question;
 import com.hanaro.wouldyouhana.dto.*;
-import com.hanaro.wouldyouhana.repository.CommentRepository;
+import com.hanaro.wouldyouhana.dto.answer.AnswerAddRequestDTO;
+import com.hanaro.wouldyouhana.dto.answer.AnswerResponseDTO;
+import com.hanaro.wouldyouhana.dto.comment.CommentAddRequestDTO;
+import com.hanaro.wouldyouhana.dto.comment.CommentResponseDTO;
+import com.hanaro.wouldyouhana.dto.question.QnaListDTO;
+import com.hanaro.wouldyouhana.dto.question.QuestionAddRequestDTO;
+import com.hanaro.wouldyouhana.dto.question.QuestionAllResponseDTO;
+import com.hanaro.wouldyouhana.dto.question.QuestionResponseDTO;
+import com.hanaro.wouldyouhana.repository.AnswerRepository;
+import com.hanaro.wouldyouhana.service.AnswerService;
 import com.hanaro.wouldyouhana.service.CommentService;
 import com.hanaro.wouldyouhana.service.ImageService;
-import com.hanaro.wouldyouhana.service.QnaService;
+import com.hanaro.wouldyouhana.service.QuestionService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,15 +31,19 @@ import java.util.List;
 @Slf4j
 public class QnaController {
 
-    private final QnaService qnaService;
+    private final QuestionService questionService;
     private final ImageService imageService;
     private final CommentService commentService;
+    private final AnswerService answerService;
+    private final AnswerRepository answerRepository;
 
     @Autowired
-    public QnaController(QnaService qnaService, ImageService imageService, CommentService commentService) {
-        this.qnaService = qnaService;
+    public QnaController(QuestionService questionService, ImageService imageService, CommentService commentService, AnswerService answerService, AnswerRepository answerRepository) {
+        this.questionService = questionService;
         this.imageService = imageService;
         this.commentService = commentService;
+        this.answerService = answerService;
+        this.answerRepository = answerRepository;
     }
 
     /**
@@ -40,53 +52,71 @@ public class QnaController {
     @PostMapping("/post")
     public ResponseEntity<QuestionAllResponseDTO> addNewQuestion(@Valid @RequestBody QuestionAddRequestDTO questionAddRequestDTO) {
         log.info("executed");
-        QuestionAllResponseDTO createdPost = qnaService.addQuestion(questionAddRequestDTO);
+        QuestionAllResponseDTO createdPost = questionService.addQuestion(questionAddRequestDTO);
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
 
     /**
      * 질문(게시글) 수정
      * */
-    @PostMapping("/post/modify/{question_id}")
-    public ResponseEntity<QuestionAllResponseDTO> modifyQuestion(@PathVariable Long question_id,
+
+    @PostMapping("/post/modify/{questionId}")
+    public ResponseEntity<QuestionAllResponseDTO> modifyQuestion(@PathVariable Long questionId,
                                                                  @RequestBody QuestionAddRequestDTO questionAddRequestDTO){
 
-        QuestionAllResponseDTO modifiedPost = qnaService.modifyQuestion(questionAddRequestDTO, question_id);
+        QuestionAllResponseDTO modifiedPost = questionService.modifyQuestion(questionAddRequestDTO, questionId);
         return new ResponseEntity<>(modifiedPost, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/post/delete/{question_id}")
-    public ResponseEntity deleteQuestion(@PathVariable Long question_id) {
-        qnaService.deleteQuestion(question_id);
+    /**
+     * 질문(게시글) 삭제
+     * */
+
+    @PreAuthorize("@customerRepository.findByEmail(principal.getUsername()).getId() == @questionRepository.findById(#question_id).customerId")
+    @DeleteMapping("/post/delete/{questionId}")
+    public ResponseEntity deleteQuestion(@PathVariable Long questionId) {
+        questionService.deleteQuestion(questionId);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
      * 질문(게시글) 사진 등록
      * */
-    @PostMapping("/post/image/{question_id}")
+    @PostMapping("/post/image/{questionId}")
     public ResponseEntity<List<ImageResponseDTO>> uploadImage(
-            @PathVariable Long question_id,
+            @PathVariable Long questionId,
             @RequestParam("file") List<MultipartFile> file) throws IOException {
 
-        List<ImageResponseDTO> savedImg = imageService.saveImages(file, question_id);
+        List<ImageResponseDTO> savedImg = imageService.saveImages(file, questionId);
 
         return new ResponseEntity<>(savedImg, HttpStatus.CREATED);
     }
 
+    // 답변 등록
+    @PostMapping("/post/answer/{questionId}")
+    public ResponseEntity<AnswerResponseDTO> addAnswer(@PathVariable Long questionId,
+                                                       @RequestBody AnswerAddRequestDTO answerAddRequestDTO) {
+        AnswerResponseDTO addedAnswer = answerService.addAnswer(questionId, answerAddRequestDTO);
+        return new ResponseEntity<>(addedAnswer, HttpStatus.CREATED);
+    }
 
+//    @DeleteMapping("/post/answer/{questionId}/{answerId}")
+//    public ResponseEntity deleteAnswer(@PathVariable Long questionId, @PathVariable Long answerId) {
+//        questionService.
+//        answerService.deleteAnswer(answerId);
+//    }
     // 댓글 추가
-    @PostMapping("/post/comment/{question_id}/")
-    public ResponseEntity<CommentResponseDTO> addComment(@PathVariable Long question_id,
+    @PostMapping("/post/comment/{questionId}/")
+    public ResponseEntity<CommentResponseDTO> addComment(@PathVariable Long questionId,
                                                          @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
-        CommentResponseDTO addedComment = commentService.addComment(question_id, null, commentAddRequestDTO);
+        CommentResponseDTO addedComment = commentService.addComment(questionId, null, commentAddRequestDTO);
         return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
     }
 
     // 대댓글 추가
-    @PostMapping("/post/replycomment/{question_id}/{parentComment_Id}")
-    public ResponseEntity<CommentResponseDTO> createReply(@PathVariable Long question_id, @PathVariable Long parentComment_Id, @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
-        CommentResponseDTO addedComment = commentService.addComment(question_id, parentComment_Id, commentAddRequestDTO);
+    @PostMapping("/post/replycomment/{questionId}/{parentCommentId}")
+    public ResponseEntity<CommentResponseDTO> createReply(@PathVariable Long questionId, @PathVariable Long parentCommentId, @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
+        CommentResponseDTO addedComment = commentService.addComment(questionId, parentCommentId, commentAddRequestDTO);
         return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
     }
 
@@ -94,9 +124,9 @@ public class QnaController {
 
 
     // 댓글 삭제
-    @DeleteMapping("/post/comment/{question_id}/{comment_id}")
-    public ResponseEntity deleteComment(@PathVariable Long question_id, @PathVariable Long comment_id) {
-        commentService.deleteComment(question_id, comment_id);
+    @DeleteMapping("/post/comment/{questionId}/{commentId}")
+    public ResponseEntity deleteComment(@PathVariable Long questionId, @PathVariable Long commentId) {
+        commentService.deleteComment(questionId, commentId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -104,28 +134,28 @@ public class QnaController {
     // 게시물 전체 조회
     @GetMapping("/qnalist")
     public ResponseEntity<List<QnaListDTO>> getAllQuestions() {
-        List<QnaListDTO> questionList = qnaService.getAllQuestions();
+        List<QnaListDTO> questionList = questionService.getAllQuestions();
         return new ResponseEntity<>(questionList, HttpStatus.OK);
     }
 
     // 카테고리별 게시물 전체 조회
-    @GetMapping("/qnalist/{category_id}")
-    public ResponseEntity<List<QnaListDTO>> getAllQuestionsByCategory(@PathVariable Long category_id) {
-        List<QnaListDTO> questionByCategoryList = qnaService.getAllQuestionsByCategory(category_id);
+    @GetMapping("/qnalist/{categoryId}")
+    public ResponseEntity<List<QnaListDTO>> getAllQuestionsByCategory(@PathVariable Long categoryId) {
+        List<QnaListDTO> questionByCategoryList = questionService.getAllQuestionsByCategory(categoryId);
         return new ResponseEntity<>(questionByCategoryList, HttpStatus.OK);
     }
 
     // 고객별 게시물 전체 조회
-    @GetMapping("/mypage/questions/{customer_id}")
-    public ResponseEntity<List<QnaListDTO>> getAllQuestionsByCustomer(@PathVariable Long customer_id) {
-        List<QnaListDTO> questionByCustomerList = qnaService.getAllQuestionsByCustomerId(customer_id);
+    @GetMapping("/mypage/questions/{customerId}")
+    public ResponseEntity<List<QnaListDTO>> getAllQuestionsByCustomer(@PathVariable Long customerId) {
+        List<QnaListDTO> questionByCustomerList = questionService.getAllQuestionsByCustomerId(customerId);
         return new ResponseEntity<>(questionByCustomerList, HttpStatus.OK);
     }
 
     // 게시물 상세 조회
-    @GetMapping("/post/{question_id}")
-    public ResponseEntity<QuestionResponseDTO> getOneQuestion(@PathVariable Long question_id) {
-        QuestionResponseDTO questionResponseDTO = qnaService.getOneQuestion(question_id);
+    @GetMapping("/post/{questionId}")
+    public ResponseEntity<QuestionResponseDTO> getOneQuestion(@PathVariable Long questionId) {
+        QuestionResponseDTO questionResponseDTO = questionService.getOneQuestion(questionId);
         return new ResponseEntity<>(questionResponseDTO, HttpStatus.OK);
     }
 }

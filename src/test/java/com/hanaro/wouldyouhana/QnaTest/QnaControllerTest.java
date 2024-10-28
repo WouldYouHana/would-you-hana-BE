@@ -2,9 +2,8 @@ package com.hanaro.wouldyouhana.QnaTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanaro.wouldyouhana.domain.Question;
-import com.hanaro.wouldyouhana.dto.QuestionAddRequestDTO;
+import com.hanaro.wouldyouhana.dto.question.QuestionAddRequestDTO;
 import com.hanaro.wouldyouhana.repository.QuestionRepository;
-import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.internal.constraintvalidators.bv.AssertTrueValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.context.WebApplicationContext;
-
-import javax.print.attribute.standard.Media;
 
 import java.util.List;
 

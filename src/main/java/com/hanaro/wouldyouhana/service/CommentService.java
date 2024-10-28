@@ -3,8 +3,8 @@ package com.hanaro.wouldyouhana.service;
 import com.hanaro.wouldyouhana.domain.Comment;
 import com.hanaro.wouldyouhana.domain.Customer;
 import com.hanaro.wouldyouhana.domain.Question;
-import com.hanaro.wouldyouhana.dto.CommentAddRequestDTO;
-import com.hanaro.wouldyouhana.dto.CommentResponseDTO;
+import com.hanaro.wouldyouhana.dto.comment.CommentAddRequestDTO;
+import com.hanaro.wouldyouhana.dto.comment.CommentResponseDTO;
 import com.hanaro.wouldyouhana.repository.CommentRepository;
 import com.hanaro.wouldyouhana.repository.CustomerRepository;
 import com.hanaro.wouldyouhana.repository.QuestionRepository;
@@ -31,10 +31,10 @@ public class CommentService {
 
     // 댓글 추가
     public CommentResponseDTO addComment(Long questionId, Long parentCommentId, CommentAddRequestDTO commentAddRequestDTO) {
-        Question question = questionRepository.findById(questionId)
+        Question foundQuestion = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
-        Customer customer = customerRepository.findById(commentAddRequestDTO.getCustomerId())
+        Customer foundCustomer = customerRepository.findById(commentAddRequestDTO.getCustomerId())
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
         Comment pComment = null;
@@ -45,14 +45,14 @@ public class CommentService {
         }
 
         Comment comment = Comment.builder()
-                .question(question)
-                .customer(customer)
+                .question(foundQuestion)
+                .customer(foundCustomer)
                 .content(commentAddRequestDTO.getContent())
                 .parentComment(pComment)
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        question.addComments(comment);
+        foundQuestion.addComments(comment);
         Comment addedComment = commentRepository.save(comment);
 
         return new CommentResponseDTO(
@@ -62,6 +62,14 @@ public class CommentService {
                 addedComment.getCreatedAt()
         );
     }
+
+    // 댓글 수정
+//    public CommentResponseDTO updateComment(Long commentId, CommentAddRequestDTO commentAddRequestDTO) {
+//        Comment foundComment = commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("comment not found"));
+//
+//        foundComment.setContent(commentAddRequestDTO.getContent());
+//
+//    }
 
     // 게시글에 대한 댓글 가져오기
     public List<Comment> getCommentsByQuestionId(Long questionId) {

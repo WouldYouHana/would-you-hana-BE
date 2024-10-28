@@ -1,7 +1,7 @@
 package com.hanaro.wouldyouhana.controller;
 
-import com.hanaro.wouldyouhana.dto.LikesScrapRequestDTO;
-import com.hanaro.wouldyouhana.dto.LikesScrapResponseDTO;
+import com.hanaro.wouldyouhana.dto.likesScrap.LikesScrapRequestDTO;
+import com.hanaro.wouldyouhana.dto.likesScrap.LikesScrapResponseDTO;
 import com.hanaro.wouldyouhana.service.LikesScrapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

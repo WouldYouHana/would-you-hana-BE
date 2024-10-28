@@ -1,6 +1,6 @@
-package com.hanaro.wouldyouhana.dto;
+package com.hanaro.wouldyouhana.dto.question;
 
-import com.hanaro.wouldyouhana.domain.Comment;
+import com.hanaro.wouldyouhana.dto.comment.CommentDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
