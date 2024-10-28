@@ -47,12 +47,12 @@ public class QnaService {
 
         // 질문 엔티티 생성
         Question question = Question.builder()
-                .customerId(questionAddRequestDTO.getCustomer_id())
+                .customerId(questionAddRequestDTO.getCustomerId())
                 .category(category)
                 .title(questionAddRequestDTO.getTitle())
                 .content(questionAddRequestDTO.getContent())
                 .location(questionAddRequestDTO.getLocation())
-                .created_at(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build();
 
         // 질문 저장
@@ -63,7 +63,7 @@ public class QnaService {
                 // 파일 시스템에 저장 로직 추가
                 String filePath = fileStorageService.saveFile(file); // 파일 저장 후 경로를 반환하는 메서드
                 Image image = Image.builder()
-                        .file_path(filePath) // 파일 경로 설정
+                        .filePath(filePath) // 파일 경로 설정
                         .question(savedQuestion) // 질문과 연결
                         .build();
                 // 이미지 저장
@@ -79,8 +79,8 @@ public class QnaService {
                 savedQuestion.getTitle(),
                 savedQuestion.getContent(),
                 savedQuestion.getLocation(),
-                savedQuestion.getCreated_at(),
-                savedQuestion.getUpdated_at(), // 추가: 업데이트 시간
+                savedQuestion.getCreatedAt(),
+                savedQuestion.getUpdatedAt(), // 추가: 업데이트 시간
                 Integer.toUnsignedLong(0), // likeCount (초기값)
                 Integer.toUnsignedLong(0), // scrapCount (초기값)
                 Integer.toUnsignedLong(0), // viewCount (초기값)
@@ -100,7 +100,7 @@ public class QnaService {
         question.setTitle(questionAddRequestDTO.getTitle());
         question.setContent(questionAddRequestDTO.getContent());
         question.setLocation(questionAddRequestDTO.getLocation());
-        question.setUpdated_at(LocalDateTime.now()); // 수정 시간 업데이트
+        question.setUpdatedAt(LocalDateTime.now()); // 수정 시간 업데이트
 
         // 질문 저장
         Question updatedQuestion = questionRepository.save(question);
@@ -114,7 +114,7 @@ public class QnaService {
                 // 파일 시스템에 저장 로직 추가
                 String filePath = fileStorageService.saveFile(file); // 파일 저장 후 경로를 반환하는 메서드
                 Image image = Image.builder()
-                        .file_path(filePath) // 파일 경로 설정
+                        .filePath(filePath) // 파일 경로 설정
                         .question(updatedQuestion) // 질문과 연결
                         .build();
                 // 이미지 저장
@@ -130,8 +130,8 @@ public class QnaService {
                 updatedQuestion.getTitle(),
                 updatedQuestion.getContent(),
                 updatedQuestion.getLocation(),
-                updatedQuestion.getCreated_at(),
-                updatedQuestion.getUpdated_at(), // 업데이트 시간
+                updatedQuestion.getCreatedAt(),
+                updatedQuestion.getUpdatedAt(), // 업데이트 시간
                 updatedQuestion.getLikeCount(), // likeCount (초기값)
                 updatedQuestion.getScrapCount(), // scrapCount (초기값)
                 updatedQuestion.getViewCount(), // viewCount (초기값)
@@ -154,14 +154,14 @@ public class QnaService {
             CommentDTO commentDTO = new CommentDTO();
             commentDTO.setId(comment.getId());
             if(comment.getParentComment() == null) {
-                commentDTO.setParentComment_id(null);
+                commentDTO.setParentCommentId(null);
             }
             else {
-                commentDTO.setParentComment_id(comment.getParentComment().getId());
+                commentDTO.setParentCommentId(comment.getParentComment().getId());
             }
             commentDTO.setContent(comment.getContent());
-            commentDTO.setCustomer_id(comment.getCustomer().getId());
-            commentDTO.setCreated_at(LocalDateTime.now());
+            commentDTO.setCustomerId(comment.getCustomer().getId());
+            commentDTO.setCreatedAt(LocalDateTime.now());
             return commentDTO;
         }).collect(Collectors.toList());
 
@@ -174,8 +174,8 @@ public class QnaService {
                 foundQuestion.getTitle(),
                 foundQuestion.getContent(),
                 foundQuestion.getLocation(),
-                foundQuestion.getCreated_at(),
-                foundQuestion.getUpdated_at(),
+                foundQuestion.getCreatedAt(),
+                foundQuestion.getUpdatedAt(),
                 foundQuestion.getLikeCount(),
                 foundQuestion.getScrapCount(),
                 foundQuestion.getViewCount(),
@@ -188,12 +188,12 @@ public class QnaService {
     public List<QnaListDTO> makeQnaListDTO(List<Question> fql) {
         List<QnaListDTO> foundQuestionListDTO = fql.stream().map(question -> {
             QnaListDTO qnaListDTO = new QnaListDTO();
-            qnaListDTO.setQuestion_id(question.getId());
-            qnaListDTO.setCustomer_id(question.getCustomerId());
-            qnaListDTO.setCategory_id(question.getCategory().getId());
+            qnaListDTO.setQuestionId(question.getId());
+            qnaListDTO.setCustomerId(question.getCustomerId());
+            qnaListDTO.setCategoryId(question.getCategory().getId());
             qnaListDTO.setTitle((question.getTitle()));
             qnaListDTO.setLocation(question.getLocation());
-            qnaListDTO.setCreated_at(question.getCreated_at());
+            qnaListDTO.setCreatedAt(question.getCreatedAt());
             qnaListDTO.setCommentCount(Integer.toUnsignedLong(question.getComments().size()));
             qnaListDTO.setLikeCount(question.getLikeCount());
             qnaListDTO.setScrapCount(question.getScrapCount());

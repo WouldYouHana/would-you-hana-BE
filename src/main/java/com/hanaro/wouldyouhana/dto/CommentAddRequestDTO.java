@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class CommentAddRequestDTO {
 
     @NotNull
-    private Long customer_id;
+    private Long customerId;
     @NotNull
     private String content;
 

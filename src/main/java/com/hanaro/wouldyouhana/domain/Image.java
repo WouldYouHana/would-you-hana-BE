@@ -23,5 +23,5 @@ public class Image {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    private String file_path;
+    private String filePath;
 }

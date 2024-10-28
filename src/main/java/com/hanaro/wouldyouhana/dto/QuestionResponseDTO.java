@@ -12,17 +12,17 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class QuestionResponseDTO {
-    private Long question_id;
-    private Long customer_id;
-    private Long category_id;
+    private Long questionId;
+    private Long customerId;
+    private Long categoryId;
     private String title;
     private String content;
     private String location;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
-    private Long like_count;
-    private Long scrap_count;
-    private Long view_count;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Long likeCount;
+    private Long scrapCount;
+    private Long viewCount;
     private List<CommentDTO> commentList;
 
 }

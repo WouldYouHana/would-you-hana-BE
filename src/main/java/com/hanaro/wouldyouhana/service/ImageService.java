@@ -55,7 +55,7 @@ public class ImageService {
 
             // 이미지 엔티티 생성
             Image image = Image.builder()
-                    .file_path(filePath)
+                    .filePath(filePath)
                     .question(question) // 조회한 Question 객체 사용
                     .customer(customer) // 조회한 Customer 객체 사용
                     .build();
@@ -64,7 +64,7 @@ public class ImageService {
             Image savedImage = imageRepository.save(image);
 
             // 응답 DTO 생성
-            ImageResponseDTO responseDTO = new ImageResponseDTO(savedImage.getId(), savedImage.getFile_path());
+            ImageResponseDTO responseDTO = new ImageResponseDTO(savedImage.getId(), savedImage.getFilePath());
             responseDTOs.add(responseDTO);
         }
 

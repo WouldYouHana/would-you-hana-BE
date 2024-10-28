@@ -26,6 +26,6 @@ public class Answer {
     @JoinColumn(name = "question_id")  // 외래 키 설정  // 외래 키 설정
     private Question question;
     private String content;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

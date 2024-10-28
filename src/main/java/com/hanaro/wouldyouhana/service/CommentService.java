@@ -34,7 +34,7 @@ public class CommentService {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
-        Customer customer = customerRepository.findById(commentAddRequestDTO.getCustomer_id())
+        Customer customer = customerRepository.findById(commentAddRequestDTO.getCustomerId())
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
         Comment pComment = null;
@@ -49,7 +49,7 @@ public class CommentService {
                 .customer(customer)
                 .content(commentAddRequestDTO.getContent())
                 .parentComment(pComment)
-                .created_at(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build();
 
         question.addComments(comment);
@@ -59,7 +59,7 @@ public class CommentService {
                 addedComment.getCustomer().getId(),
                 addedComment.getQuestion().getId(),
                 addedComment.getContent(),
-                addedComment.getCreated_at()
+                addedComment.getCreatedAt()
         );
     }
 

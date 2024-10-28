@@ -54,12 +54,12 @@ public class Customer implements UserDetails {
 
     // 경험치
     @Column
-    private Long experience_points;
+    private Long experiencePoints;
 
     // 가입일자
     @CreatedDate
     @Column
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     // 성별
     @Column
@@ -67,7 +67,7 @@ public class Customer implements UserDetails {
 
     // 생년월일
     @Column
-    private String birth_date;
+    private String birthDate;
 
     @OneToMany(mappedBy = "customerId")
     @JsonManagedReference
