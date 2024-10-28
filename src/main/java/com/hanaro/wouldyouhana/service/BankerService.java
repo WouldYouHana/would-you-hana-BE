@@ -1,9 +1,9 @@
 package com.hanaro.wouldyouhana.service;
 
-import com.hanaro.wouldyouhana.domain.Customer;
+import com.hanaro.wouldyouhana.domain.Banker;
 import com.hanaro.wouldyouhana.forSignIn.JwtToken;
 import com.hanaro.wouldyouhana.forSignIn.JwtTokenProvider;
-import com.hanaro.wouldyouhana.repository.CustomerRepository;
+import com.hanaro.wouldyouhana.repository.BankerRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -15,25 +15,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class CustomerService {
+public class BankerService {
 
-    private final CustomerRepository customerRepository;
+    private final BankerRepository bankerRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private EmailService emailService;
     private Map<String, String> verificationCodes = new HashMap<>();
 
-    public CustomerService(CustomerRepository customerRepository, BCryptPasswordEncoder passwordEncoder, AuthenticationManagerBuilder authenticationManagerBuilder, JwtTokenProvider jwtTokenProvider) {
-        this.customerRepository = customerRepository;
+    public BankerService(BankerRepository bankerRepository, BCryptPasswordEncoder passwordEncoder, AuthenticationManagerBuilder authenticationManagerBuilder, JwtTokenProvider jwtTokenProvider) {
+        this.bankerRepository = bankerRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.jwtTokenProvider = jwtTokenProvider;
         this.emailService = emailService;
     }
 
-    public Customer registerCustomer(Customer customer) {
+    public Banker registerBanker(Banker banker) {
         // 비밀번호 암호화
-        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
-        return customerRepository.save(customer);
+        banker.setPassword(passwordEncoder.encode(banker.getPassword()));
+        return bankerRepository.save(banker);
     }
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
