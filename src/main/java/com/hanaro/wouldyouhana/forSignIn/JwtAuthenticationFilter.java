@@ -35,8 +35,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         System.out.println("JwtAuthenticationFilter initialized"); // 추가된 로그
     }
 
-
-
 //    @Override
 //    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 //        System.out.println("Filtering request..."); // 추가된 로그

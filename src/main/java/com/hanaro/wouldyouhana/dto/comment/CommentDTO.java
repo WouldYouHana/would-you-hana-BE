@@ -1,6 +1,5 @@
-package com.hanaro.wouldyouhana.dto;
+package com.hanaro.wouldyouhana.dto.comment;
 
-import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

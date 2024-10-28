@@ -1,4 +1,4 @@
-package com.hanaro.wouldyouhana.dto;
+package com.hanaro.wouldyouhana.dto.question;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

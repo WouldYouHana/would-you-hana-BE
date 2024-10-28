@@ -5,6 +5,8 @@ import com.hanaro.wouldyouhana.forSignIn.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -15,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalAuthentication
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
@@ -34,13 +37,16 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/members/sign-in").permitAll()
-                        .requestMatchers("/members/test").authenticated() // 인증된 사용자만 접근 가능
-                        .anyRequest().authenticated()
+                        .requestMatchers("/members/test").authenticated()
+                        .requestMatchers("/mypage").authenticated()
+                        .requestMatchers("/post/*").permitAll()// 질문글 조회는 허용
+                        .requestMatchers("/post/**").authenticated() // 그 외는 인증 필요(수정, 삭제 등)
+                        .requestMatchers("/mypage/**").authenticated() // 마이페이지 하위 경로 모두 인증 필요
+                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
 
 }
