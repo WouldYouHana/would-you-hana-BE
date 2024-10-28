@@ -9,16 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class CustomerSignUpDto {
-    private String nickname;
+
+public class BankerSignUpDto {
+    private String name;
     private String email;
     private String confirmEmail; // 이메일 인증
     private String password;
     private String confirmPassword; // 비밀번호 확인
-    private String name;
-    private String phone;
-    private String location;
-    private String gender;
-    private String birthDate;
+    private String branchName;
     private String login;
 }
