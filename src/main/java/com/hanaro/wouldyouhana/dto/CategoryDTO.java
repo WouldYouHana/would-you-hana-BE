@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CategoryDTO {
 
-    private Long category_id;
+    private Long categoryId;
 
     private String name;
 

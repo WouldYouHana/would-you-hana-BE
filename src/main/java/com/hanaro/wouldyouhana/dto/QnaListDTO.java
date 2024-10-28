@@ -13,13 +13,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class QnaListDTO {
 
-    private Long question_id;
-    private Long customer_id;
-    private Long category_id;
+    private Long questionId;
+    private Long customerId;
+    private Long categoryId;
     private String title;
     private String location;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     private Long commentCount;
     private Long likeCount;
+    private Long scrapCount;
     private Long viewCount;
+
 }

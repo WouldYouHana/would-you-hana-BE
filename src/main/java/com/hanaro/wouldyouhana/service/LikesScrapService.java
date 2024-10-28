@@ -128,7 +128,7 @@ public class LikesScrapService {
                 .sorted(Comparator.comparing(scrap -> scrap.getQuestion().getId(), Comparator.reverseOrder())) // ID 기준으로 내림차순 정렬
                 .map(scrap -> new LikesScrapResponseDTO(scrap.getId(), scrap.getQuestion().getId(),scrap.getQuestion().getCategory().getName(),
                         scrap.getQuestion().getTitle(), scrap.getQuestion().getLikeCount(), scrap.getQuestion().getViewCount(),
-                        scrap.getQuestion().getCreated_at(), scrap.getQuestion().getAnswers().getBanker().getName()))
+                        scrap.getQuestion().getCreatedAt(), scrap.getQuestion().getAnswers().getBanker().getName()))
                 .toList(); // 변환된 DTO 리스트 반환
     }
 
@@ -148,7 +148,7 @@ public class LikesScrapService {
                 .sorted(Comparator.comparing(like -> like.getQuestion().getId(), Comparator.reverseOrder())) // ID 기준으로 내림차순 정렬
                 .map(like -> new LikesScrapResponseDTO(like.getId(), like.getQuestion().getId(),like.getQuestion().getCategory().getName(),
                         like.getQuestion().getTitle(), like.getQuestion().getLikeCount(), like.getQuestion().getViewCount(),
-                        like.getQuestion().getCreated_at(), like.getQuestion().getAnswers().getBanker().getName()))
+                        like.getQuestion().getCreatedAt(), like.getQuestion().getAnswers().getBanker().getName()))
                 .toList(); // 변환된 DTO 리스트 반환
     }
 }

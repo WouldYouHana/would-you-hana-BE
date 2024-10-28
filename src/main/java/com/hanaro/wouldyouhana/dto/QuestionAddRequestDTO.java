@@ -16,7 +16,7 @@ public class QuestionAddRequestDTO {
     @NotNull
     private String title;
     @NotNull
-    private Long customer_id;
+    private Long customerId;
     @NotNull
     private Long category_id;
     @NotNull

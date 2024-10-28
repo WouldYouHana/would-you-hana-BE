@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 
 public class CommentResponseDTO {
     @NotNull
-    private Long customer_id;
+    private Long customerId;
     @NotNull
-    private Long question_id;
+    private Long questionId;
     @NotNull
     private String content;
     @NotNull
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 }

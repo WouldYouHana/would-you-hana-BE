@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ImageResponseDTO {
 
-    private Long image_id;
-    private String file_path;
+    private Long imageId;
+    private String filePath;
 
 }

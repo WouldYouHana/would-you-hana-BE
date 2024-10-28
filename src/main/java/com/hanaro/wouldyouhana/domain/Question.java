@@ -20,7 +20,8 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long customer_id;
+    @Column(name="customer_id")
+    private Long customerId;
 
     @ManyToOne // 다대일 관계 설정
     @JoinColumn(name = "category_id", nullable = false) // 외래 키 설정
@@ -29,8 +30,8 @@ public class Question {
     private String title;
     private String content;
     private String location;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private Long likeCount;
     private Long scrapCount;
     private Long viewCount;

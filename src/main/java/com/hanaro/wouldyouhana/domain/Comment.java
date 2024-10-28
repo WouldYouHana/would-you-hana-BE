@@ -37,7 +37,7 @@ public class Comment {
     @OneToMany(mappedBy = "parentComment")
     private List<Comment> replies;
 
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     // Getters and Setters
 }

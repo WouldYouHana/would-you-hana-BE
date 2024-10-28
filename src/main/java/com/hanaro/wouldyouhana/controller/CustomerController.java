@@ -49,9 +49,9 @@ public class CustomerController {
                 .phone(signupRequest.getPhone())
                 .location(signupRequest.getLocation())
                 .gender(signupRequest.getGender())
-                .birth_date(signupRequest.getBirthDate())
-                .experience_points(0L) // 초기 경험치 0 설정
-                .created_at(LocalDateTime.now()) // 현재 시간으로 가입일자 설정
+                .birthDate(signupRequest.getBirthDate())
+                .experiencePoints(0L) // 초기 경험치 0 설정
+                .createdAt(LocalDateTime.now()) // 현재 시간으로 가입일자 설정
                 .build();
 
         // 회원가입 처리

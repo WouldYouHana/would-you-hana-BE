@@ -115,6 +115,13 @@ public class QnaController {
         return new ResponseEntity<>(questionByCategoryList, HttpStatus.OK);
     }
 
+    // 고객별 게시물 전체 조회
+    @GetMapping("/mypage/questions/{customer_id}")
+    public ResponseEntity<List<QnaListDTO>> getAllQuestionsByCustomer(@PathVariable Long customer_id) {
+        List<QnaListDTO> questionByCustomerList = qnaService.getAllQuestionsByCustomerId(customer_id);
+        return new ResponseEntity<>(questionByCustomerList, HttpStatus.OK);
+    }
+
     // 게시물 상세 조회
     @GetMapping("/post/{question_id}")
     public ResponseEntity<QuestionResponseDTO> getOneQuestion(@PathVariable Long question_id) {
