@@ -36,8 +36,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/members/sign-in").permitAll()
-                        .requestMatchers("/members/test").authenticated()
+                        .requestMatchers("/members/signIn").permitAll()
+                        .requestMatchers("/members/test").permitAll()
                         .requestMatchers("/mypage").authenticated()
                         .requestMatchers("/post/*").permitAll()// 질문글 조회는 허용
                         .requestMatchers("/post/**").authenticated() // 그 외는 인증 필요(수정, 삭제 등)

@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping("/members")
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -28,7 +28,7 @@ public class CustomerController {
     }
 
     // 회원가입 처리하는 API
-    @PostMapping("/signup")
+    @PostMapping("/signUp")
     public ResponseEntity<?> signup(@RequestBody CustomerSignUpDto signupRequest) {
         // 비밀번호 일치하는지 확인
         if (!signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {

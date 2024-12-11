@@ -50,7 +50,7 @@ public class BankerService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // 4. JWT 토큰 생성
-        JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
+        JwtToken jwtToken = jwtTokenProvider.generateToken(email, authentication);
 
         return jwtToken;
     }

@@ -29,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(customer.getUsername())
                 .password(passwordEncoder.encode(customer.getPassword()))
-                //.password(customer.getPassword()) // 저장된 비밀번호를 그대로 사용
+//                .password(customer.getPassword()) // 저장된 비밀번호를 그대로 사용
                 .roles(customer.getRoles().toArray(new String[0]))
                 .build();
     }

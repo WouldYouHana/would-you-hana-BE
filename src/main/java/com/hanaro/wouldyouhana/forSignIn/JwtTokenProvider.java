@@ -28,14 +28,14 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
     private final Key key;
 
-    // application.yml에서 secret 값 가져와서 key에 저장
+    // application.properties에서 secret 값 가져와서 key에 저장
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     // Member 정보를 가지고 AccessToken, RefreshToken을 생성하는 메서드
-    public JwtToken generateToken(Authentication authentication) {
+    public JwtToken generateToken(String userEmail, Authentication authentication) {
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -48,6 +48,7 @@ public class JwtTokenProvider {
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
+                .claim("userEmail", userEmail) // 로그인 ID 추가
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -80,9 +81,17 @@ public class JwtTokenProvider {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
+        // 클레임에서 이메일 정보 가져오기
+        String userEmail = claims.get("userEmail", String.class);
+        System.out.println(userEmail);
+
+        // CustomUserDetails에 이메일 포함
+        CustomUserDetails principal = new CustomUserDetails(claims.getSubject(), "", authorities, userEmail);
+
         // UserDetails 객체를 만들어서 Authentication return
         // UserDetails: interface, User: UserDetails를 구현한 class
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
+//        UserDetails principal = new User(claims.getSubject(), "", authorities);
+
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 

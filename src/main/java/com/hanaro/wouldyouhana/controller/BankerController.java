@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/banker")
+@RequestMapping("/bankers")
 public class BankerController {
 
     private final BankerService bankerService;
@@ -27,7 +27,7 @@ public class BankerController {
     }
 
     // 회원가입 처리하는 API
-    @PostMapping("/signup")
+    @PostMapping("/signUp")
     public ResponseEntity<?> signup(@RequestBody BankerSignUpDto signupRequest) {
         // 비밀번호 일치하는지 확인
         if (!signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
