@@ -55,8 +55,17 @@ public class CustomerService {
         return jwtToken;
     }
 
-//    public abstract JwtToken signIn(String username, String password)
+    public String getLocation(String token){
+        // JWT 토큰에서 사용자 이메일을 추출
+        String email = jwtTokenProvider.getUsernameFromToken(token);
 
+        // 이메일로 고객을 조회
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Customer not found with email: " + email));
+
+        // 고객의 location 정보 반환
+        return customer.getLocation();
+    }
 
     public String sendEmailVerification(String email) {
         String code = emailService.sendVerificationCode(email);

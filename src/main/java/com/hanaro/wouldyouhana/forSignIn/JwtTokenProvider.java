@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class JwtTokenProvider {
+
     private final Key key;
 
     // application.properties에서 secret 값 가져와서 key에 저장
@@ -128,6 +129,15 @@ public class JwtTokenProvider {
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
+    }
+
+    // JWT에서 username(예: email)을 추출하는 메서드
+    public String getUsernameFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getSubject();  // JWT의 subject에 email이 저장되어 있다고 가정
     }
 
 }
