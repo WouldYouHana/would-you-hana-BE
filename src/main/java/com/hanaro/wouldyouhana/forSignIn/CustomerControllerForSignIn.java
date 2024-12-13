@@ -16,7 +16,7 @@ public class CustomerControllerForSignIn {
 
     private final CustomerService customerService;
 
-    @PostMapping("/sign-in")
+    @PostMapping("/signIn")
     public JwtToken signIn(@RequestBody SignInDto signInDto) {
         String email = signInDto.getEmail();
         String password = signInDto.getPassword();
@@ -33,7 +33,6 @@ public class CustomerControllerForSignIn {
         System.out.println("Accessing /members/test endpoint");
         System.out.println("!!!!!!!!!!!!!!!!!!!"+SecurityUtil.getCurrentUsername());
         return SecurityUtil.getCurrentUsername();
-
     }
 
 }
