@@ -8,7 +8,6 @@ import com.hanaro.wouldyouhana.dto.question.*;
 import com.hanaro.wouldyouhana.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -169,16 +168,15 @@ public class QuestionService {
         Question foundQuestion = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
-        Answer foundAnswer = answerRepository.findByQuestionId(questionId)
-                .orElseThrow(() -> new EntityNotFoundException("Answer not found"));
-
-        AnswerResponseDTO answerResponseDTO = new AnswerResponseDTO(
-                foundAnswer.getBanker().getName(),
-                foundQuestion.getId(),
-                foundQuestion.getContent(),
-                foundQuestion.getCreatedAt(),
-                foundQuestion.getUpdatedAt()
-        );
+        AnswerResponseDTO answerResponseDTO = answerRepository.findByQuestionId(questionId)
+                .map(answer -> new AnswerResponseDTO(
+                        answer.getBanker().getName(),
+                        foundQuestion.getId(),
+                        foundQuestion.getContent(),
+                        foundQuestion.getCreatedAt(),
+                        foundQuestion.getUpdatedAt()
+                ))
+                .orElse(null);  // 답변이 없으면 null을 반환
 
         List<CommentDTO> commentDTOS = foundQuestion.getComments().stream().map(comment ->
         {
