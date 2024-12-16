@@ -9,6 +9,7 @@ import com.hanaro.wouldyouhana.dto.question.QnaListDTO;
 import com.hanaro.wouldyouhana.dto.question.QuestionAddRequestDTO;
 import com.hanaro.wouldyouhana.dto.question.QuestionAllResponseDTO;
 import com.hanaro.wouldyouhana.dto.question.QuestionResponseDTO;
+import com.hanaro.wouldyouhana.forSignIn.SecurityUtil;
 import com.hanaro.wouldyouhana.repository.AnswerRepository;
 import com.hanaro.wouldyouhana.service.AnswerService;
 import com.hanaro.wouldyouhana.service.CommentService;
@@ -105,20 +106,25 @@ public class QnaController {
 //        questionService.
 //        answerService.deleteAnswer(answerId);
 //    }
+
     // 댓글 추가
-    @PostMapping("/post/comment/{questionId}/")
+    @PostMapping("/post/comment/{questionId}")
     public ResponseEntity<CommentResponseDTO> addComment(@PathVariable Long questionId,
+                                                         @RequestHeader("Authorization") String authorizationHeader,
                                                          @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
-        CommentResponseDTO addedComment = commentService.addComment(questionId, null, commentAddRequestDTO);
+//        System.out.println("이거 내용이야: "+commentAddRequestDTO.getContent());
+        String userEmail = SecurityUtil.getCurrentUsername();
+//        System.out.println("요청보냈다: "+userEmail);
+        CommentResponseDTO addedComment = commentService.addComment(questionId, null, userEmail, commentAddRequestDTO);
         return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
     }
 
     // 대댓글 추가
-    @PostMapping("/post/replycomment/{questionId}/{parentCommentId}")
-    public ResponseEntity<CommentResponseDTO> createReply(@PathVariable Long questionId, @PathVariable Long parentCommentId, @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
-        CommentResponseDTO addedComment = commentService.addComment(questionId, parentCommentId, commentAddRequestDTO);
-        return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
-    }
+//    @PostMapping("/post/replycomment/{questionId}/{parentCommentId}")
+//    public ResponseEntity<CommentResponseDTO> createReply(@PathVariable Long questionId, @PathVariable Long parentCommentId, @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
+//        CommentResponseDTO addedComment = commentService.addComment(questionId, parentCommentId, commentAddRequestDTO);
+//        return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
+//    }
 
     // 게시글에 대한 댓글 가져오기
 
