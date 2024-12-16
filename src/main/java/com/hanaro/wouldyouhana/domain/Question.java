@@ -32,9 +32,9 @@ public class Question {
     private String location;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Long likeCount;
-    private Long scrapCount;
-    private Long viewCount;
+    private Long likeCount=0L;
+    private Long scrapCount=0L;
+    private Long viewCount=0L;
 
     @OneToOne(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     //@JoinColumn(name = "question_id")  // 외래 키 설정
