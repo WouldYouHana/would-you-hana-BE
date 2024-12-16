@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -190,10 +191,19 @@ public class QuestionService {
     // 질문 글 목록 DTO(QnaListDTO) 만드는 공통 메서드
     // 질문 전체 목록, 카테고리별 질문 전체 목록, 고객별 질문 전체 목록에서 사용
     public List<QnaListDTO> makeQnaListDTO(List<Question> fql) {
+
         List<QnaListDTO> foundQuestionListDTO = fql.stream().map(question -> {
+
+            String answerBanker = Optional.ofNullable(question.getAnswers())
+                    .map(answers -> answers.getBanker())
+                    .map(banker -> banker.getName())
+                    .orElse(null);
+
             QnaListDTO qnaListDTO = new QnaListDTO();
             qnaListDTO.setQuestionId(question.getId());
             qnaListDTO.setCustomerId(question.getCustomerId());
+            qnaListDTO.setAnswerBanker(answerBanker); //이거
+            qnaListDTO.setCategoryName(question.getCategory().getName()); //이것도
             qnaListDTO.setCategoryId(question.getCategory().getId());
             qnaListDTO.setTitle((question.getTitle()));
             qnaListDTO.setLocation(question.getLocation());
