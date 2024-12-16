@@ -22,18 +22,6 @@ public class CustomerControllerForSignIn {
 
     private final CustomerService customerService;
 
-//    @PostMapping("/signIn")
-//    public JwtToken signIn(@RequestBody SignInDto signInDto) {
-//        String email = signInDto.getEmail();
-//        String password = signInDto.getPassword();
-//        JwtToken jwtToken = customerService.signIn(email, password);
-//        log.info("request username = {}, password = {}", email, password);
-//        log.info("jwtToken accessToken = {}, refreshToken = {}", jwtToken.getAccessToken(), jwtToken.getRefreshToken());
-//
-//        System.out.println("!!!!!!!!!!!!!!!!!!!"+SecurityUtil.getCurrentUsername());
-//        return jwtToken;
-//    }
-
     @PostMapping("/signIn")
     public ResponseEntity<CustomerSignInReturnDTO> signIn(@RequestBody CustomerSignInDto signInDto) {
         String email = signInDto.getEmail();
@@ -45,13 +33,15 @@ public class CustomerControllerForSignIn {
         System.out.println("!!!!!!!!!!!!!!!!!!!"+ SecurityUtil.getCurrentUsername());
 
         String location = customerService.getLocation(jwtToken.getAccessToken());
-        CustomerSignInReturnDTO signInReturnDTO = new CustomerSignInReturnDTO(jwtToken.getAccessToken(), email, "C", location);
+        String nickName = customerService.getiNickName(jwtToken.getAccessToken());
+
+        CustomerSignInReturnDTO signInReturnDTO = new CustomerSignInReturnDTO(jwtToken.getAccessToken(), email, "C", location, nickName);
         return new ResponseEntity<>(signInReturnDTO, HttpStatus.CREATED);
     }
 
     @PostMapping("/test")
     public String test() {
-        System.out.println("Accessing /members/test endpoint");
+        System.out.println("Accessing /bankers/test endpoint");
         System.out.println("!!!!!!!!!!!!!!!!!!!"+SecurityUtil.getCurrentUsername());
         return SecurityUtil.getCurrentUsername();
     }
