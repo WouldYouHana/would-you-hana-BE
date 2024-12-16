@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class AnswerResponseDTO {
 
     @NotNull
-    private Long bankerId;
+    private String bankerName;
     @NotNull
     private Long questionId;
     @NotNull

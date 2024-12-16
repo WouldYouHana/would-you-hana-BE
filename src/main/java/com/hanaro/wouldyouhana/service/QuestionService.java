@@ -2,17 +2,16 @@ package com.hanaro.wouldyouhana.service;
 
 import com.hanaro.wouldyouhana.domain.*;
 import com.hanaro.wouldyouhana.dto.comment.CommentDTO;
-import com.hanaro.wouldyouhana.dto.question.QnaListDTO;
-import com.hanaro.wouldyouhana.dto.question.QuestionAddRequestDTO;
-import com.hanaro.wouldyouhana.dto.question.QuestionAllResponseDTO;
-import com.hanaro.wouldyouhana.dto.question.QuestionResponseDTO;
+import com.hanaro.wouldyouhana.dto.question.*;
 import com.hanaro.wouldyouhana.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -187,6 +186,26 @@ public class QuestionService {
                 commentDTOS
         );
     }
+
+    // 오늘의 인기 질문
+    public List<TodayQnaListDTO> getTodayQuestions() {
+        // 오늘 날짜의 시작 시간과 끝 시간을 계산
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();  // 오늘 00:00:00
+        LocalDateTime endOfDay = today.atTime(23, 59, 59);  // 오늘 23:59:59
+
+        // 오늘 날짜의 질문들 중에서 viewCount가 높은 6개 가져오기
+        List<Question> foundQuestionList = questionRepository.findTop6ByCreatedAtTodayOrderByViewCountDesc(startOfDay, endOfDay, PageRequest.of(0, 6));
+
+        // Question -> TodayQnaListDTO로 변환
+        return foundQuestionList.stream()
+                .map(question -> new TodayQnaListDTO(
+                        question.getId(),
+                        question.getTitle(),
+                        question.getViewCount()))
+                .collect(Collectors.toList());
+    }
+
 
     // 질문 글 목록 DTO(QnaListDTO) 만드는 공통 메서드
     // 질문 전체 목록, 카테고리별 질문 전체 목록, 고객별 질문 전체 목록에서 사용
