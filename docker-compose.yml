@@ -31,6 +31,9 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/db
       SPRING_DATASOURCE_USERNAME: scott
       SPRING_DATASOURCE_PASSWORD: tiger
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID} # app 서비스에도 AWS 키 전달
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY} # app 서비스에도 AWS 키 전달
+
     networks:
       - app-network
 
