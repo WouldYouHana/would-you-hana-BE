@@ -10,8 +10,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 
 public class CommentResponseDTO {
+//    @NotNull
+//    private Long customerId;
+
     @NotNull
-    private Long customerId;
+    private String userName;
     @NotNull
     private Long questionId;
     @NotNull

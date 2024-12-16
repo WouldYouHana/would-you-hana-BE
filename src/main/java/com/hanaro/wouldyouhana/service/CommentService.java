@@ -30,11 +30,11 @@ public class CommentService {
     }
 
     // 댓글 추가
-    public CommentResponseDTO addComment(Long questionId, Long parentCommentId, CommentAddRequestDTO commentAddRequestDTO) {
+    public CommentResponseDTO addComment(Long questionId, Long parentCommentId, String userEmail, CommentAddRequestDTO commentAddRequestDTO) {
         Question foundQuestion = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
-        Customer foundCustomer = customerRepository.findById(commentAddRequestDTO.getCustomerId())
+        Customer foundCustomer = customerRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
         Comment pComment = null;
@@ -56,7 +56,7 @@ public class CommentService {
         Comment addedComment = commentRepository.save(comment);
 
         return new CommentResponseDTO(
-                addedComment.getCustomer().getId(),
+                addedComment.getCustomer().getName(),
                 addedComment.getQuestion().getId(),
                 addedComment.getContent(),
                 addedComment.getCreatedAt()
