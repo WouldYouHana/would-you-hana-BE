@@ -1,4 +1,4 @@
-package com.hanaro.wouldyouhana.forSignIn;
+package com.hanaro.wouldyouhana.forSignIn.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-public class SignInDto {
+public class CustomerSignInDto {
 
     private String email;
     private String password;
