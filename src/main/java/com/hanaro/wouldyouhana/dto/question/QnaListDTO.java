@@ -15,6 +15,8 @@ public class QnaListDTO {
 
     private Long questionId;
     private Long customerId;
+    private String answerBanker;
+    private String categoryName;
     private Long categoryId;
     private String title;
     private String location;
