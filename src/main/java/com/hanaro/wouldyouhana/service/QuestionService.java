@@ -1,5 +1,6 @@
 package com.hanaro.wouldyouhana.service;
 
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.hanaro.wouldyouhana.domain.*;
 import com.hanaro.wouldyouhana.dto.comment.CommentDTO;
 import com.hanaro.wouldyouhana.dto.question.QnaListDTO;
@@ -8,18 +9,21 @@ import com.hanaro.wouldyouhana.dto.question.QuestionAllResponseDTO;
 import com.hanaro.wouldyouhana.dto.question.QuestionResponseDTO;
 import com.hanaro.wouldyouhana.repository.*;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final CustomerRepository customerRepository;
@@ -28,26 +32,28 @@ public class QuestionService {
     private final ImageRepository imageRepository;
     private final FileStorageService fileStorageService;
     private final LikesRepository likesRepository;
+    private final AmazonS3Client amazonS3Client;
 
-    @Autowired
-    public QuestionService(QuestionRepository questionRepository, CustomerRepository customerRepository, CategoryRepository categoryRepository, CommentRepository commentRepository,
-                           ImageRepository imageRepository, FileStorageService fileStorageService, LikesRepository likesRepository) {
-        this.questionRepository = questionRepository;
-        this.customerRepository = customerRepository;
-        this.categoryRepository = categoryRepository;
-        this.commentRepository = commentRepository;
-        this.imageRepository = imageRepository;
-        this.fileStorageService = fileStorageService;
-        this.likesRepository = likesRepository;
-    }
+//    @Autowired
+//    public QuestionService(QuestionRepository questionRepository, CustomerRepository customerRepository, CategoryRepository categoryRepository, CommentRepository commentRepository,
+//                           ImageRepository imageRepository, FileStorageService fileStorageService, LikesRepository likesRepository, AmazonS3Client amazonS3Client) {
+//        this.questionRepository = questionRepository;
+//        this.customerRepository = customerRepository;
+//        this.categoryRepository = categoryRepository;
+//        this.commentRepository = commentRepository;
+//        this.imageRepository = imageRepository;
+//        this.fileStorageService = fileStorageService;
+//        this.likesRepository = likesRepository;
+//        this.amazonS3Client = amazonS3Client;
+//    }
 
     /**
      * 질문(게시글) 등록
      * */
-    public QuestionAllResponseDTO addQuestion(QuestionAddRequestDTO questionAddRequestDTO) {
+    public QuestionAllResponseDTO addQuestion(QuestionAddRequestDTO questionAddRequestDTO, List<MultipartFile> files) {
 
         // 카테고리 ID로 카테고리 객체 가져오기
-        Category category = categoryRepository.findById(questionAddRequestDTO.getCategory_id())
+        Category category = categoryRepository.findById(questionAddRequestDTO.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다.")); // 예외 처리 추가
 
         // 질문 엔티티 생성
@@ -63,10 +69,15 @@ public class QuestionService {
         // 질문 저장
         Question savedQuestion = questionRepository.save(question);
 
-        if (questionAddRequestDTO.getFile() != null) {
-            for (MultipartFile file : questionAddRequestDTO.getFile()) {
-                // 파일 시스템에 저장 로직 추가
-                String filePath = fileStorageService.saveFile(file); // 파일 저장 후 경로를 반환하는 메서드
+        ArrayList<String> filePaths = new ArrayList<String>();
+
+        if (files != null) {
+
+            for (MultipartFile file : files) {
+
+                String filePath = fileStorageService.saveFile(file); // S3 버킷 내 저장된 이미지의 링크 반환
+                filePaths.add(filePath);
+
                 Image image = Image.builder()
                         .filePath(filePath) // 파일 경로 설정
                         .question(savedQuestion) // 질문과 연결
@@ -89,14 +100,14 @@ public class QuestionService {
                 Integer.toUnsignedLong(0), // likeCount (초기값)
                 Integer.toUnsignedLong(0), // scrapCount (초기값)
                 Integer.toUnsignedLong(0), // viewCount (초기값)
-                questionAddRequestDTO.getFile().stream().map(MultipartFile::getOriginalFilename).toList()
+                filePaths
         );
     }
 
     /**
      * 질문(게시글) 수정
      * */
-    public QuestionAllResponseDTO modifyQuestion(QuestionAddRequestDTO questionAddRequestDTO, Long questionId) {
+    public QuestionAllResponseDTO modifyQuestion(QuestionAddRequestDTO questionAddRequestDTO, Long questionId, List<MultipartFile> files) {
         // 기존 질문 엔티티 조회
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
@@ -113,11 +124,14 @@ public class QuestionService {
         // 기존 이미지 삭제
         imageRepository.deleteAllByQuestionId(questionId);
 
+        ArrayList<String> filePaths = new ArrayList<String>();
+
         // 새로운 이미지 파일 처리
-        if (questionAddRequestDTO.getFile() != null) {
-            for (MultipartFile file : questionAddRequestDTO.getFile()) {
+        if (files != null) {
+            for (MultipartFile file : files) {
                 // 파일 시스템에 저장 로직 추가
                 String filePath = fileStorageService.saveFile(file); // 파일 저장 후 경로를 반환하는 메서드
+                filePaths.add(filePath);
                 Image image = Image.builder()
                         .filePath(filePath) // 파일 경로 설정
                         .question(updatedQuestion) // 질문과 연결
@@ -140,7 +154,7 @@ public class QuestionService {
                 updatedQuestion.getLikeCount(), // likeCount (초기값)
                 updatedQuestion.getScrapCount(), // scrapCount (초기값)
                 updatedQuestion.getViewCount(), // viewCount (초기값)
-                questionAddRequestDTO.getFile().stream().map(MultipartFile::getOriginalFilename).toList() // 파일 이름 리스트 추가
+                filePaths // 파일 이름 리스트 추가
         );
     }
 

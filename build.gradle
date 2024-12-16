@@ -47,6 +47,11 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'com.sun.mail:javax.mail:1.6.2'
+
+    // AWS S3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.767'
+    //implementation 'net.coobird:thumnailator:0.4.16'
 }
 
 tasks.named('test') {

@@ -23,6 +23,6 @@ public class QuestionAllResponseDTO {
     private Long likeCount;
     private Long scrapCount;
     private Long viewCount;
-    private List<String> file;
+    private List<String> filePaths;
 
 }

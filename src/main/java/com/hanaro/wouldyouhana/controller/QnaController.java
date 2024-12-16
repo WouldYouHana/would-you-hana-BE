@@ -51,9 +51,11 @@ public class QnaController {
      * 질문(게시글) 등록
      * */
     @PostMapping("/post")
-    public ResponseEntity<QuestionAllResponseDTO> addNewQuestion(@Valid @RequestBody QuestionAddRequestDTO questionAddRequestDTO) {
+    public ResponseEntity<QuestionAllResponseDTO> addNewQuestion(@Valid
+                                                                     @RequestPart("question") QuestionAddRequestDTO questionAddRequestDTO,
+                                                                 @RequestPart(value = "file", required = false) List<MultipartFile> files) throws IOException {
         log.info("executed");
-        QuestionAllResponseDTO createdPost = questionService.addQuestion(questionAddRequestDTO);
+        QuestionAllResponseDTO createdPost = questionService.addQuestion(questionAddRequestDTO, files);
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
 
@@ -63,9 +65,10 @@ public class QnaController {
 
     @PostMapping("/post/modify/{questionId}")
     public ResponseEntity<QuestionAllResponseDTO> modifyQuestion(@PathVariable Long questionId,
-                                                                 @RequestBody QuestionAddRequestDTO questionAddRequestDTO){
+                                                                 @RequestPart("question") QuestionAddRequestDTO questionAddRequestDTO,
+                                                                    @RequestPart(value = "file", required = false) List<MultipartFile> files){
 
-        QuestionAllResponseDTO modifiedPost = questionService.modifyQuestion(questionAddRequestDTO, questionId);
+        QuestionAllResponseDTO modifiedPost = questionService.modifyQuestion(questionAddRequestDTO, questionId, files);
         return new ResponseEntity<>(modifiedPost, HttpStatus.CREATED);
     }
 
