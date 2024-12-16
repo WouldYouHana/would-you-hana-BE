@@ -35,27 +35,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         System.out.println("JwtAuthenticationFilter initialized"); // 추가된 로그
     }
 
-//    @Override
-//    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-//        System.out.println("Filtering request..."); // 추가된 로그
-//        String token = resolveToken((HttpServletRequest) request);
-//        HttpServletRequest httpRequest = (HttpServletRequest) request;
-//        System.out.println("Request Method: " + httpRequest.getMethod());
-//        System.out.println("Request URI: " + httpRequest.getRequestURI());
-//        System.out.println("Authorization Header: " + httpRequest.getHeader("Authorization"));
-//
-//        System.out.println("Received token: " + token);  // 추가된 로그
-//        if (token == null || !jwtTokenProvider.validateToken(token)) {
-//            System.out.println("잘못되었다");
-//            ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            return;
-//        }
-//
-//        Authentication authentication = jwtTokenProvider.getAuthentication(token);
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        chain.doFilter(request, response);
-//    }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -77,17 +56,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
-
-
-    // Request Header에서 토큰 정보 추출
-//    private String resolveToken(HttpServletRequest request) {
-//        String bearerToken = request.getHeader("Authorization");
-//        System.out.println("Authorization Header: " + bearerToken); // 헤더 출력
-//        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
-//            return bearerToken.substring(7);
-//        }
-//        return null;
-//    }
 
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
