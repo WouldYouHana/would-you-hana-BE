@@ -45,9 +45,9 @@ public class Question {
     //@JoinColumn(name = "question_id")  // 외래 키 설정
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    //@OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     //@JoinColumn(name = "question_id")  // 외래 키 설정
-    private List<Image> images;
+    private List<String> filePaths;
 
     // 조회수 증가
     public void incrementViewCount() {
