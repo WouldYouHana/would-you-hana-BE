@@ -62,13 +62,20 @@ public class FileStorageService {
         metadata.setContentLength(uploadFile.getSize());
         metadata.setContentType(uploadFile.getContentType());
         try {
+            // 파일 업로드 관련 정보 출력
+            System.out.println("버킷 이름: " + bucketName);
+            System.out.println("파일 이름: " + fileName);
+            System.out.println("파일 크기: " + uploadFile.getSize() + " bytes");
+            System.out.println("파일 콘텐츠 타입: " + uploadFile.getContentType());
+
             amazonS3Client.putObject(
-                    new PutObjectRequest(bucketName, fileName, uploadFile.getInputStream(), metadata).withCannedAcl(CannedAccessControlList.PublicRead)  // PublicRead 권한으로 upload
+                    new PutObjectRequest(bucketName, fileName, uploadFile.getInputStream(), metadata) // PublicRead 권한으로 upload
             );
 
             // S3 URL 반환 (파일 URL은 AWS S3에서 객체 접근을 위한 URL)
             return amazonS3Client.getUrl(bucketName, fileName).toString();
         } catch (AmazonS3Exception e) {
+            System.err.println("S3 업로드 실패: " + e.getMessage());
             throw new IOException("파일 업로드 중 오류 발생");
         }
     }
