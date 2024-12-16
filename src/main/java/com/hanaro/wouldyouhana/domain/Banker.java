@@ -26,7 +26,9 @@ public class Banker implements UserDetails {
     private String name;
     private String email;
     private String password;
+    private String location;
     private String branchName;
+    private String content;
 
     @OneToMany(mappedBy = "id")
     private List<Comment> answers;
