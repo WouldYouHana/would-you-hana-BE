@@ -2,6 +2,7 @@ package com.hanaro.wouldyouhana.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.hanaro.wouldyouhana.domain.*;
+import com.hanaro.wouldyouhana.dto.answer.AnswerResponseDTO;
 import com.hanaro.wouldyouhana.dto.comment.CommentDTO;
 import com.hanaro.wouldyouhana.dto.question.*;
 import com.hanaro.wouldyouhana.repository.*;
@@ -32,6 +33,7 @@ public class QuestionService {
     private final FileStorageService fileStorageService;
     private final LikesRepository likesRepository;
     private final AmazonS3Client amazonS3Client;
+    private final AnswerRepository answerRepository;
 
 //    @Autowired
 //    public QuestionService(QuestionRepository questionRepository, CustomerRepository customerRepository, CategoryRepository categoryRepository, CommentRepository commentRepository,
@@ -167,6 +169,17 @@ public class QuestionService {
         Question foundQuestion = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
+        Answer foundAnswer = answerRepository.findByQuestionId(questionId)
+                .orElseThrow(() -> new EntityNotFoundException("Answer not found"));
+
+        AnswerResponseDTO answerResponseDTO = new AnswerResponseDTO(
+                foundAnswer.getBanker().getName(),
+                foundQuestion.getId(),
+                foundQuestion.getContent(),
+                foundQuestion.getCreatedAt(),
+                foundQuestion.getUpdatedAt()
+        );
+
         List<CommentDTO> commentDTOS = foundQuestion.getComments().stream().map(comment ->
         {
             CommentDTO commentDTO = new CommentDTO();
@@ -197,6 +210,7 @@ public class QuestionService {
                 foundQuestion.getLikeCount(),
                 foundQuestion.getScrapCount(),
                 foundQuestion.getViewCount(),
+                answerResponseDTO,
                 commentDTOS
         );
     }

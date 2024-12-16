@@ -1,5 +1,7 @@
 package com.hanaro.wouldyouhana.dto.question;
 
+import com.hanaro.wouldyouhana.domain.Answer;
+import com.hanaro.wouldyouhana.dto.answer.AnswerResponseDTO;
 import com.hanaro.wouldyouhana.dto.comment.CommentDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -23,6 +26,7 @@ public class QuestionResponseDTO {
     private Long likeCount;
     private Long scrapCount;
     private Long viewCount;
+    private AnswerResponseDTO answer;
     private List<CommentDTO> commentList;
 
 }

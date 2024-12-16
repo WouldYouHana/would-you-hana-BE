@@ -1,5 +1,6 @@
 package com.hanaro.wouldyouhana.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
