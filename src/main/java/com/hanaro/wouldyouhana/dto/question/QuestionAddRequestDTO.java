@@ -18,12 +18,10 @@ public class QuestionAddRequestDTO {
     @NotNull
     private Long customerId;
     @NotNull
-    private Long category_id;
+    private Long categoryId;
     @NotNull
     private String location;
     @NotNull
     private String content;
-
-    private List<MultipartFile> file;
 
 }
