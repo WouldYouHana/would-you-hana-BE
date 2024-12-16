@@ -2,6 +2,7 @@ package com.hanaro.wouldyouhana.service;
 
 import com.hanaro.wouldyouhana.domain.Banker;
 import com.hanaro.wouldyouhana.domain.Customer;
+import com.hanaro.wouldyouhana.dto.banker.BankerListReturnDTO;
 import com.hanaro.wouldyouhana.forSignIn.JwtToken;
 import com.hanaro.wouldyouhana.forSignIn.JwtTokenProvider;
 import com.hanaro.wouldyouhana.repository.BankerRepository;
@@ -13,7 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class BankerService {
@@ -60,6 +63,21 @@ public class BankerService {
         System.out.println("행원 로그인5");
 
         return jwtToken;
+    }
+
+    public List<BankerListReturnDTO> getBankerList(String location){
+        // 지역에 해당하는 Banker 목록을 조회
+        System.out.println("지역: "+ location);
+        List<Banker> bankers = bankerRepository.findByLocation(location);
+
+        // Banker -> BankerListReturnDTO로 변환
+        return bankers.stream()
+                .map(banker -> new BankerListReturnDTO(
+                        banker.getId(),
+                        banker.getName(),
+                        banker.getBranchName(),
+                        banker.getContent()))
+                .collect(Collectors.toList());
     }
 
     public String getBranchName(String token){

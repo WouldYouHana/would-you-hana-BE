@@ -2,6 +2,7 @@ package com.hanaro.wouldyouhana.controller;
 
 import com.hanaro.wouldyouhana.domain.Banker;
 import com.hanaro.wouldyouhana.dto.BankerSignUpDto;
+import com.hanaro.wouldyouhana.dto.banker.BankerListReturnDTO;
 import com.hanaro.wouldyouhana.forSignIn.JwtToken;
 import com.hanaro.wouldyouhana.forSignIn.SecurityUtil;
 import com.hanaro.wouldyouhana.forSignIn.dto.CustomerSignInDto;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 
 @Slf4j
 @RestController
@@ -23,6 +26,12 @@ public class BankerController {
 
     private final BankerService bankerService;
     private final BankerRepository bankerRepository;
+
+    @GetMapping("/getList")
+    public ResponseEntity<List<BankerListReturnDTO>> getBankerList(@RequestParam String location) {
+        List<BankerListReturnDTO> bankerList = bankerService.getBankerList(location);
+        return new ResponseEntity<>(bankerList, HttpStatus.OK);
+    }
 
     @PostMapping("/signIn")
     public ResponseEntity<CustomerSignInReturnDTO> signIn(@RequestBody CustomerSignInDto signInDto) {
