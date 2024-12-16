@@ -1,4 +1,4 @@
-package com.hanaro.wouldyouhana.forSignIn;
+package com.hanaro.wouldyouhana.forSignIn.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class SignInReturnDTO {
+public class CustomerSignInReturnDTO {
 
     private String token;
     private String email;
