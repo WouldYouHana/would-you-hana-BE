@@ -1,4 +1,4 @@
-package com.hanaro.wouldyouhana.forSignIn;
+package com.hanaro.wouldyouhana.forSignIn.customer;
 
 import com.hanaro.wouldyouhana.domain.Customer;
 import com.hanaro.wouldyouhana.repository.CustomerRepository;

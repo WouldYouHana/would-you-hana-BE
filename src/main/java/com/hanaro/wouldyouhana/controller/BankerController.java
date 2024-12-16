@@ -2,9 +2,9 @@ package com.hanaro.wouldyouhana.controller;
 
 import com.hanaro.wouldyouhana.domain.Banker;
 import com.hanaro.wouldyouhana.dto.BankerSignUpDto;
+import com.hanaro.wouldyouhana.dto.banker.BankerSignInReturnDTO;
 import com.hanaro.wouldyouhana.forSignIn.JwtToken;
-import com.hanaro.wouldyouhana.forSignIn.SecurityUtil;
-import com.hanaro.wouldyouhana.forSignIn.SignInDto;
+import com.hanaro.wouldyouhana.forSignIn.dto.CustomerSignInDto;
 import com.hanaro.wouldyouhana.repository.BankerRepository;
 import com.hanaro.wouldyouhana.service.BankerService;
 import org.springframework.http.HttpStatus;
@@ -24,6 +24,17 @@ public class BankerController {
     public BankerController(BankerService bankerService, BankerRepository bankerRepository) {
         this.bankerService = bankerService;
         this.bankerRepository = bankerRepository;
+    }
+
+    @PostMapping("/signIn")
+    public ResponseEntity<BankerSignInReturnDTO> signIn(@RequestBody CustomerSignInDto signInDto){
+        String email = signInDto.getEmail();
+        String password = signInDto.getPassword();
+        JwtToken jwtToken = bankerService.signIn(email, password);
+
+        String branchName = bankerService.getBranchName(jwtToken.getAccessToken());
+        BankerSignInReturnDTO bankerSignInReturnDTO = new BankerSignInReturnDTO(jwtToken.getAccessToken(), email, "B", branchName);
+        return new ResponseEntity<>(bankerSignInReturnDTO, HttpStatus.CREATED);
     }
 
     // 회원가입 처리하는 API

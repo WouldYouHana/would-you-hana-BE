@@ -1,4 +1,4 @@
-package com.hanaro.wouldyouhana.forSignIn;
+package com.hanaro.wouldyouhana.forSignIn.customer;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;

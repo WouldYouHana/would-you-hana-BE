@@ -1,5 +1,6 @@
 package com.hanaro.wouldyouhana.forSignIn;
 
+import com.hanaro.wouldyouhana.forSignIn.customer.CustomUserDetails;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -7,8 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -37,6 +36,9 @@ public class JwtTokenProvider {
 
     // Member 정보를 가지고 AccessToken, RefreshToken을 생성하는 메서드
     public JwtToken generateToken(String userEmail, Authentication authentication) {
+
+        System.out.println("로그인 톸,ㄴ!!!11");
+
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -53,6 +55,8 @@ public class JwtTokenProvider {
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+
+        System.out.println("로그인 톸,ㄴ!!!22222");
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()

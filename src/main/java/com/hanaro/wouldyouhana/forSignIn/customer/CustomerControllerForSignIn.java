@@ -1,5 +1,9 @@
-package com.hanaro.wouldyouhana.forSignIn;
+package com.hanaro.wouldyouhana.forSignIn.customer;
 
+import com.hanaro.wouldyouhana.forSignIn.JwtToken;
+import com.hanaro.wouldyouhana.forSignIn.SecurityUtil;
+import com.hanaro.wouldyouhana.forSignIn.dto.CustomerSignInDto;
+import com.hanaro.wouldyouhana.forSignIn.dto.CustomerSignInReturnDTO;
 import com.hanaro.wouldyouhana.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,17 +35,17 @@ public class CustomerControllerForSignIn {
 //    }
 
     @PostMapping("/signIn")
-    public ResponseEntity<SignInReturnDTO> signIn(@RequestBody SignInDto signInDto) {
+    public ResponseEntity<CustomerSignInReturnDTO> signIn(@RequestBody CustomerSignInDto signInDto) {
         String email = signInDto.getEmail();
         String password = signInDto.getPassword();
         JwtToken jwtToken = customerService.signIn(email, password);
         log.info("request username = {}, password = {}", email, password);
         log.info("jwtToken accessToken = {}, refreshToken = {}", jwtToken.getAccessToken(), jwtToken.getRefreshToken());
 
-        System.out.println("!!!!!!!!!!!!!!!!!!!"+SecurityUtil.getCurrentUsername());
+        System.out.println("!!!!!!!!!!!!!!!!!!!"+ SecurityUtil.getCurrentUsername());
 
         String location = customerService.getLocation(jwtToken.getAccessToken());
-        SignInReturnDTO signInReturnDTO = new SignInReturnDTO(jwtToken.getAccessToken(), email, "C", location);
+        CustomerSignInReturnDTO signInReturnDTO = new CustomerSignInReturnDTO(jwtToken.getAccessToken(), email, "C", location);
         return new ResponseEntity<>(signInReturnDTO, HttpStatus.CREATED);
     }
 
