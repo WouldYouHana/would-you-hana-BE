@@ -39,7 +39,6 @@ public class BankerService {
         return bankerRepository.save(banker);
     }
 
-
     @Transactional
     public JwtToken signIn(String email, String password) {
 
@@ -74,6 +73,19 @@ public class BankerService {
         // 고객의 location 정보 반환
         return banker.getBranchName();
     }
+
+    public String getiNickName(String token){
+        // JWT 토큰에서 사용자 이메일을 추출
+        String email = jwtTokenProvider.getUsernameFromToken(token);
+
+        // 이메일로 고객을 조회
+        Banker banker = bankerRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Customer not found with email: " + email));
+
+        // 고객의 location 정보 반환
+        return banker.getName();
+    }
+
 
 
     public String sendEmailVerification(String email) {

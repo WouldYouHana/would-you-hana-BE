@@ -5,10 +5,7 @@ import com.hanaro.wouldyouhana.dto.answer.AnswerAddRequestDTO;
 import com.hanaro.wouldyouhana.dto.answer.AnswerResponseDTO;
 import com.hanaro.wouldyouhana.dto.comment.CommentAddRequestDTO;
 import com.hanaro.wouldyouhana.dto.comment.CommentResponseDTO;
-import com.hanaro.wouldyouhana.dto.question.QnaListDTO;
-import com.hanaro.wouldyouhana.dto.question.QuestionAddRequestDTO;
-import com.hanaro.wouldyouhana.dto.question.QuestionAllResponseDTO;
-import com.hanaro.wouldyouhana.dto.question.QuestionResponseDTO;
+import com.hanaro.wouldyouhana.dto.question.*;
 import com.hanaro.wouldyouhana.forSignIn.SecurityUtil;
 import com.hanaro.wouldyouhana.repository.AnswerRepository;
 import com.hanaro.wouldyouhana.service.AnswerService;
@@ -96,10 +93,12 @@ public class QnaController {
         return new ResponseEntity<>(savedImg, HttpStatus.CREATED);
     }
 
-    // 답변 등록
+    // 답변 등록 - 행원
     @PostMapping("/post/answer/{questionId}")
     public ResponseEntity<AnswerResponseDTO> addAnswer(@PathVariable Long questionId,
+                                                       @RequestHeader("Authorization") String authorizationHeader,
                                                        @RequestBody AnswerAddRequestDTO answerAddRequestDTO) {
+        String userEmail = SecurityUtil.getCurrentUsername();
         AnswerResponseDTO addedAnswer = answerService.addAnswer(questionId, answerAddRequestDTO);
         return new ResponseEntity<>(addedAnswer, HttpStatus.CREATED);
     }
@@ -115,9 +114,7 @@ public class QnaController {
     public ResponseEntity<CommentResponseDTO> addComment(@PathVariable Long questionId,
                                                          @RequestHeader("Authorization") String authorizationHeader,
                                                          @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
-//        System.out.println("이거 내용이야: "+commentAddRequestDTO.getContent());
         String userEmail = SecurityUtil.getCurrentUsername();
-//        System.out.println("요청보냈다: "+userEmail);
         CommentResponseDTO addedComment = commentService.addComment(questionId, null, userEmail, commentAddRequestDTO);
         return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
     }
@@ -137,6 +134,15 @@ public class QnaController {
     public ResponseEntity deleteComment(@PathVariable Long questionId, @PathVariable Long commentId) {
         commentService.deleteComment(questionId, commentId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * 오늘의 인기 게시글
+     * */
+    @GetMapping("/todatQnalist")
+    public ResponseEntity<List<TodayQnaListDTO>> getTodayQuestions() {
+        List<TodayQnaListDTO> questionList = questionService.getTodayQuestions();
+        return new ResponseEntity<>(questionList, HttpStatus.OK);
     }
 
 

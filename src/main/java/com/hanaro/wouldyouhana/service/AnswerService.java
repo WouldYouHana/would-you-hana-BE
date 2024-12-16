@@ -51,7 +51,7 @@ public class AnswerService {
         Answer addedAnswer = answerRepository.save(answer);
 
         return new AnswerResponseDTO(
-                addedAnswer.getBanker().getId(),
+                addedAnswer.getBanker().getName(),
                 addedAnswer.getQuestion().getId(),
                 addedAnswer.getContent(),
                 addedAnswer.getCreatedAt(),
@@ -69,7 +69,7 @@ public class AnswerService {
         Answer updatedAnswer = answerRepository.save(foundAnswer);
 
         return new AnswerResponseDTO(
-                updatedAnswer.getBanker().getId(),
+                updatedAnswer.getBanker().getName(),
                 updatedAnswer.getQuestion().getId(),
                 updatedAnswer.getContent(),
                 updatedAnswer.getCreatedAt(),
