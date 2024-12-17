@@ -114,7 +114,7 @@ public class QnaController {
                                                          @RequestHeader("Authorization") String authorizationHeader,
                                                          @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
         String userEmail = SecurityUtil.getCurrentUsername();
-        CommentResponseDTO addedComment = commentService.addComment(question_id, null, userEmail, commentAddRequestDTO);
+        CommentResponseDTO addedComment = commentService.addComment(question_id, userEmail, commentAddRequestDTO);
         return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
     }
 

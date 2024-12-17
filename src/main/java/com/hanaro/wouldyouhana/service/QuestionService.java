@@ -182,12 +182,6 @@ public class QuestionService {
         {
             CommentDTO commentDTO = new CommentDTO();
             commentDTO.setId(comment.getId());
-            if(comment.getParentComment() == null) {
-                commentDTO.setParentCommentId(null);
-            }
-            else {
-                commentDTO.setParentCommentId(comment.getParentComment().getId());
-            }
             commentDTO.setContent(comment.getContent());
             commentDTO.setCustomerId(comment.getCustomer().getId());
             commentDTO.setCreatedAt(LocalDateTime.now());
