@@ -27,6 +27,7 @@ import java.util.List;
 
 @Controller
 @Slf4j
+@RequestMapping("/qna")
 public class QnaController {
 
     private final QuestionService questionService;
@@ -108,12 +109,12 @@ public class QnaController {
 //    }
 
     // 댓글 추가
-    @PostMapping("/qna/comment/{questionId}")
-    public ResponseEntity<CommentResponseDTO> addComment(@PathVariable Long questionId,
+    @PostMapping("/comment/{question_id}")
+    public ResponseEntity<CommentResponseDTO> addComment(@PathVariable Long question_id,
                                                          @RequestHeader("Authorization") String authorizationHeader,
                                                          @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
         String userEmail = SecurityUtil.getCurrentUsername();
-        CommentResponseDTO addedComment = commentService.addComment(questionId, null, userEmail, commentAddRequestDTO);
+        CommentResponseDTO addedComment = commentService.addComment(question_id, null, userEmail, commentAddRequestDTO);
         return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
     }
 
@@ -135,26 +136,39 @@ public class QnaController {
     }
 
     /**
-     * 오늘의 인기 게시글
+     * 오늘의 인기 게시글 - 좋아요 (TOP6)
      * */
-    @GetMapping("/todayQnalist")
+    @GetMapping("/todayQnaList")
     public ResponseEntity<List<TodayQnaListDTO>> getTodayQuestions(@RequestParam String location) {
         List<TodayQnaListDTO> questionList = questionService.getTodayQuestions(location);
         return new ResponseEntity<>(questionList, HttpStatus.OK);
     }
 
+    // 게시물 전체 조회 (순서 없음)
+    @GetMapping("/qnaList")
+    public ResponseEntity<List<QnaListDTO>> getAllQuestions(@RequestParam String location) {
+        List<QnaListDTO> questionList = questionService.getAllQuestions(location);
+        return new ResponseEntity<>(questionList, HttpStatus.OK);
+    }
 
-    // 게시물 전체 조회
-    @GetMapping("/qnalist")
-    public ResponseEntity<List<QnaListDTO>> getAllQuestions() {
-        List<QnaListDTO> questionList = questionService.getAllQuestions();
+    // 지역별 게시물 전체 조회 (최신순)
+    @GetMapping("/qnaList/latest")
+    public ResponseEntity<List<QnaListDTO>> getLatestQuestions(@RequestParam String location) {
+        List<QnaListDTO> questionList = questionService.getAllQuestionsSortedByLatest(location);
+        return new ResponseEntity<>(questionList, HttpStatus.OK);
+    }
+
+    // 지역별 게시물 전체 조회 (좋아요순)
+    @GetMapping("/qnaList/likes")
+    public ResponseEntity<List<QnaListDTO>> getLikesQuestions(@RequestParam String location) {
+        List<QnaListDTO> questionList = questionService.getAllQuestionsSortedByLikes(location);
         return new ResponseEntity<>(questionList, HttpStatus.OK);
     }
 
     // 카테고리별 게시물 전체 조회
-    @GetMapping("/qnalist/{categoryName}")
-    public ResponseEntity<List<QnaListDTO>> getAllQuestionsByCategory(@PathVariable String categoryName) {
-        List<QnaListDTO> questionByCategoryList = questionService.getAllQuestionsByCategory(categoryName);
+    @GetMapping("/qnaList/{category}")
+    public ResponseEntity<List<QnaListDTO>> getAllQuestionsByCategory(@PathVariable String category, @RequestParam String location) {
+        List<QnaListDTO> questionByCategoryList = questionService.getAllQuestionsByCategory(category, location);
         return new ResponseEntity<>(questionByCategoryList, HttpStatus.OK);
     }
 
@@ -166,9 +180,9 @@ public class QnaController {
     }
 
     // 게시물 상세 조회
-    @GetMapping("/post/{questionId}")
-    public ResponseEntity<QuestionResponseDTO> getOneQuestion(@PathVariable Long questionId) {
-        QuestionResponseDTO questionResponseDTO = questionService.getOneQuestion(questionId);
+    @GetMapping("/{question_id}")
+    public ResponseEntity<QuestionResponseDTO> getOneQuestion(@PathVariable Long question_id) {
+        QuestionResponseDTO questionResponseDTO = questionService.getOneQuestion(question_id);
         return new ResponseEntity<>(questionResponseDTO, HttpStatus.OK);
     }
 }
