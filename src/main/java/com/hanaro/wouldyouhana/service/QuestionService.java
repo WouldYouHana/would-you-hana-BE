@@ -54,8 +54,7 @@ public class QuestionService {
     public QuestionAllResponseDTO addQuestion(QuestionAddRequestDTO questionAddRequestDTO, List<MultipartFile> files) {
 
         // 카테고리 ID로 카테고리 객체 가져오기
-        Category category = categoryRepository.findById(questionAddRequestDTO.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다.")); // 예외 처리 추가
+        Category category = categoryRepository.findByName(questionAddRequestDTO.getCategoryName());
 
         // 질문 엔티티 생성
         Question question = Question.builder()
@@ -92,7 +91,7 @@ public class QuestionService {
         return new QuestionAllResponseDTO(
                 savedQuestion.getId(),
                 savedQuestion.getCustomerId(),
-                savedQuestion.getCategory().getId(),
+                savedQuestion.getCategory().getName(),
                 savedQuestion.getTitle(),
                 savedQuestion.getContent(),
                 savedQuestion.getLocation(),
@@ -146,7 +145,7 @@ public class QuestionService {
         return new QuestionAllResponseDTO(
                 updatedQuestion.getId(),
                 updatedQuestion.getCustomerId(),
-                updatedQuestion.getCategory().getId(),
+                updatedQuestion.getCategory().getName(),
                 updatedQuestion.getTitle(),
                 updatedQuestion.getContent(),
                 updatedQuestion.getLocation(),
@@ -200,7 +199,7 @@ public class QuestionService {
         return new QuestionResponseDTO(
                 foundQuestion.getId(),
                 foundQuestion.getCustomerId(),
-                foundQuestion.getCategory().getId(),
+                foundQuestion.getCategory().getName(),
                 foundQuestion.getTitle(),
                 foundQuestion.getContent(),
                 foundQuestion.getLocation(),
@@ -250,7 +249,6 @@ public class QuestionService {
             qnaListDTO.setCustomerId(question.getCustomerId());
             qnaListDTO.setAnswerBanker(answerBanker); //이거
             qnaListDTO.setCategoryName(question.getCategory().getName()); //이것도
-            qnaListDTO.setCategoryId(question.getCategory().getId());
             qnaListDTO.setTitle((question.getTitle()));
             qnaListDTO.setLocation(question.getLocation());
             qnaListDTO.setCreatedAt(question.getCreatedAt());
@@ -271,8 +269,9 @@ public class QuestionService {
     }
 
     // 카테고리별 질문 전체 목록
-    public List<QnaListDTO> getAllQuestionsByCategory(Long categoryId) {
-        List<Question> foundQuestionList = questionRepository.findByCategory_id(categoryId)
+    public List<QnaListDTO> getAllQuestionsByCategory(String categoryName) {
+        Category category = categoryRepository.findByName(categoryName);
+        List<Question> foundQuestionList = questionRepository.findByCategory_id(category.getId())
                 .orElseThrow(() -> new EntityNotFoundException("No Question for category"));
         return makeQnaListDTO(foundQuestionList);
     }

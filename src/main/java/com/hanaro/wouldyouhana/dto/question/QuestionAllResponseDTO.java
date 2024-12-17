@@ -14,7 +14,7 @@ public class QuestionAllResponseDTO {
 
     private Long questionId;
     private Long customerId;
-    private Long categoryId;
+    private String categoryName;
     private String title;
     private String content;
     private String location;
