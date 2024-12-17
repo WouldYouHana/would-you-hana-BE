@@ -18,7 +18,7 @@ public class QuestionAddRequestDTO {
     @NotNull
     private Long customerId;
     @NotNull
-    private Long categoryId;
+    private String categoryName;
     @NotNull
     private String location;
     @NotNull

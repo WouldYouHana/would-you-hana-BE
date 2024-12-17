@@ -152,9 +152,9 @@ public class QnaController {
     }
 
     // 카테고리별 게시물 전체 조회
-    @GetMapping("/qnalist/{categoryId}")
-    public ResponseEntity<List<QnaListDTO>> getAllQuestionsByCategory(@PathVariable Long categoryId) {
-        List<QnaListDTO> questionByCategoryList = questionService.getAllQuestionsByCategory(categoryId);
+    @GetMapping("/qnalist/{categoryName}")
+    public ResponseEntity<List<QnaListDTO>> getAllQuestionsByCategory(@PathVariable String categoryName) {
+        List<QnaListDTO> questionByCategoryList = questionService.getAllQuestionsByCategory(categoryName);
         return new ResponseEntity<>(questionByCategoryList, HttpStatus.OK);
     }
 
