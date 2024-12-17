@@ -32,10 +32,7 @@ public class CustomerControllerForSignIn {
 
         System.out.println("!!!!!!!!!!!!!!!!!!!"+ SecurityUtil.getCurrentUsername());
 
-        String location = customerService.getLocation(jwtToken.getAccessToken());
-        String nickName = customerService.getiNickName(jwtToken.getAccessToken());
-
-        CustomerSignInReturnDTO signInReturnDTO = new CustomerSignInReturnDTO(jwtToken.getAccessToken(), email, "C", location, nickName);
+        CustomerSignInReturnDTO signInReturnDTO = customerService.getUserInfo(jwtToken.getAccessToken());
         return new ResponseEntity<>(signInReturnDTO, HttpStatus.CREATED);
     }
 

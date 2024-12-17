@@ -38,13 +38,8 @@ public class BankerController {
         String email = signInDto.getEmail();
         String password = signInDto.getPassword();
         JwtToken jwtToken = bankerService.signIn(email, password);
-        log.info("request username = {}, password = {}", email, password);
-        log.info("jwtToken accessToken = {}, refreshToken = {}", jwtToken.getAccessToken(), jwtToken.getRefreshToken());
 
-        System.out.println("!!!!!!!!!!!!!!!!!!!"+ SecurityUtil.getCurrentUsername());
-        String location = bankerService.getBranchName(jwtToken.getAccessToken());
-        String nickName = bankerService.getiNickName(jwtToken.getAccessToken());
-        CustomerSignInReturnDTO signInReturnDTO = new CustomerSignInReturnDTO(jwtToken.getAccessToken(), email, "B", location, nickName);
+        CustomerSignInReturnDTO signInReturnDTO = bankerService.getUserInfo(jwtToken.getAccessToken());
         return new ResponseEntity<>(signInReturnDTO, HttpStatus.CREATED);
     }
 
