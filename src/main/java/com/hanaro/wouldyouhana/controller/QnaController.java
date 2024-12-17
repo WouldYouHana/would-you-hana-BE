@@ -47,7 +47,7 @@ public class QnaController {
     /**
      * 질문(게시글) 등록
      * */
-    @PostMapping("/post")
+    @PostMapping("/qna/register")
     public ResponseEntity<QuestionAllResponseDTO> addNewQuestion(@Valid
                                                                      @RequestPart("question") QuestionAddRequestDTO questionAddRequestDTO,
                                                                  @RequestPart(value = "file", required = false) List<MultipartFile> files) throws IOException {
@@ -59,8 +59,7 @@ public class QnaController {
     /**
      * 질문(게시글) 수정
      * */
-
-    @PostMapping("/post/modify/{questionId}")
+    @PostMapping("/qna/modify/{questionId}")
     public ResponseEntity<QuestionAllResponseDTO> modifyQuestion(@PathVariable Long questionId,
                                                                  @RequestPart("question") QuestionAddRequestDTO questionAddRequestDTO,
                                                                     @RequestPart(value = "file", required = false) List<MultipartFile> files){
@@ -72,9 +71,8 @@ public class QnaController {
     /**
      * 질문(게시글) 삭제
      * */
-
     @PreAuthorize("@customerRepository.findByEmail(principal.getUsername()).getId() == @questionRepository.findById(#question_id).customerId")
-    @DeleteMapping("/post/delete/{questionId}")
+    @DeleteMapping("/qna/delete/{questionId}")
     public ResponseEntity deleteQuestion(@PathVariable Long questionId) {
         questionService.deleteQuestion(questionId);
         return new ResponseEntity(HttpStatus.OK);
@@ -83,18 +81,18 @@ public class QnaController {
     /**
      * 질문(게시글) 사진 등록
      * */
-    @PostMapping("/post/image/{questionId}")
-    public ResponseEntity<List<ImageResponseDTO>> uploadImage(
-            @PathVariable Long questionId,
-            @RequestParam("file") List<MultipartFile> file) throws IOException {
-
-        List<ImageResponseDTO> savedImg = imageService.saveImages(file, questionId);
-
-        return new ResponseEntity<>(savedImg, HttpStatus.CREATED);
-    }
+//    @PostMapping("/qna/image/{questionId}")
+//    public ResponseEntity<List<ImageResponseDTO>> uploadImage(
+//            @PathVariable Long questionId,
+//            @RequestParam("file") List<MultipartFile> file) throws IOException {
+//
+//        List<ImageResponseDTO> savedImg = imageService.saveImages(file, questionId);
+//
+//        return new ResponseEntity<>(savedImg, HttpStatus.CREATED);
+//    }
 
     // 답변 등록 - 행원
-    @PostMapping("/post/answer/{questionId}")
+    @PostMapping("/qna/answer/{questionId}")
     public ResponseEntity<AnswerResponseDTO> addAnswer(@PathVariable Long questionId,
                                                        @RequestHeader("Authorization") String authorizationHeader,
                                                        @RequestBody AnswerAddRequestDTO answerAddRequestDTO) {
@@ -110,7 +108,7 @@ public class QnaController {
 //    }
 
     // 댓글 추가
-    @PostMapping("/post/comment/{questionId}")
+    @PostMapping("/qna/comment/{questionId}")
     public ResponseEntity<CommentResponseDTO> addComment(@PathVariable Long questionId,
                                                          @RequestHeader("Authorization") String authorizationHeader,
                                                          @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
@@ -130,7 +128,7 @@ public class QnaController {
 
 
     // 댓글 삭제
-    @DeleteMapping("/post/comment/{questionId}/{commentId}")
+    @DeleteMapping("/qna/comment/{questionId}/{commentId}")
     public ResponseEntity deleteComment(@PathVariable Long questionId, @PathVariable Long commentId) {
         commentService.deleteComment(questionId, commentId);
         return new ResponseEntity<>(HttpStatus.OK);
