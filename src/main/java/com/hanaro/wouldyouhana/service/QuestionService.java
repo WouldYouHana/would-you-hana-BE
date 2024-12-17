@@ -262,17 +262,28 @@ public class QuestionService {
         return foundQuestionListDTO;
     }
 
-    // 질문 전체 목록
-    public List<QnaListDTO> getAllQuestions() {
-        List<Question> foundQuestionList = questionRepository.findAll();
+    // 지역별 전체 게시글 조회
+    public List<QnaListDTO> getAllQuestions(String location) {
+        List<Question> foundQuestionList = questionRepository.findByLocation(location);
+        return makeQnaListDTO(foundQuestionList);
+    }
+
+    // 지역별 최신순 게시글 조회
+    public List<QnaListDTO> getAllQuestionsSortedByLatest(String location) {
+        List<Question> foundQuestionList = questionRepository.findByLocationOrderByCreatedAtDesc(location);
+        return makeQnaListDTO(foundQuestionList);
+    }
+
+    // 지역별 좋아요 순 게시글 조회
+    public List<QnaListDTO> getAllQuestionsSortedByLikes(String location) {
+        List<Question> foundQuestionList = questionRepository.findByLocationOrderByLikeCountDesc(location);
         return makeQnaListDTO(foundQuestionList);
     }
 
     // 카테고리별 질문 전체 목록
-    public List<QnaListDTO> getAllQuestionsByCategory(String categoryName) {
+    public List<QnaListDTO> getAllQuestionsByCategory(String categoryName, String location) {
         Category category = categoryRepository.findByName(categoryName);
-        List<Question> foundQuestionList = questionRepository.findByCategory_id(category.getId())
-                .orElseThrow(() -> new EntityNotFoundException("No Question for category"));
+        List<Question> foundQuestionList = questionRepository.findByLocationAndCategory_Id(location, category.getId());
         return makeQnaListDTO(foundQuestionList);
     }
 

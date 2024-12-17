@@ -10,11 +10,11 @@ INSERT INTO banker (branch_name, email, name, password, content, location) value
 INSERT INTO banker (branch_name, email, name, password, content, location) values ("서울숲지점", "banker2@example.com", "홍창기", "root1234!","이것은 행원 소개", "서울시 성동구");
 INSERT INTO banker (branch_name, email, name, password, content, location) values ("구의역지점", "banker3@example.com", "박해민", "root1234!","이것은 행원 소개", "서울시 광진구");
 
-INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (1, 1, "안녕하세요!", "안녕하세요, 처음 가입했습니다. 반가워요!!", "서울시 성동구", "2024-12-17 10:00:00", null, 0, 0, 0);
-INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 2, "주택청약종합저축에 대해 여쭈어볼게 있습니다.", "이번에 주택청약종합저축 월 납입 한도가 25만원으로 올랐잖아요? ... ", "서울시 성동구", "2024-12-17 14:00:00", null, 0, 0, 5);
+INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (1, 1, "안녕하세요!", "안녕하세요, 처음 가입했습니다. 반가워요!!", "서울시 성동구", "2024-12-17 10:00:00", null, 3, 0, 0);
+INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 2, "주택청약종합저축에 대해 여쭈어볼게 있습니다.", "이번에 주택청약종합저축 월 납입 한도가 25만원으로 올랐잖아요? ... ", "서울시 성동구", "2024-12-17 14:00:00", null, 2, 0, 5);
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (3, 3, "제 대략적인 대출 한도가 궁금합니다.", "재직중인 26살 남자입니다. ...", "서울시 성동구", "2024-10-23 15:00:00", null, 0, 0, 3);
-INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 2, "주택청약종합저축에 대해 여쭈어볼게 있습니다.2", "이번에 주택청약종합저축 월 납입 한도가 25만원으로 올랐잖아요? ... ", "서울시 성동구", "2024-12-17 14:00:00", null, 0, 0, 5);
-INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 2, "주택청약종합저축에 대해 여쭈어볼게 있습니다.3", "이번에 주택청약종합저축 월 납입 한도가 25만원으로 올랐잖아요? ... ", "서울시 광진구", "2024-12-17 14:00:00", null, 0, 0, 8);
+INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 2, "주택청약종합저축에 대해 여쭈어볼게 있습니다.2", "이번에 주택청약종합저축 월 납입 한도가 25만원으로 올랐잖아요? ... ", "서울시 성동구", "2024-12-17 14:00:00", null, 6, 0, 5);
+INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 2, "주택청약종합저축에 대해 여쭈어볼게 있습니다.3", "이번에 주택청약종합저축 월 납입 한도가 25만원으로 올랐잖아요? ... ", "서울시 광진구", "2024-12-17 14:00:00", null, 3, 0, 8);
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 2, "주택청약종합저축에 대해 여쭈어볼게 있습니다.4", "이번에 주택청약종합저축 월 납입 한도가 25만원으로 올랐잖아요? ... ", "서울시 성동구", "2024-12-17 14:00:00", null, 0, 0, 1);
 
 
