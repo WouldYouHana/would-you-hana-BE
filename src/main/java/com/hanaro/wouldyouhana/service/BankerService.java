@@ -5,6 +5,7 @@ import com.hanaro.wouldyouhana.domain.Customer;
 import com.hanaro.wouldyouhana.dto.banker.BankerListReturnDTO;
 import com.hanaro.wouldyouhana.forSignIn.JwtToken;
 import com.hanaro.wouldyouhana.forSignIn.JwtTokenProvider;
+import com.hanaro.wouldyouhana.forSignIn.dto.CustomerSignInReturnDTO;
 import com.hanaro.wouldyouhana.repository.BankerRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -80,28 +81,20 @@ public class BankerService {
                 .collect(Collectors.toList());
     }
 
-    public String getBranchName(String token){
+
+    public CustomerSignInReturnDTO getUserInfo(String token){
         // JWT 토큰에서 사용자 이메일을 추출
         String email = jwtTokenProvider.getUsernameFromToken(token);
 
-        // 이메일로 고객을 조회
+        // 이메일로 행원을 조회
         Banker banker = bankerRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Customer not found with email: " + email));
 
-        // 고객의 location 정보 반환
-        return banker.getBranchName();
-    }
+        Long id = banker.getId();
+        String branch = banker.getBranchName();
+        String name = banker.getName();
 
-    public String getiNickName(String token){
-        // JWT 토큰에서 사용자 이메일을 추출
-        String email = jwtTokenProvider.getUsernameFromToken(token);
-
-        // 이메일로 고객을 조회
-        Banker banker = bankerRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Customer not found with email: " + email));
-
-        // 고객의 location 정보 반환
-        return banker.getName();
+        return new CustomerSignInReturnDTO(token, id, email, "B", branch, name);
     }
 
 

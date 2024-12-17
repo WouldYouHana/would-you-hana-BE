@@ -10,6 +10,7 @@ import lombok.Setter;
 public class CustomerSignInReturnDTO {
 
     private String token;
+    private Long id; //일반회원 or 행원의 id
     private String email;
     private String role; //role: 행원인 경우 “B” 일반회원: “C”
     private String location; // customer 테이블의 location

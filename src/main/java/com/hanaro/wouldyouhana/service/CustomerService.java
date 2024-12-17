@@ -3,6 +3,7 @@ package com.hanaro.wouldyouhana.service;
 import com.hanaro.wouldyouhana.domain.Customer;
 import com.hanaro.wouldyouhana.forSignIn.JwtToken;
 import com.hanaro.wouldyouhana.forSignIn.JwtTokenProvider;
+import com.hanaro.wouldyouhana.forSignIn.dto.CustomerSignInReturnDTO;
 import com.hanaro.wouldyouhana.repository.CustomerRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -55,7 +56,7 @@ public class CustomerService {
         return jwtToken;
     }
 
-    public String getLocation(String token){
+    public CustomerSignInReturnDTO getUserInfo(String token){
         // JWT 토큰에서 사용자 이메일을 추출
         String email = jwtTokenProvider.getUsernameFromToken(token);
 
@@ -63,21 +64,13 @@ public class CustomerService {
         Customer customer = customerRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Customer not found with email: " + email));
 
-        // 고객의 location 정보 반환
-        return customer.getLocation();
+        Long id = customer.getId();
+        String location = customer.getLocation();
+        String name = customer.getName();
+
+        return new CustomerSignInReturnDTO(token, id, email, "C", location, name);
     }
 
-    public String getiNickName(String token){
-        // JWT 토큰에서 사용자 이메일을 추출
-        String email = jwtTokenProvider.getUsernameFromToken(token);
-
-        // 이메일로 고객을 조회
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Customer not found with email: " + email));
-
-        // 고객의 location 정보 반환
-        return customer.getName();
-    }
 
     public String sendEmailVerification(String email) {
         String code = emailService.sendVerificationCode(email);
