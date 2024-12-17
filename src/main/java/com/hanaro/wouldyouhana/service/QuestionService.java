@@ -188,14 +188,14 @@ public class QuestionService {
     }
 
     // 오늘의 인기 질문
-    public List<TodayQnaListDTO> getTodayQuestions() {
+    public List<TodayQnaListDTO> getTodayQuestions(String location) {
         // 오늘 날짜의 시작 시간과 끝 시간을 계산
         LocalDate today = LocalDate.now();
         LocalDateTime startOfDay = today.atStartOfDay();  // 오늘 00:00:00
         LocalDateTime endOfDay = today.atTime(23, 59, 59);  // 오늘 23:59:59
 
         // 오늘 날짜의 질문들 중에서 viewCount가 높은 6개 가져오기
-        List<Question> foundQuestionList = questionRepository.findTop6ByCreatedAtTodayOrderByViewCountDesc(startOfDay, endOfDay, PageRequest.of(0, 6));
+        List<Question> foundQuestionList = questionRepository.findTop6ByCreatedAtTodayOrderByViewCountDesc(location, startOfDay, endOfDay, PageRequest.of(0, 6));
 
         // Question -> TodayQnaListDTO로 변환
         return foundQuestionList.stream()
