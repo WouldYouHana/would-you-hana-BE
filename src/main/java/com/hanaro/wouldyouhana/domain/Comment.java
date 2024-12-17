@@ -25,6 +25,11 @@ public class Comment {
     private Question question;
 
     @ManyToOne
+    @JoinColumn(name = "post_id")
+    @JsonBackReference
+    private Post post;
+
+    @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 

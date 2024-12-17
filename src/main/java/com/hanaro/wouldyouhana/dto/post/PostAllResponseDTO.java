@@ -1,4 +1,4 @@
-package com.hanaro.wouldyouhana.dto.question;
+package com.hanaro.wouldyouhana.dto.post;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,19 +10,17 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class QuestionAllResponseDTO {
-
-    private Long questionId;
-    private String nickname;
+public class PostAllResponseDTO {
+    private Long postId;
+    private Long customerId;
     private String categoryName;
     private String title;
     private String content;
-    private String location;
+    private String communityName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Long likeCount;
     private Long scrapCount;
     private Long viewCount;
     private List<String> filePaths;
-
 }

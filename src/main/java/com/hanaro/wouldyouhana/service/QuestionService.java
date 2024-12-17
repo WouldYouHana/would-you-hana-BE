@@ -56,19 +56,8 @@ public class QuestionService {
         // 카테고리 ID로 카테고리 객체 가져오기
         Category category = categoryRepository.findByName(questionAddRequestDTO.getCategoryName());
 
-        // 질문 엔티티 생성
-        Question question = Question.builder()
-                .customerId(questionAddRequestDTO.getCustomerId())
-                .category(category)
-                .title(questionAddRequestDTO.getTitle())
-                .content(questionAddRequestDTO.getContent())
-                .location(questionAddRequestDTO.getLocation())
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        // 질문 저장
-        Question savedQuestion = questionRepository.save(question);
-
+        Customer customer = customerRepository.findById(questionAddRequestDTO.getCustomerId()).get();
+        // 업로드한 파일에 대한 s3 버킷 내 주소들를 저장
         ArrayList<String> filePaths = new ArrayList<String>();
 
         if (files != null) {
@@ -78,19 +67,32 @@ public class QuestionService {
                 String filePath = fileStorageService.saveFile(file); // S3 버킷 내 저장된 이미지의 링크 반환
                 filePaths.add(filePath);
 
-                Image image = Image.builder()
-                        .filePath(filePath) // 파일 경로 설정
-                        .question(savedQuestion) // 질문과 연결
-                        .build();
-                // 이미지 저장
-                imageRepository.save(image);
+//                Image image = Image.builder()
+//                        .filePath(filePath) // 파일 경로 설정
+//                        .question(savedQuestion) // 질문과 연결
+//                        .build();
+//                // 이미지 저장
+//                imageRepository.save(image);
             }
         }
+        // 질문 엔티티 생성
+        Question question = Question.builder()
+                .customerId(questionAddRequestDTO.getCustomerId())
+                .category(category)
+                .title(questionAddRequestDTO.getTitle())
+                .content(questionAddRequestDTO.getContent())
+                .location(questionAddRequestDTO.getLocation())
+                .createdAt(LocalDateTime.now())
+                .filePaths(filePaths)
+                .build();
+
+        // 질문 저장
+        Question savedQuestion = questionRepository.save(question);
 
         // 최종적으로 반환할 DTO 생성
         return new QuestionAllResponseDTO(
                 savedQuestion.getId(),
-                savedQuestion.getCustomerId(),
+                customer.getNickname(),
                 savedQuestion.getCategory().getName(),
                 savedQuestion.getTitle(),
                 savedQuestion.getContent(),
@@ -107,24 +109,17 @@ public class QuestionService {
     /**
      * 질문(게시글) 수정
      * */
-    public QuestionAllResponseDTO modifyQuestion(QuestionAddRequestDTO questionAddRequestDTO, Long questionId, List<MultipartFile> files) {
+    public Long modifyQuestion(QuestionAddRequestDTO questionAddRequestDTO, Long questionId, List<MultipartFile> files) {
         // 기존 질문 엔티티 조회
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
-
-        // 질문 정보 수정
-        question.setTitle(questionAddRequestDTO.getTitle());
-        question.setContent(questionAddRequestDTO.getContent());
-        question.setLocation(questionAddRequestDTO.getLocation());
-        question.setUpdatedAt(LocalDateTime.now()); // 수정 시간 업데이트
-
-        // 질문 저장
-        Question updatedQuestion = questionRepository.save(question);
-
+        // 카테고리 ID로 카테고리 객체 가져오기
+        Category category = categoryRepository.findByName(questionAddRequestDTO.getCategoryName());
+        Customer customer = customerRepository.findById(questionAddRequestDTO.getCustomerId()).get();
         // 기존 이미지 삭제
-        imageRepository.deleteAllByQuestionId(questionId);
+        //imageRepository.deleteAllByQuestionId(questionId);
 
-        ArrayList<String> filePaths = new ArrayList<String>();
+        List<String> filePaths = question.getFilePaths();
 
         // 새로운 이미지 파일 처리
         if (files != null) {
@@ -132,30 +127,26 @@ public class QuestionService {
                 // 파일 시스템에 저장 로직 추가
                 String filePath = fileStorageService.saveFile(file); // 파일 저장 후 경로를 반환하는 메서드
                 filePaths.add(filePath);
-                Image image = Image.builder()
-                        .filePath(filePath) // 파일 경로 설정
-                        .question(updatedQuestion) // 질문과 연결
-                        .build();
-                // 이미지 저장
-                imageRepository.save(image);
+//                Image image = Image.builder()
+//                        .filePath(filePath) // 파일 경로 설정
+//                        .question(updatedQuestion) // 질문과 연결
+//                        .build();
+//                // 이미지 저장
+//                imageRepository.save(image);
             }
         }
+        // 질문 정보 수정
+        question.setTitle(questionAddRequestDTO.getTitle());
+        question.setContent(questionAddRequestDTO.getContent());
+        question.setLocation(questionAddRequestDTO.getLocation());
+        question.setCategory(category);
+        question.setUpdatedAt(LocalDateTime.now());
+        question.setFilePaths(filePaths);
 
-        // 최종적으로 반환할 DTO 생성
-        return new QuestionAllResponseDTO(
-                updatedQuestion.getId(),
-                updatedQuestion.getCustomerId(),
-                updatedQuestion.getCategory().getName(),
-                updatedQuestion.getTitle(),
-                updatedQuestion.getContent(),
-                updatedQuestion.getLocation(),
-                updatedQuestion.getCreatedAt(),
-                updatedQuestion.getUpdatedAt(), // 업데이트 시간
-                updatedQuestion.getLikeCount(), // likeCount (초기값)
-                updatedQuestion.getScrapCount(), // scrapCount (초기값)
-                updatedQuestion.getViewCount(), // viewCount (초기값)
-                filePaths // 파일 이름 리스트 추가
-        );
+        // 질문 저장
+        Question updatedQuestion = questionRepository.save(question);
+
+        return questionId;
     }
 
     // 질문 삭제
@@ -167,7 +158,7 @@ public class QuestionService {
     public QuestionResponseDTO getOneQuestion(Long questionId) {
         Question foundQuestion = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
-
+        Customer customer = customerRepository.findById(foundQuestion.getCustomerId()).get();
         AnswerResponseDTO answerResponseDTO = answerRepository.findByQuestionId(questionId)
                 .map(answer -> new AnswerResponseDTO(
                         answer.getBanker().getName(),
@@ -192,7 +183,7 @@ public class QuestionService {
 
         return new QuestionResponseDTO(
                 foundQuestion.getId(),
-                foundQuestion.getCustomerId(),
+                customer.getNickname(),
                 foundQuestion.getCategory().getName(),
                 foundQuestion.getTitle(),
                 foundQuestion.getContent(),

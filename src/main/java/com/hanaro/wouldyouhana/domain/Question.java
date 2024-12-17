@@ -32,8 +32,12 @@ public class Question {
     private String location;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    @Builder.Default
     private Long likeCount=0L;
+    @Builder.Default
     private Long scrapCount=0L;
+    @Builder.Default
     private Long viewCount=0L;
 
     @OneToOne(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
