@@ -137,9 +137,9 @@ public class QnaController {
     /**
      * 오늘의 인기 게시글
      * */
-    @GetMapping("/todatQnalist")
-    public ResponseEntity<List<TodayQnaListDTO>> getTodayQuestions() {
-        List<TodayQnaListDTO> questionList = questionService.getTodayQuestions();
+    @GetMapping("/todayQnalist")
+    public ResponseEntity<List<TodayQnaListDTO>> getTodayQuestions(@RequestParam String location) {
+        List<TodayQnaListDTO> questionList = questionService.getTodayQuestions(location);
         return new ResponseEntity<>(questionList, HttpStatus.OK);
     }
 
