@@ -65,7 +65,7 @@ public class PostService {
     }
 
     // 커뮤니티 게시글 수정
-    public PostAllResponseDTO modifyPost(PostAddRequestDTO postAddRequestDTO, Long postId, List<MultipartFile> files) {
+    public Long modifyPost(PostAddRequestDTO postAddRequestDTO, Long postId, List<MultipartFile> files) {
         // 기존 커뮤니티 게시글 조회
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found"));
@@ -89,22 +89,9 @@ public class PostService {
         post.setUpdatedAt(LocalDateTime.now());
         post.setFilePaths(filePaths);
 
-        Post updatedPost = postRepository.save(post);
+        Post modifiedPost = postRepository.save(post);
 
-        return new PostAllResponseDTO(
-                updatedPost.getId(),
-                updatedPost.getCustomerId(),
-                updatedPost.getCategory().getName(),
-                updatedPost.getTitle(),
-                updatedPost.getContent(),
-                updatedPost.getCommunityName(),
-                updatedPost.getCreatedAt(),
-                updatedPost.getUpdatedAt(),
-                updatedPost.getLikeCount(),
-                updatedPost.getScrapCount(),
-                updatedPost.getViewCount(),
-                updatedPost.getFilePaths()
-        );
+        return modifiedPost.getId();
 
     }
 

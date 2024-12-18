@@ -61,16 +61,17 @@ public class QnaController {
      * 질문(게시글) 수정
      * */
     @PutMapping("/qna/modify/{questionId}")
-    public RedirectView modifyQuestion(@PathVariable Long questionId,
+    public ResponseEntity<Void> modifyQuestion(@PathVariable Long questionId,
                                                                  @RequestPart("question") QuestionAddRequestDTO questionAddRequestDTO,
                                                                     @RequestPart(value = "file", required = false) List<MultipartFile> files){
 
         questionId = questionService.modifyQuestion(questionAddRequestDTO, questionId, files);
-        // 수정된 질문의 상세 페이지로 리다이렉트
-        RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/qna/" + questionId);  // 수정된 질문의 ID를 사용하여 상세 페이지로 리다이렉트
-
-        return redirectView;  // 리다이렉트 응답 반환
+        if(questionId == null){ // 실패시
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else { // 성공시
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 
     /**

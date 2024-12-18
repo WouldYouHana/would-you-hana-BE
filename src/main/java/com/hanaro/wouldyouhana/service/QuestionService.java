@@ -144,9 +144,9 @@ public class QuestionService {
         question.setFilePaths(filePaths);
 
         // 질문 저장
-        Question updatedQuestion = questionRepository.save(question);
+        Question modifiedQuestion = questionRepository.save(question);
 
-        return questionId;
+        return modifiedQuestion.getId();
     }
 
     // 질문 삭제

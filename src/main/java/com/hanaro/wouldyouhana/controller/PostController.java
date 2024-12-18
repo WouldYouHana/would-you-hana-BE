@@ -43,14 +43,17 @@ public class PostController {
 
     // 커뮤니티 게시글 수정
     @PutMapping("/modify/{postId}")
-    public RedirectView modifyPost(@PathVariable("postId") Long postId,
+    public ResponseEntity<Void> modifyPost(@PathVariable("postId") Long postId,
                                    @RequestPart("post") PostAddRequestDTO postAddRequestDTO,
                                    @RequestPart(value="file", required = false) List<MultipartFile> files) {
-        PostAllResponseDTO modifiedPost = postService.modifyPost(postAddRequestDTO, postId, files);
-        RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/post/" + modifiedPost.getPostId());  // 수정된 게시글의 ID를 사용하여 상세 페이지로 리다이렉트
+        postId = postService.modifyPost(postAddRequestDTO, postId, files);
+        if(postId == null){ // 실패시
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else { // 성공시
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
 
-        return redirectView;  // 리다이렉트 응답 반환
     }
 
     // 커뮤니티 게시글 삭제
@@ -68,8 +71,8 @@ public class PostController {
     }
 
     // 커뮤니티 게시글 전체 조회
-//    @GetMapping("/postList")
-//    public ResponseEntity<List<PostResponseDTO>> getPostList() {
-//
-//    }
+    @GetMapping("/postList")
+    public ResponseEntity<List<PostResponseDTO>> getPostList() {
+
+    }
 }
