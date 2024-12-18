@@ -35,39 +35,39 @@ public class LikesScrapService {
     /**
      * 스크랩 저장 & 취소
      * */
-    public void saveScrap(LikesScrapRequestDTO likesScrapRequestDTO) {
-        Question question = questionRepository.findById(likesScrapRequestDTO.getQuestionId())
-                .orElseThrow(() -> new EntityNotFoundException("Question not found"));
-        Customer customer = customerRepository.findById(likesScrapRequestDTO.getCustomerId())
-                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
-
-        boolean alreadyExists = scrapRepository.existsByQuestionAndCustomer(question, customer);
-
-        if(!alreadyExists){ // 스크랩
-
-            // Scrap 객체 생성 및 저장
-            Scrap scrap = new Scrap();
-            scrap.setQuestion(question);
-            scrap.setCustomer(customer);
-
-            scrapRepository.save(scrap);
-
-            // 게시물의 스크랩 수 증가
-            question.incrementScrapCount();
-
-        }else{ //스크랩 취소
-
-            // 해당 Scrap 객체 찾기
-            Scrap scrap = scrapRepository.findByQuestionAndCustomer(question, customer)
-                    .orElseThrow(() -> new EntityNotFoundException("Like not found for this question and customer."));
-
-            // 게시물의 스크랩 수 감소
-            question.decrementScrapCount();
-
-            // Scrap 객체 삭제
-            scrapRepository.delete(scrap);
-        }
-    }
+//    public void saveScrap(LikesScrapRequestDTO likesScrapRequestDTO) {
+//        Question question = questionRepository.findById(likesScrapRequestDTO.getQuestionId())
+//                .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+//        Customer customer = customerRepository.findById(likesScrapRequestDTO.getCustomerId())
+//                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+//
+//        boolean alreadyExists = scrapRepository.existsByQuestionAndCustomer(question, customer);
+//
+//        if(!alreadyExists){ // 스크랩
+//
+//            // Scrap 객체 생성 및 저장
+//            Scrap scrap = new Scrap();
+//            scrap.setQuestion(question);
+//            scrap.setCustomer(customer);
+//
+//            scrapRepository.save(scrap);
+//
+//            // 게시물의 스크랩 수 증가
+//            question.incrementScrapCount();
+//
+//        }else{ //스크랩 취소
+//
+//            // 해당 Scrap 객체 찾기
+//            Scrap scrap = scrapRepository.findByQuestionAndCustomer(question, customer)
+//                    .orElseThrow(() -> new EntityNotFoundException("Like not found for this question and customer."));
+//
+//            // 게시물의 스크랩 수 감소
+//            question.decrementScrapCount();
+//
+//            // Scrap 객체 삭제
+//            scrapRepository.delete(scrap);
+//        }
+//    }
 
     /**
      * 좋아요 저장 - 커뮤니티 포스트 한정
@@ -129,20 +129,20 @@ public class LikesScrapService {
     /**
      * 좋아요 조회 (최신순)
      * */
-    public List<LikesScrapResponseDTO> getLikes(Long customer_id){
-
-        Customer customer = customerRepository.findById(customer_id)
-                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
-
-        // 고객의 스크랩 조회
-        List<Likes> likes = likesRepository.findByCustomer(customer);
-
-        // Scrap 객체를 ScrapResponseDTO로 변환해서 최신순으로 정렬하여 반환
-        return likes.stream()
-                .sorted(Comparator.comparing(like -> like.getQuestion().getId(), Comparator.reverseOrder())) // ID 기준으로 내림차순 정렬
-                .map(like -> new LikesScrapResponseDTO(like.getId(), like.getQuestion().getId(),like.getQuestion().getCategory().getName(),
-                        like.getQuestion().getTitle(), like.getQuestion().getLikeCount(), like.getQuestion().getViewCount(),
-                        like.getQuestion().getCreatedAt(), like.getQuestion().getAnswers().getBanker().getName()))
-                .toList(); // 변환된 DTO 리스트 반환
-    }
+//    public List<LikesScrapResponseDTO> getLikes(Long customer_id){
+//
+//        Customer customer = customerRepository.findById(customer_id)
+//                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+//
+//        // 고객의 스크랩 조회
+//        List<Likes> likes = likesRepository.findByCustomer(customer);
+//
+//        // Scrap 객체를 ScrapResponseDTO로 변환해서 최신순으로 정렬하여 반환
+//        return likes.stream()
+//                .sorted(Comparator.comparing(like -> like.getQuestion().getId(), Comparator.reverseOrder())) // ID 기준으로 내림차순 정렬
+//                .map(like -> new LikesScrapResponseDTO(like.getId(), like.getQuestion().getId(),like.getQuestion().getCategory().getName(),
+//                        like.getQuestion().getTitle(), like.getQuestion().getLikeCount(), like.getQuestion().getViewCount(),
+//                        like.getQuestion().getCreatedAt(), like.getQuestion().getAnswers().getBanker().getName()))
+//                .toList(); // 변환된 DTO 리스트 반환
+//    }
 }
