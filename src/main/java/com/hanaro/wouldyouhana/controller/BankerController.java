@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -63,6 +64,7 @@ public class BankerController {
                 .password(signupRequest.getPassword())
                 .name(signupRequest.getName())
                 .branchName(signupRequest.getBranchName())
+                .roles(new ArrayList<>(List.of("BANKER"))) // 기본 역할 'USER' 추가
                 .build();
 
         // 회원가입 처리
