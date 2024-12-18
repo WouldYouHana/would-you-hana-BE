@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -27,10 +29,10 @@ public class CustomerController {
     // 회원가입 처리하는 API
     @PostMapping("/signUp")
     public ResponseEntity<?> signup(@RequestBody CustomerSignUpDto signupRequest) {
-        // 비밀번호 일치하는지 확인
-        if (!signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
-            return new ResponseEntity<>("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
+//        // 비밀번호 일치하는지 확인
+//        if (!signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
+//            return new ResponseEntity<>("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+//        }
 
         // 이메일 중복 확인
         if (customerRepository.existsByEmail(signupRequest.getEmail())) {
@@ -50,6 +52,7 @@ public class CustomerController {
                 .birthDate(signupRequest.getBirthDate())
                 .experiencePoints(0L) // 초기 경험치 0 설정
                 .createdAt(LocalDateTime.now()) // 현재 시간으로 가입일자 설정
+                .roles(new ArrayList<>(List.of("USER"))) // 기본 역할 'USER' 추가
                 .build();
 
         // 회원가입 처리

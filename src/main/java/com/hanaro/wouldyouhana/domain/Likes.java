@@ -19,7 +19,7 @@ public class Likes {
 
     @ManyToOne
     @JoinColumn(name = "question_id")  // 게시글 ID
-    private Question question;  // 좋아요가 눌린 게시글
+    private Post post;  // 좋아요가 눌린 게시글
 
     @ManyToOne
     @JoinColumn(name = "customer_id")  // 사용자 ID
