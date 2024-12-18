@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 public class CommentDTO {
 
     private Long id;
-    private Long parentCommentId;
     private String content;
     private Long customerId;
     private LocalDateTime createdAt;

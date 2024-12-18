@@ -1,4 +1,4 @@
-package com.hanaro.wouldyouhana.dto.question;
+package com.hanaro.wouldyouhana.dto.post;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,19 +11,15 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class QnaListDTO {
-
-    private Long questionId;
-    private Long customerId;
-    private String answerBanker;
+public class PostListDTO {
+    private Long postId;
+    private String nickname;
     private String categoryName;
-//    private Long categoryId;
     private String title;
     private String location;
     private LocalDateTime createdAt;
-    private Long commentCount;
+    private int commentCount;
     private Long likeCount;
     private Long scrapCount;
     private Long viewCount;
-
 }

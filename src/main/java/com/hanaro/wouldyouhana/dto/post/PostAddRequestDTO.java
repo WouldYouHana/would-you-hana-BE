@@ -1,17 +1,14 @@
-package com.hanaro.wouldyouhana.dto.question;
+package com.hanaro.wouldyouhana.dto.post;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.validation.constraints.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class QuestionAddRequestDTO {
+public class PostAddRequestDTO {
 
     @NotNull
     private String title;
@@ -23,5 +20,4 @@ public class QuestionAddRequestDTO {
     private String location;
     @NotNull
     private String content;
-
 }

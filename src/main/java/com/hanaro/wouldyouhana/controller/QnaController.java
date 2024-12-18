@@ -2,6 +2,7 @@ package com.hanaro.wouldyouhana.controller;
 
 import com.hanaro.wouldyouhana.dto.*;
 import com.hanaro.wouldyouhana.dto.answer.AnswerAddRequestDTO;
+import com.hanaro.wouldyouhana.dto.answer.AnswerGoodRequestDTO;
 import com.hanaro.wouldyouhana.dto.answer.AnswerResponseDTO;
 import com.hanaro.wouldyouhana.dto.comment.CommentAddRequestDTO;
 import com.hanaro.wouldyouhana.dto.comment.CommentResponseDTO;
@@ -27,6 +28,7 @@ import java.util.List;
 
 @Controller
 @Slf4j
+@RequestMapping("/qna")
 public class QnaController {
 
     private final QuestionService questionService;
@@ -47,7 +49,7 @@ public class QnaController {
     /**
      * 질문(게시글) 등록
      * */
-    @PostMapping("/qna/register")
+    @PostMapping("/register")
     public ResponseEntity<QuestionAllResponseDTO> addNewQuestion(@Valid
                                                                      @RequestPart("question") QuestionAddRequestDTO questionAddRequestDTO,
                                                                  @RequestPart(value = "file", required = false) List<MultipartFile> files) throws IOException {
@@ -59,23 +61,27 @@ public class QnaController {
     /**
      * 질문(게시글) 수정
      * */
-    @PostMapping("/qna/modify/{questionId}")
-    public ResponseEntity<QuestionAllResponseDTO> modifyQuestion(@PathVariable Long questionId,
+    @PutMapping("/modify/{questionId}")
+    public ResponseEntity<Void> modifyQuestion(@PathVariable Long questionId,
                                                                  @RequestPart("question") QuestionAddRequestDTO questionAddRequestDTO,
                                                                     @RequestPart(value = "file", required = false) List<MultipartFile> files){
-
-        QuestionAllResponseDTO modifiedPost = questionService.modifyQuestion(questionAddRequestDTO, questionId, files);
-        return new ResponseEntity<>(modifiedPost, HttpStatus.CREATED);
+        questionId = questionService.modifyQuestion(questionAddRequestDTO, questionId, files);
+        if(questionId == null){ // 실패시
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else { // 성공시
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 
     /**
      * 질문(게시글) 삭제
      * */
     @PreAuthorize("@customerRepository.findByEmail(principal.getUsername()).getId() == @questionRepository.findById(#question_id).customerId")
-    @DeleteMapping("/qna/delete/{questionId}")
-    public ResponseEntity deleteQuestion(@PathVariable Long questionId) {
+    @DeleteMapping("/delete/{questionId}")
+    public ResponseEntity<Void> deleteQuestion(@PathVariable Long questionId) {
         questionService.deleteQuestion(questionId);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -92,7 +98,7 @@ public class QnaController {
 //    }
 
     // 답변 등록 - 행원
-    @PostMapping("/qna/answer/{questionId}")
+    @PostMapping("/answer/{questionId}")
     public ResponseEntity<AnswerResponseDTO> addAnswer(@PathVariable Long questionId,
                                                        @RequestHeader("Authorization") String authorizationHeader,
                                                        @RequestBody AnswerAddRequestDTO answerAddRequestDTO) {
@@ -108,12 +114,12 @@ public class QnaController {
 //    }
 
     // 댓글 추가
-    @PostMapping("/qna/comment/{questionId}")
-    public ResponseEntity<CommentResponseDTO> addComment(@PathVariable Long questionId,
+    @PostMapping("/comment/{question_id}")
+    public ResponseEntity<CommentResponseDTO> addComment(@PathVariable Long question_id,
                                                          @RequestHeader("Authorization") String authorizationHeader,
                                                          @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
         String userEmail = SecurityUtil.getCurrentUsername();
-        CommentResponseDTO addedComment = commentService.addComment(questionId, null, userEmail, commentAddRequestDTO);
+        CommentResponseDTO addedComment = commentService.addCommentForQuestion(question_id, userEmail, commentAddRequestDTO);
         return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
     }
 
@@ -124,37 +130,54 @@ public class QnaController {
 //        return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
 //    }
 
-    // 게시글에 대한 댓글 가져오기
-
-
     // 댓글 삭제
-    @DeleteMapping("/qna/comment/{questionId}/{commentId}")
+    @DeleteMapping("/comment/{questionId}/{commentId}")
     public ResponseEntity deleteComment(@PathVariable Long questionId, @PathVariable Long commentId) {
-        commentService.deleteComment(questionId, commentId);
+        commentService.deleteCommentForQuestion(questionId, commentId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
-     * 오늘의 인기 게시글
+     * 오늘의 인기 게시글 - 좋아요 (TOP6)
      * */
-    @GetMapping("/todayQnalist")
+    @GetMapping("/todayQnaList")
     public ResponseEntity<List<TodayQnaListDTO>> getTodayQuestions(@RequestParam String location) {
         List<TodayQnaListDTO> questionList = questionService.getTodayQuestions(location);
         return new ResponseEntity<>(questionList, HttpStatus.OK);
     }
 
+    // 게시물 전체 조회 (순서 없음)
+    @GetMapping("/qnaList")
+    public ResponseEntity<List<QnaListDTO>> getAllQuestions(@RequestParam String location) {
+        List<QnaListDTO> questionList = questionService.getAllQuestions(location);
+        return new ResponseEntity<>(questionList, HttpStatus.OK);
+    }
 
-    // 게시물 전체 조회
-    @GetMapping("/qnalist")
-    public ResponseEntity<List<QnaListDTO>> getAllQuestions() {
-        List<QnaListDTO> questionList = questionService.getAllQuestions();
+    // 지역별 게시물 전체 조회 (최신순)
+    @GetMapping("/qnaList/latest")
+    public ResponseEntity<List<QnaListDTO>> getLatestQuestions(@RequestParam String location) {
+        List<QnaListDTO> questionList = questionService.getAllQuestionsSortedByLatest(location);
+        return new ResponseEntity<>(questionList, HttpStatus.OK);
+    }
+
+    // 지역별 게시물 전체 조회 (좋아요순)
+    @GetMapping("/qnaList/likes")
+    public ResponseEntity<List<QnaListDTO>> getLikesQuestions(@RequestParam String location) {
+        List<QnaListDTO> questionList = questionService.getAllQuestionsSortedByLikes(location);
+        return new ResponseEntity<>(questionList, HttpStatus.OK);
+    }
+
+    // 지역별 게시물 전체 조회 (답변 도움 순)
+    @GetMapping("/qnaList/good")
+    public ResponseEntity<List<QnaListDTO>> getGoodQuestions(@RequestParam String location) {
+        List<QnaListDTO> questionList = questionService.getAllQuestionsSortedByGoodCount(location);
         return new ResponseEntity<>(questionList, HttpStatus.OK);
     }
 
     // 카테고리별 게시물 전체 조회
-    @GetMapping("/qnalist/{categoryId}")
-    public ResponseEntity<List<QnaListDTO>> getAllQuestionsByCategory(@PathVariable Long categoryId) {
-        List<QnaListDTO> questionByCategoryList = questionService.getAllQuestionsByCategory(categoryId);
+    @GetMapping("/qnaList/{category}")
+    public ResponseEntity<List<QnaListDTO>> getAllQuestionsByCategory(@PathVariable String category, @RequestParam String location) {
+        List<QnaListDTO> questionByCategoryList = questionService.getAllQuestionsByCategory(category, location);
         return new ResponseEntity<>(questionByCategoryList, HttpStatus.OK);
     }
 
@@ -166,9 +189,16 @@ public class QnaController {
     }
 
     // 게시물 상세 조회
-    @GetMapping("/post/{questionId}")
-    public ResponseEntity<QuestionResponseDTO> getOneQuestion(@PathVariable Long questionId) {
-        QuestionResponseDTO questionResponseDTO = questionService.getOneQuestion(questionId);
+    @GetMapping("/{question_id}")
+    public ResponseEntity<QuestionResponseDTO> getOneQuestion(@PathVariable Long question_id) {
+        QuestionResponseDTO questionResponseDTO = questionService.getOneQuestion(question_id);
         return new ResponseEntity<>(questionResponseDTO, HttpStatus.OK);
+    }
+
+    // 답변 도움돼요 등록
+    @PostMapping("/answerLike")
+    public ResponseEntity<String> goodRequest(@RequestBody AnswerGoodRequestDTO answerGoodRequestDTO){
+        questionService.saveGood(answerGoodRequestDTO);
+        return ResponseEntity.ok("answerLike Success");
     }
 }

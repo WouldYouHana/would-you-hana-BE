@@ -37,7 +37,7 @@ public class LikesScrapService {
     }
 
     /**
-     * 스크랩 저장
+     * 스크랩 저장 & 취소
      * */
     public void saveScrap(LikesScrapRequestDTO likesScrapRequestDTO) {
         Question question = questionRepository.findById(likesScrapRequestDTO.getQuestionId())
@@ -45,18 +45,17 @@ public class LikesScrapService {
         Customer customer = customerRepository.findById(likesScrapRequestDTO.getCustomerId())
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
-        if(likesScrapRequestDTO.isSelected()){ // 스크랩
+        boolean alreadyExists = scrapRepository.existsByQuestionAndCustomer(question, customer);
 
-            // 이미 같은 question과 customer로 좋아요 존재하는지 확인 (중복 확인)
-            boolean alreadyExists = scrapRepository.existsByQuestionAndCustomer(question, customer);
-            if (!alreadyExists) {
-                // Scrap 객체 생성 및 저장
-                Scrap scrap = new Scrap();
-                scrap.setQuestion(question);
-                scrap.setCustomer(customer);
+        if(!alreadyExists){ // 스크랩
 
-                scrapRepository.save(scrap);
-            }
+            // Scrap 객체 생성 및 저장
+            Scrap scrap = new Scrap();
+            scrap.setQuestion(question);
+            scrap.setCustomer(customer);
+
+            scrapRepository.save(scrap);
+
             // 게시물의 스크랩 수 증가
             question.incrementScrapCount();
 
@@ -83,18 +82,16 @@ public class LikesScrapService {
         Customer customer = customerRepository.findById(likesScrapRequestDTO.getCustomerId())
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
-        if(likesScrapRequestDTO.isSelected()){ // 좋아요
+        boolean alreadyExists = likesRepository.existsByQuestionAndCustomer(question, customer);
 
-            // 이미 같은 question과 customer로 좋아요 존재하는지 확인 (중복 확인)
-            boolean alreadyExists = likesRepository.existsByQuestionAndCustomer(question, customer);
-            if (!alreadyExists) {
-                // Likes 객체 생성 및 저장
-                Likes likes = new Likes();
-                likes.setQuestion(question);
-                likes.setCustomer(customer);
+        if(!alreadyExists){ // 좋아요
 
-                likesRepository.save(likes);
-            }
+            // Likes 객체 생성 및 저장
+            Likes likes = new Likes();
+            likes.setQuestion(question);
+            likes.setCustomer(customer);
+
+            likesRepository.save(likes);
             // 게시글의 좋아요 개수 증가
             question.incrementLikesCount();
 

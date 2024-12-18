@@ -55,7 +55,8 @@ public class AnswerService {
                 addedAnswer.getQuestion().getId(),
                 addedAnswer.getContent(),
                 addedAnswer.getCreatedAt(),
-                addedAnswer.getUpdatedAt()
+                addedAnswer.getUpdatedAt(),
+                addedAnswer.getGoodCount()
         );
     }
 
@@ -73,7 +74,8 @@ public class AnswerService {
                 updatedAnswer.getQuestion().getId(),
                 updatedAnswer.getContent(),
                 updatedAnswer.getCreatedAt(),
-                updatedAnswer.getUpdatedAt()
+                updatedAnswer.getUpdatedAt(),
+                updatedAnswer.getGoodCount()
         );
     }
 

@@ -25,17 +25,15 @@ public class Comment {
     private Question question;
 
     @ManyToOne
+    @JoinColumn(name = "post_id")
+    @JsonBackReference
+    private Post post;
+
+    @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
     private String content;
-
-    @ManyToOne
-    @JoinColumn(name="parent_id")
-    private Comment parentComment;
-
-    @OneToMany(mappedBy = "parentComment")
-    private List<Comment> replies;
 
     private LocalDateTime createdAt;
 
