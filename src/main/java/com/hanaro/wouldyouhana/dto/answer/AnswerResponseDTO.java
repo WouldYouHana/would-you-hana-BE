@@ -20,4 +20,6 @@ public class AnswerResponseDTO {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private Long goodCount;
 }

@@ -21,7 +21,9 @@ INSERT INTO post (customer_id, title, category_id, location, content, created_at
 INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (2, "다들 예금 얼마나 하고 계시나요?", 2, "서울시 성동구", "궁금합니다!", "2024-12-18 15:30:00", null, 7, 0, 5 );
 INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (3, "다들 예금 얼마나 하고 계시나요?", 3, "서울시 성동구", "궁금합니다!", "2024-12-18 15:30:00", null, 8, 0, 5 );
 
-INSERT INTO answer (banker_id, question_id, content, created_at, updated_at) VALUES (1, 1, 'This is an answer', "2024-10-21 10:00:00", "2024-10-21 10:00:00");
+INSERT INTO answer (banker_id, question_id, content, created_at, updated_at, good_count) VALUES (1, 1, 'This is an answer', "2024-10-21 10:00:00", "2024-10-21 10:00:00", 0);
+INSERT INTO answer (banker_id, question_id, content, created_at, updated_at, good_count) VALUES (1, 2, 'This is an answer', "2024-10-21 10:00:00", "2024-10-21 10:00:00", 7);
+
 
 INSERT INTO comment (customer_id, question_id, content, created_at) values (1, 1,"반갑습니다!","2024-10-21 10:05:00" );
 INSERT INTO comment (customer_id, question_id, content, created_at) values (2, 1,"어서오세요!","2024-10-21 10:07:00" );
