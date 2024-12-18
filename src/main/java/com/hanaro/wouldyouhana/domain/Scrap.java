@@ -9,18 +9,19 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "Scrap_post")
-public class ScrapPost {
+@Table(name = "Scrap")
+public class Scrap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @JoinColumn(name = "question_id")
+    private Question question;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    // Getters and Setters
 }

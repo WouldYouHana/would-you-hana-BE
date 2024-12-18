@@ -39,8 +39,7 @@ public class BankerService {
 
     public Banker registerBanker(Banker banker) {
         // 비밀번호 암호화
-        //banker.setPassword(passwordEncoder.encode(banker.getPassword()));
-        banker.setPassword((banker.getPassword()));
+        banker.setPassword(passwordEncoder.encode(banker.getPassword()));
         return bankerRepository.save(banker);
     }
 
@@ -92,10 +91,10 @@ public class BankerService {
                 .orElseThrow(() -> new RuntimeException("Customer not found with email: " + email));
 
         Long id = banker.getId();
-        String location = banker.getLocation();
+        String branch = banker.getBranchName();
         String name = banker.getName();
 
-        return new CustomerSignInReturnDTO(token, id, email, "B", location, name);
+        return new CustomerSignInReturnDTO(token, id, email, "B", branch, name);
     }
 
 

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LikesRequestDTO {
+public class LikesScrapRequestDTO {
 
     private Long postId;
     private Long customerId;
