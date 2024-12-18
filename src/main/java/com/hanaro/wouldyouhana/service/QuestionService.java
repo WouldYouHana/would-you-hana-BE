@@ -10,6 +10,7 @@ import com.hanaro.wouldyouhana.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -278,19 +279,35 @@ public class QuestionService {
 
     // 지역별 최신순 게시글 조회
     public List<QnaListDTO> getAllQuestionsSortedByLatest(String location) {
-        List<Question> foundQuestionList = questionRepository.findByLocationOrderByCreatedAtDesc(location);
+        List<Question> foundQuestionList;
+        if(location.isEmpty()){
+            foundQuestionList = questionRepository.findAll(Sort.by(Sort.Order.desc("createdAt")));
+        }else{
+            foundQuestionList = questionRepository.findByLocationOrderByCreatedAtDesc(location);
+        }
         return makeQnaListDTO(foundQuestionList);
     }
 
     // 지역별 좋아요 순 게시글 조회
     public List<QnaListDTO> getAllQuestionsSortedByLikes(String location) {
-        List<Question> foundQuestionList = questionRepository.findByLocationOrderByLikeCountDesc(location);
+        List<Question> foundQuestionList;
+        if(location.isEmpty()){
+            foundQuestionList = questionRepository.findAll(Sort.by(Sort.Order.desc("goodCount")));
+        }else{
+            foundQuestionList = questionRepository.findByLocationOrderByLikeCountDesc(location);
+        }
         return makeQnaListDTO(foundQuestionList);
     }
 
     // 지역별 답변 도움순 게시글 조회
     public List<QnaListDTO> getAllQuestionsSortedByGoodCount(String location){
-        List<Question> foundQuestionList = questionRepository.findByLocationOrderByAnswers_GoodCountDesc(location);
+
+        List<Question> foundQuestionList;
+        if(location.isEmpty()){
+            foundQuestionList = questionRepository.findAll();
+        }else{
+            foundQuestionList = questionRepository.findByLocationOrderByAnswers_GoodCountDesc(location);
+        }
         return makeQnaListDTO(foundQuestionList);
     }
 

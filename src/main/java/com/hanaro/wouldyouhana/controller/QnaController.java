@@ -61,12 +61,12 @@ public class QnaController {
     /**
      * 질문(게시글) 수정
      * */
-    @PutMapping("/modify/{questionId}")
-    public ResponseEntity<Void> modifyQuestion(@PathVariable Long questionId,
+    @PutMapping("/modify/{question_id}")
+    public ResponseEntity<Void> modifyQuestion(@PathVariable Long question_id,
                                                                  @RequestPart("question") QuestionAddRequestDTO questionAddRequestDTO,
                                                                     @RequestPart(value = "file", required = false) List<MultipartFile> files){
-        questionId = questionService.modifyQuestion(questionAddRequestDTO, questionId, files);
-        if(questionId == null){ // 실패시
+        question_id = questionService.modifyQuestion(questionAddRequestDTO, question_id, files);
+        if(question_id == null){ // 실패시
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         else { // 성공시
