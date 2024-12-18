@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+    container_name: mysql-container
+    ports:
+      - "33076:3306" # 호스트와 매핑
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: db
+      MYSQL_USER: scott
+      MYSQL_PASSWORD: tiger
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  app:
+    image: wouldyouhanabe:latest
+    depends_on:
+      mysql:
+        condition: service_healthy
+    container_name: spring-boot-app
+    ports:
+      - "8080:8080" # 호스트와 매핑
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/db
+      SPRING_DATASOURCE_USERNAME: scott
+      SPRING_DATASOURCE_PASSWORD: tiger
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID} # app 서비스에도 AWS 키 전달
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY} # app 서비스에도 AWS 키 전달
+
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
