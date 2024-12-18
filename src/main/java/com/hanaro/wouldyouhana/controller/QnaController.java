@@ -201,4 +201,11 @@ public class QnaController {
         questionService.saveGood(answerGoodRequestDTO);
         return ResponseEntity.ok("answerLike Success");
     }
+
+    // 지역별 게시물 전체 조회 (최신순)
+    @GetMapping("/qnaList/latest/branch")
+    public ResponseEntity<List<QnaListDTO>> getLatestBranchQuestions(@RequestParam String branch) {
+        List<QnaListDTO> questionList = questionService.getAllQuestionsSortedByLatestBranchMapping(branch);
+        return new ResponseEntity<>(questionList, HttpStatus.OK);
+    }
 }

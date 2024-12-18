@@ -39,3 +39,7 @@ INSERT INTO customer_roles (customer_id, roles)VALUES (3, 'USER');
 INSERT INTO banker_roles (banker_id, roles)VALUES (1, 'BANKER');
 INSERT INTO banker_roles (banker_id, roles)VALUES (2, 'BANKER');
 INSERT INTO banker_roles (banker_id, roles)VALUES (3, 'BANKER');
+
+INSERT INTO branch_location_mapping(branch_name, location)VALUES ("성수역지점", "서울시 성동구");
+INSERT INTO branch_location_mapping(branch_name, location)VALUES ("서울숲지점", "서울시 성동구");
+INSERT INTO branch_location_mapping(branch_name, location)VALUES ("구의역지점", "서울시 광진구");
