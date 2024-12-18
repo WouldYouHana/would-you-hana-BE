@@ -23,11 +23,11 @@ public class LikesScrapController {
     /**
      * 스크랩 요청 (저장, 취소)
      * */
-    @PostMapping("qna/scrap")
-    public ResponseEntity<String> scrapRequest(@RequestBody LikesScrapRequestDTO likesScrapRequestDTO){
-        likesScrapService.saveScrap(likesScrapRequestDTO);
-        return ResponseEntity.ok("Scrap Success");
-    }
+//    @PostMapping("qna/scrap")
+//    public ResponseEntity<String> scrapRequest(@RequestBody LikesScrapRequestDTO likesScrapRequestDTO){
+//        likesScrapService.saveScrap(likesScrapRequestDTO);
+//        return ResponseEntity.ok("Scrap Success");
+//    }
 
 
     /**
@@ -51,11 +51,11 @@ public class LikesScrapController {
     /**
      * 좋아요 게시글 조회 (최신순)
      * */
-    @GetMapping("mypage/getLikes/{customerId}")
-    public ResponseEntity<List<LikesScrapResponseDTO>> getLikes(@PathVariable Long customerId){
-
-        return ResponseEntity.ok(likesScrapService.getLikes(customerId));
-    }
+//    @GetMapping("mypage/getLikes/{customerId}")
+//    public ResponseEntity<List<LikesScrapResponseDTO>> getLikes(@PathVariable Long customerId){
+//
+//        return ResponseEntity.ok(likesScrapService.getLikes(customerId));
+//    }
 
 
 }

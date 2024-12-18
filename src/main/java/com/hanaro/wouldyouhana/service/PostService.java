@@ -3,10 +3,13 @@ package com.hanaro.wouldyouhana.service;
 import com.hanaro.wouldyouhana.domain.Category;
 import com.hanaro.wouldyouhana.domain.Customer;
 import com.hanaro.wouldyouhana.domain.Post;
+import com.hanaro.wouldyouhana.domain.Question;
 import com.hanaro.wouldyouhana.dto.comment.CommentDTO;
 import com.hanaro.wouldyouhana.dto.post.PostAddRequestDTO;
 import com.hanaro.wouldyouhana.dto.post.PostAllResponseDTO;
+import com.hanaro.wouldyouhana.dto.post.PostListDTO;
 import com.hanaro.wouldyouhana.dto.post.PostResponseDTO;
+import com.hanaro.wouldyouhana.dto.question.QnaListDTO;
 import com.hanaro.wouldyouhana.repository.CategoryRepository;
 import com.hanaro.wouldyouhana.repository.CustomerRepository;
 import com.hanaro.wouldyouhana.repository.PostRepository;
@@ -18,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,7 +55,7 @@ public class PostService {
         }
 
         Post newPost = Post.builder()
-                .communityName(postAddRequestDTO.getCommunityName())
+                .location(postAddRequestDTO.getLocation())
                 .category(category)
                 .title(postAddRequestDTO.getTitle())
                 .customerId(postAddRequestDTO.getCustomerId())
@@ -120,7 +124,7 @@ public class PostService {
         return new PostResponseDTO(
                 foundPost.getId(),
                 customer.getNickname(),
-                foundPost.getCommunityName(),
+                foundPost.getLocation(),
                 foundPost.getCategory().getName(),
                 foundPost.getTitle(),
                 foundPost.getContent(),
@@ -132,5 +136,43 @@ public class PostService {
                 commentDTOS
         );
     }
+
+    // 질문 글 목록 DTO(QnaListDTO) 만드는 공통 메서드
+    // 질문 전체 목록, 카테고리별 질문 전체 목록, 고객별 질문 전체 목록에서 사용
+    public List<PostListDTO> makePostListDTO(List<Post> fql) {
+
+        List<PostListDTO> foundPostListDTO = fql.stream().map(post -> {
+            Customer customer = customerRepository.findById(post.getCustomerId()).get();
+
+            PostListDTO postListDTO = new PostListDTO();
+            postListDTO.setPostId(post.getId());
+            postListDTO.setNickname(customer.getNickname());
+            postListDTO.setCategoryName(post.getCategory().getName());
+            postListDTO.setTitle(post.getTitle());
+            postListDTO.setLocation(post.getLocation());
+            postListDTO.setCreatedAt(post.getCreatedAt());
+            postListDTO.setCommentCount(post.getComments().size());
+            postListDTO.setLikeCount(post.getLikeCount());
+            postListDTO.setScrapCount(post.getScrapCount());
+            postListDTO.setViewCount(post.getViewCount());
+
+            return postListDTO;
+        }).toList();
+        return foundPostListDTO;
+    }
+
+    // 지역별 전체 게시글 조회
+    public List<PostListDTO> getAllPosts(String location) {
+        List<Post> foundQuestionList = postRepository.findByLocation(location);
+        return makePostListDTO(foundQuestionList);
+    }
+
+    // 카테고리별 게시글 조회
+    public List<PostListDTO> getAllPostsByCategory(String categoryName, String location) {
+        List<Post> foundPostList = postRepository.findByLocationAndCategory_Name(location, categoryName);
+        return makePostListDTO(foundPostList);
+    }
+
+
 
 }

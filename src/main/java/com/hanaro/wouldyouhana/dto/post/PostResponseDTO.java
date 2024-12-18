@@ -15,7 +15,7 @@ import java.util.List;
 public class PostResponseDTO {
     private Long postId;
     private String nickname;
-    private String communityName;
+    private String location;
     private String categoryName;
     private String title;
     private String content;

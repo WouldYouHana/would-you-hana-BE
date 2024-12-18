@@ -1,11 +1,16 @@
 package com.hanaro.wouldyouhana.controller;
 
 import com.hanaro.wouldyouhana.domain.Question;
+import com.hanaro.wouldyouhana.dto.comment.CommentAddRequestDTO;
+import com.hanaro.wouldyouhana.dto.comment.CommentResponseDTO;
 import com.hanaro.wouldyouhana.dto.post.PostAddRequestDTO;
 import com.hanaro.wouldyouhana.dto.post.PostAllResponseDTO;
+import com.hanaro.wouldyouhana.dto.post.PostListDTO;
 import com.hanaro.wouldyouhana.dto.post.PostResponseDTO;
 import com.hanaro.wouldyouhana.dto.question.QuestionAddRequestDTO;
 import com.hanaro.wouldyouhana.dto.question.QuestionAllResponseDTO;
+import com.hanaro.wouldyouhana.forSignIn.SecurityUtil;
+import com.hanaro.wouldyouhana.service.CommentService;
 import com.hanaro.wouldyouhana.service.PostService;
 import com.hanaro.wouldyouhana.service.QuestionService;
 import jakarta.validation.Valid;
@@ -26,6 +31,8 @@ public class PostController {
 
     @Autowired
     PostService postService;
+    @Autowired
+    CommentService commentService;
 
     // 커뮤니티 게시글 등록
     @PostMapping("/register")
@@ -71,8 +78,34 @@ public class PostController {
     }
 
     // 커뮤니티 게시글 전체 조회
-//    @GetMapping("/postList")
-//    public ResponseEntity<List<PostResponseDTO>> getPostList() {
-//
-//    }
+
+    @GetMapping("/postList")
+    public ResponseEntity<List<PostListDTO>> getAllPosts(@RequestParam String location) {
+        List<PostListDTO> postList = postService.getAllPosts(location);
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
+
+    // 카테고리 별 게시글 전체 조회
+    @GetMapping("/postList/{category}")
+    public ResponseEntity<List<PostListDTO>> getAllPostsByCategory(@PathVariable("category") String category, @RequestParam String location) {
+        List<PostListDTO> postByCategoryList = postService.getAllPostsByCategory(category, location);
+        return new ResponseEntity<>(postByCategoryList, HttpStatus.OK);
+    }
+
+    @PostMapping("/comment/{postId}")
+    public ResponseEntity<CommentResponseDTO> addComment(@PathVariable("postId") Long postId, @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
+        String userEmail = SecurityUtil.getCurrentUsername();
+        CommentResponseDTO addedComment = commentService.addCommentForPost(postId, userEmail, commentAddRequestDTO);
+        return new ResponseEntity<>(addedComment, HttpStatus.OK);
+
+    }
+
+    // 댓글 삭제
+    @DeleteMapping("/comment/delete/{postId}/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long postId, @PathVariable Long commentId) {
+        commentService.deleteCommentForPost(postId, commentId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }
