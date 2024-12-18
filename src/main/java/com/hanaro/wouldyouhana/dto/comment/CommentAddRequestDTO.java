@@ -11,12 +11,9 @@ import lombok.Setter;
 
 public class CommentAddRequestDTO {
 
-//    @NotNull
-//    private Long customerId;
+    @NotNull
+    private Long customerId;
     @NotNull
     private String content;
-
-    public CommentAddRequestDTO() {
-    }
 
 }
