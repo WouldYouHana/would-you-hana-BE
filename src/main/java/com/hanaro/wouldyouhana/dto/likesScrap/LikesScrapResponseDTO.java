@@ -16,11 +16,11 @@ public class LikesScrapResponseDTO {
 
     // 화면에 보여지는 내용
     private String categoryName;
-    private String title;
+    private String questionTitle;
     private Long likeCount;
     private Long viewCount;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    private String answerBanker;
-
+    //private String bankerName;
 }
