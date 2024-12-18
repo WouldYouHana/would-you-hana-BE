@@ -36,11 +36,11 @@ public class LikesScrapController {
     /**
      * 좋아요 요청 (저장, 취소)
      * */
-    @PostMapping("post/likes")
-    public ResponseEntity<String> likesRequest(@RequestBody LikesScrapRequestDTO likesScrapRequestDTO){
-        likesScrapService.saveLikes(likesScrapRequestDTO);
-        return ResponseEntity.ok("Likes Success");
-    }
+//    @PostMapping("post/likes")
+//    public ResponseEntity<String> likesRequest(@RequestBody LikesScrapRequestDTO likesScrapRequestDTO){
+//        likesScrapService.saveLikes(likesScrapRequestDTO);
+//        return ResponseEntity.ok("Likes Success");
+//    }
 
     /**
      * 스크랩 게시글 조회 (최신순)

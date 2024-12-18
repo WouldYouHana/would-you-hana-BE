@@ -21,6 +21,9 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query("SELECT q FROM Question q WHERE q.location = :location ORDER BY q.likeCount DESC")
     List<Question> findByLocationOrderByLikeCountDesc(String location);
 
+    // location을 기준으로 답변 도움 순 (goodCount)으로 질문 목록을 가져오는 메서드
+    List<Question> findByLocationOrderByAnswers_GoodCountDesc(String location);
+
     // location을 기준으로 질문 목록을 가져오는 메서드
     List<Question> findByLocation(String location);
     // location과 categoryId를 기준으로 질문 목록을 가져오는 메서드

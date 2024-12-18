@@ -162,10 +162,11 @@ public class QuestionService {
         AnswerResponseDTO answerResponseDTO = answerRepository.findByQuestionId(questionId)
                 .map(answer -> new AnswerResponseDTO(
                         answer.getBanker().getName(),
-                        foundQuestion.getId(),
-                        foundQuestion.getContent(),
-                        foundQuestion.getCreatedAt(),
-                        foundQuestion.getUpdatedAt()
+                        answer.getId(),
+                        answer.getContent(),
+                        answer.getCreatedAt(),
+                        answer.getUpdatedAt(),
+                        answer.getGoodCount()
                 ))
                 .orElse(null);  // 답변이 없으면 null을 반환
 
@@ -238,7 +239,6 @@ public class QuestionService {
             qnaListDTO.setLocation(question.getLocation());
             qnaListDTO.setCreatedAt(question.getCreatedAt());
             qnaListDTO.setCommentCount(Integer.toUnsignedLong(question.getComments().size()));
-            qnaListDTO.setLikeCount(question.getLikeCount());
             qnaListDTO.setScrapCount(question.getScrapCount());
             qnaListDTO.setViewCount(question.getViewCount());
 
@@ -262,6 +262,12 @@ public class QuestionService {
     // 지역별 좋아요 순 게시글 조회
     public List<QnaListDTO> getAllQuestionsSortedByLikes(String location) {
         List<Question> foundQuestionList = questionRepository.findByLocationOrderByLikeCountDesc(location);
+        return makeQnaListDTO(foundQuestionList);
+    }
+
+    // 지역별 답변 도움순 게시글 조회
+    public List<QnaListDTO> getAllQuestionsSortedByGoodCount(String location){
+        List<Question> foundQuestionList = questionRepository.findByLocationOrderByAnswers_GoodCountDesc(location);
         return makeQnaListDTO(foundQuestionList);
     }
 

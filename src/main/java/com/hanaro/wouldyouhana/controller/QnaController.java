@@ -169,6 +169,13 @@ public class QnaController {
         return new ResponseEntity<>(questionList, HttpStatus.OK);
     }
 
+    // 지역별 게시물 전체 조회 (답변 도움 순)
+    @GetMapping("/qnaList/good")
+    public ResponseEntity<List<QnaListDTO>> getGoodQuestions(@RequestParam String location) {
+        List<QnaListDTO> questionList = questionService.getAllQuestionsSortedByGoodCount(location);
+        return new ResponseEntity<>(questionList, HttpStatus.OK);
+    }
+
     // 카테고리별 게시물 전체 조회
     @GetMapping("/qnaList/{category}")
     public ResponseEntity<List<QnaListDTO>> getAllQuestionsByCategory(@PathVariable String category, @RequestParam String location) {
