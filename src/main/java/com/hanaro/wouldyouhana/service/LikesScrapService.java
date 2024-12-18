@@ -1,16 +1,10 @@
 package com.hanaro.wouldyouhana.service;
 
 
-import com.hanaro.wouldyouhana.domain.Customer;
-import com.hanaro.wouldyouhana.domain.Likes;
-import com.hanaro.wouldyouhana.domain.Question;
-import com.hanaro.wouldyouhana.domain.Scrap;
+import com.hanaro.wouldyouhana.domain.*;
 import com.hanaro.wouldyouhana.dto.likesScrap.LikesScrapRequestDTO;
 import com.hanaro.wouldyouhana.dto.likesScrap.LikesScrapResponseDTO;
-import com.hanaro.wouldyouhana.repository.CustomerRepository;
-import com.hanaro.wouldyouhana.repository.LikesRepository;
-import com.hanaro.wouldyouhana.repository.QuestionRepository;
-import com.hanaro.wouldyouhana.repository.ScrapRepository;
+import com.hanaro.wouldyouhana.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,13 +21,15 @@ public class LikesScrapService {
     private final LikesRepository likesRepository;
     private final QuestionRepository questionRepository;
     private final CustomerRepository customerRepository;
+    private final PostRepository postRepository;
 
     @Autowired
-    public LikesScrapService(ScrapRepository scrapRepository, LikesRepository likesRepository, QuestionRepository questionRepository, CustomerRepository customerRepository) {
+    public LikesScrapService(ScrapRepository scrapRepository, LikesRepository likesRepository, QuestionRepository questionRepository, CustomerRepository customerRepository, PostRepository postRepository) {
         this.scrapRepository = scrapRepository;
         this.likesRepository = likesRepository;
         this.questionRepository = questionRepository;
         this.customerRepository = customerRepository;
+        this.postRepository = postRepository;
     }
 
     /**
@@ -74,35 +70,36 @@ public class LikesScrapService {
     }
 
     /**
-     * 좋아요 저장
+     * 좋아요 저장 - 커뮤니티 포스트 한정
      * */
     public void saveLikes(LikesScrapRequestDTO likesScrapRequestDTO){
-        Question question = questionRepository.findById(likesScrapRequestDTO.getQuestionId())
-                .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+        Post post = postRepository.findById(likesScrapRequestDTO.getPostId())
+                .orElseThrow(() -> new EntityNotFoundException("Post Not Found"));
         Customer customer = customerRepository.findById(likesScrapRequestDTO.getCustomerId())
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
-        boolean alreadyExists = likesRepository.existsByQuestionAndCustomer(question, customer);
+        // 좋아요가 이미 클릭되어 있는지 확인
+        boolean alreadyExists = likesRepository.existsByPostAndCustomer(post, customer);
 
         if(!alreadyExists){ // 좋아요
 
             // Likes 객체 생성 및 저장
             Likes likes = new Likes();
-            likes.setQuestion(question);
+            likes.setPost(post);
             likes.setCustomer(customer);
 
             likesRepository.save(likes);
             // 게시글의 좋아요 개수 증가
-            question.incrementLikesCount();
+            post.incrementLikesCount();
 
         }else{ //좋아요 취소
 
             // 해당 Likes 객체 찾기
-            Likes likes = likesRepository.findByQuestionAndCustomer(question, customer)
+            Likes likes = likesRepository.findByPostAndCustomer(post, customer)
                     .orElseThrow(() -> new EntityNotFoundException("Like not found for this question and customer."));
 
-            // 질문글의 좋아요 개수 감소
-            question.decrementLikesCount();
+            // 커뮤니티 게시글의 좋아요 개수 감소
+            post.decrementLikesCount();
 
             // Likes 객체 삭제
             likesRepository.delete(likes);

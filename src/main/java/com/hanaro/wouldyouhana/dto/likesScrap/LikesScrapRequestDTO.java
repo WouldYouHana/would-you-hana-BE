@@ -9,6 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class LikesScrapRequestDTO {
 
-    private Long questionId;
+    private Long postId;
     private Long customerId;
 }
