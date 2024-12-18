@@ -21,7 +21,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.util.List;
@@ -49,10 +48,11 @@ public class QnaController {
     /**
      * 질문(게시글) 등록
      * */
-    @PostMapping("/qna/register")
+    @PostMapping("/register")
     public ResponseEntity<QuestionAllResponseDTO> addNewQuestion(@Valid
                                                                      @RequestPart("question") QuestionAddRequestDTO questionAddRequestDTO,
                                                                  @RequestPart(value = "file", required = false) List<MultipartFile> files) throws IOException {
+        log.info("executed");
         QuestionAllResponseDTO createdPost = questionService.addQuestion(questionAddRequestDTO, files);
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
@@ -60,11 +60,10 @@ public class QnaController {
     /**
      * 질문(게시글) 수정
      * */
-    @PutMapping("/qna/modify/{questionId}")
+    @PutMapping("/modify/{questionId}")
     public ResponseEntity<Void> modifyQuestion(@PathVariable Long questionId,
                                                                  @RequestPart("question") QuestionAddRequestDTO questionAddRequestDTO,
                                                                     @RequestPart(value = "file", required = false) List<MultipartFile> files){
-
         questionId = questionService.modifyQuestion(questionAddRequestDTO, questionId, files);
         if(questionId == null){ // 실패시
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -78,7 +77,7 @@ public class QnaController {
      * 질문(게시글) 삭제
      * */
     @PreAuthorize("@customerRepository.findByEmail(principal.getUsername()).getId() == @questionRepository.findById(#question_id).customerId")
-    @DeleteMapping("/qna/delete/{questionId}")
+    @DeleteMapping("/delete/{questionId}")
     public ResponseEntity<Void> deleteQuestion(@PathVariable Long questionId) {
         questionService.deleteQuestion(questionId);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -98,7 +97,7 @@ public class QnaController {
 //    }
 
     // 답변 등록 - 행원
-    @PostMapping("/qna/answer/{questionId}")
+    @PostMapping("/answer/{questionId}")
     public ResponseEntity<AnswerResponseDTO> addAnswer(@PathVariable Long questionId,
                                                        @RequestHeader("Authorization") String authorizationHeader,
                                                        @RequestBody AnswerAddRequestDTO answerAddRequestDTO) {
@@ -134,7 +133,7 @@ public class QnaController {
 
 
     // 댓글 삭제
-    @DeleteMapping("/qna/comment/{questionId}/{commentId}")
+    @DeleteMapping("/comment/{questionId}/{commentId}")
     public ResponseEntity deleteComment(@PathVariable Long questionId, @PathVariable Long commentId) {
         commentService.deleteComment(questionId, commentId);
         return new ResponseEntity<>(HttpStatus.OK);
