@@ -21,6 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.util.List;
@@ -52,7 +53,6 @@ public class QnaController {
     public ResponseEntity<QuestionAllResponseDTO> addNewQuestion(@Valid
                                                                      @RequestPart("question") QuestionAddRequestDTO questionAddRequestDTO,
                                                                  @RequestPart(value = "file", required = false) List<MultipartFile> files) throws IOException {
-        log.info("executed");
         QuestionAllResponseDTO createdPost = questionService.addQuestion(questionAddRequestDTO, files);
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
@@ -60,13 +60,18 @@ public class QnaController {
     /**
      * 질문(게시글) 수정
      * */
-    @PostMapping("/qna/modify/{questionId}")
-    public ResponseEntity<QuestionAllResponseDTO> modifyQuestion(@PathVariable Long questionId,
+    @PutMapping("/qna/modify/{questionId}")
+    public ResponseEntity<Void> modifyQuestion(@PathVariable Long questionId,
                                                                  @RequestPart("question") QuestionAddRequestDTO questionAddRequestDTO,
                                                                     @RequestPart(value = "file", required = false) List<MultipartFile> files){
 
-        QuestionAllResponseDTO modifiedPost = questionService.modifyQuestion(questionAddRequestDTO, questionId, files);
-        return new ResponseEntity<>(modifiedPost, HttpStatus.CREATED);
+        questionId = questionService.modifyQuestion(questionAddRequestDTO, questionId, files);
+        if(questionId == null){ // 실패시
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else { // 성공시
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 
     /**
@@ -74,9 +79,9 @@ public class QnaController {
      * */
     @PreAuthorize("@customerRepository.findByEmail(principal.getUsername()).getId() == @questionRepository.findById(#question_id).customerId")
     @DeleteMapping("/qna/delete/{questionId}")
-    public ResponseEntity deleteQuestion(@PathVariable Long questionId) {
+    public ResponseEntity<Void> deleteQuestion(@PathVariable Long questionId) {
         questionService.deleteQuestion(questionId);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -114,7 +119,7 @@ public class QnaController {
                                                          @RequestHeader("Authorization") String authorizationHeader,
                                                          @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
         String userEmail = SecurityUtil.getCurrentUsername();
-        CommentResponseDTO addedComment = commentService.addComment(question_id, null, userEmail, commentAddRequestDTO);
+        CommentResponseDTO addedComment = commentService.addComment(question_id, userEmail, commentAddRequestDTO);
         return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
     }
 

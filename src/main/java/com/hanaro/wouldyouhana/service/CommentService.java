@@ -30,25 +30,17 @@ public class CommentService {
     }
 
     // 댓글 추가
-    public CommentResponseDTO addComment(Long questionId, Long parentCommentId, String userEmail, CommentAddRequestDTO commentAddRequestDTO) {
+    public CommentResponseDTO addComment(Long questionId, String userEmail, CommentAddRequestDTO commentAddRequestDTO) {
         Question foundQuestion = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
         Customer foundCustomer = customerRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
-        Comment pComment = null;
-        // 부모 댓글 id가 있으면
-        if (parentCommentId != null) {
-            pComment = commentRepository.findById(parentCommentId)
-                    .orElseThrow(() -> new EntityNotFoundException("No parent comment found"));
-        }
-
         Comment comment = Comment.builder()
                 .question(foundQuestion)
                 .customer(foundCustomer)
                 .content(commentAddRequestDTO.getContent())
-                .parentComment(pComment)
                 .createdAt(LocalDateTime.now())
                 .build();
 
