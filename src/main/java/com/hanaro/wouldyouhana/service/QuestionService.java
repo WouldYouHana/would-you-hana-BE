@@ -36,6 +36,7 @@ public class QuestionService {
     private final AmazonS3Client amazonS3Client;
     private final AnswerRepository answerRepository;
     private final AnswerGoodRepository answerGoodRepository;
+    private final BranchLocationMappingRepository branchLocationMappingRepository;
 
 //    @Autowired
 //    public QuestionService(QuestionRepository questionRepository, CustomerRepository customerRepository, CategoryRepository categoryRepository, CommentRepository commentRepository,
@@ -252,6 +253,26 @@ public class QuestionService {
     // 지역별 전체 게시글 조회
     public List<QnaListDTO> getAllQuestions(String location) {
         List<Question> foundQuestionList = questionRepository.findByLocation(location);
+        return makeQnaListDTO(foundQuestionList);
+    }
+
+    public List<QnaListDTO> getAllQuestionsSortedByLatestBranchMapping(String branch){
+        // Optional을 사용하여 결과를 안전하게 처리
+        Optional<BranchLocationMapping> branchLocationMapping = branchLocationMappingRepository.findByBranchName(branch);
+
+        // Optional이 비어있을 경우 예외를 던지거나 빈 값을 반환하는 처리 필요
+        if (branchLocationMapping.isEmpty()) {
+            // branchName에 해당하는 BranchLocationMapping이 없을 때 처리
+            throw new IllegalArgumentException("Branch name not found: " + branch);
+        }
+
+        // BranchLocationMapping에서 location 값을 가져옵니다.
+        String location = branchLocationMapping.get().getLocation();
+
+        // location에 해당하는 질문 목록을 조회
+        List<Question> foundQuestionList = questionRepository.findByLocation(location);
+
+        // QnaListDTO로 변환하여 반환
         return makeQnaListDTO(foundQuestionList);
     }
 
