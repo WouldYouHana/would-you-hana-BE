@@ -78,6 +78,7 @@ public class PostController {
     }
 
     // 커뮤니티 게시글 전체 조회
+
     @GetMapping("/postList")
     public ResponseEntity<List<PostListDTO>> getAllPosts(@RequestParam String location) {
         List<PostListDTO> postList = postService.getAllPosts(location);
@@ -105,5 +106,6 @@ public class PostController {
         commentService.deleteCommentForPost(postId, commentId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
 }
