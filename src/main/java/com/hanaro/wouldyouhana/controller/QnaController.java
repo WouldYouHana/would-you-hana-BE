@@ -2,6 +2,7 @@ package com.hanaro.wouldyouhana.controller;
 
 import com.hanaro.wouldyouhana.dto.*;
 import com.hanaro.wouldyouhana.dto.answer.AnswerAddRequestDTO;
+import com.hanaro.wouldyouhana.dto.answer.AnswerGoodRequestDTO;
 import com.hanaro.wouldyouhana.dto.answer.AnswerResponseDTO;
 import com.hanaro.wouldyouhana.dto.comment.CommentAddRequestDTO;
 import com.hanaro.wouldyouhana.dto.comment.CommentResponseDTO;
@@ -129,9 +130,6 @@ public class QnaController {
 //        return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
 //    }
 
-    // 게시글에 대한 댓글 가져오기
-
-
     // 댓글 삭제
     @DeleteMapping("/comment/{questionId}/{commentId}")
     public ResponseEntity deleteComment(@PathVariable Long questionId, @PathVariable Long commentId) {
@@ -195,5 +193,12 @@ public class QnaController {
     public ResponseEntity<QuestionResponseDTO> getOneQuestion(@PathVariable Long question_id) {
         QuestionResponseDTO questionResponseDTO = questionService.getOneQuestion(question_id);
         return new ResponseEntity<>(questionResponseDTO, HttpStatus.OK);
+    }
+
+    // 답변 도움돼요 등록
+    @PostMapping("/answerLike")
+    public ResponseEntity<String> goodRequest(@RequestBody AnswerGoodRequestDTO answerGoodRequestDTO){
+        questionService.saveGood(answerGoodRequestDTO);
+        return ResponseEntity.ok("answerLike Success");
     }
 }

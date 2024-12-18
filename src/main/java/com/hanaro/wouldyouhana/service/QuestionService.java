@@ -2,6 +2,7 @@ package com.hanaro.wouldyouhana.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.hanaro.wouldyouhana.domain.*;
+import com.hanaro.wouldyouhana.dto.answer.AnswerGoodRequestDTO;
 import com.hanaro.wouldyouhana.dto.answer.AnswerResponseDTO;
 import com.hanaro.wouldyouhana.dto.comment.CommentDTO;
 import com.hanaro.wouldyouhana.dto.question.*;
@@ -34,6 +35,7 @@ public class QuestionService {
     private final LikesRepository likesRepository;
     private final AmazonS3Client amazonS3Client;
     private final AnswerRepository answerRepository;
+    private final AnswerGoodRepository answerGoodRepository;
 
 //    @Autowired
 //    public QuestionService(QuestionRepository questionRepository, CustomerRepository customerRepository, CategoryRepository categoryRepository, CommentRepository commentRepository,
@@ -285,5 +287,34 @@ public class QuestionService {
         return makeQnaListDTO(foundQuestionList);
     }
 
+    // 답변 도움돼요 저장 & 취소
+    public void saveGood(AnswerGoodRequestDTO answerGoodRequestDTO){
+        Question question = questionRepository.findById(answerGoodRequestDTO.getQuestionId())
+                .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+        Customer customer = customerRepository.findById(answerGoodRequestDTO.getCustomerId())
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+
+        Answer answer = question.getAnswers();
+
+        boolean alreadyExists = answerGoodRepository.existsByAnswerAndCustomer(answer, customer);
+
+        if(!alreadyExists){ // 도움
+            AnswerGood answerGood = new AnswerGood();
+            answerGood.setAnswer(answer);
+            answerGood.setCustomer(customer);
+
+            answerGoodRepository.save(answerGood);
+
+            answer.incrementGoodCount();
+
+        }else{ // 도움 취소
+            answer.decrementGoodCount();
+
+            AnswerGood answerGood = answerGoodRepository.findByAnswerAndCustomer(answer, customer);
+
+            answerGoodRepository.delete(answerGood);
+
+        }
+    }
 
 }
