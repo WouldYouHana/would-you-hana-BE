@@ -71,8 +71,8 @@ public class PostController {
     }
 
     // 커뮤니티 게시글 전체 조회
-    @GetMapping("/postList")
-    public ResponseEntity<List<PostResponseDTO>> getPostList() {
-
-    }
+//    @GetMapping("/postList")
+//    public ResponseEntity<List<PostResponseDTO>> getPostList() {
+//
+//    }
 }

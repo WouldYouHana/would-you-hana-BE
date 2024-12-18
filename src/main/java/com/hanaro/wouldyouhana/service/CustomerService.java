@@ -33,7 +33,8 @@ public class CustomerService {
 
     public Customer registerCustomer(Customer customer) {
         // 비밀번호 암호화
-        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        //customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        customer.setPassword((customer.getPassword()));
         return customerRepository.save(customer);
     }
 
