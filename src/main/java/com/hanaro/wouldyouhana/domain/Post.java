@@ -18,16 +18,12 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String communityName;
+    private Long customerId;
+    private String title;
     @ManyToOne // 다대일 관계 설정
     @JoinColumn(name = "category_id", nullable = false) // 외래 키 설정
     private Category category; // Category 객체 추가
-
-    private String title;
-
-    @Column(name="customer_id")
-    private Long customerId;
+    private String location;
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

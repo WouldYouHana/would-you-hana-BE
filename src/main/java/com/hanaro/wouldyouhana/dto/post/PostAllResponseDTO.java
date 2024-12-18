@@ -16,7 +16,7 @@ public class PostAllResponseDTO {
     private String categoryName;
     private String title;
     private String content;
-    private String communityName;
+    private String location;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Long likeCount;

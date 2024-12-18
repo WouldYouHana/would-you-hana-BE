@@ -119,7 +119,7 @@ public class QnaController {
                                                          @RequestHeader("Authorization") String authorizationHeader,
                                                          @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
         String userEmail = SecurityUtil.getCurrentUsername();
-        CommentResponseDTO addedComment = commentService.addComment(question_id, userEmail, commentAddRequestDTO);
+        CommentResponseDTO addedComment = commentService.addCommentForQuestion(question_id, userEmail, commentAddRequestDTO);
         return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
     }
 
@@ -133,7 +133,7 @@ public class QnaController {
     // 댓글 삭제
     @DeleteMapping("/comment/{questionId}/{commentId}")
     public ResponseEntity deleteComment(@PathVariable Long questionId, @PathVariable Long commentId) {
-        commentService.deleteComment(questionId, commentId);
+        commentService.deleteCommentForQuestion(questionId, commentId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

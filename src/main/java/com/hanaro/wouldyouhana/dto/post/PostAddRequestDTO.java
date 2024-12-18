@@ -17,7 +17,7 @@ public class PostAddRequestDTO {
     @NotNull
     private String categoryName;
     @NotNull
-    private String communityName;
+    private String location;
     @NotNull
     private String content;
 }
