@@ -20,5 +20,5 @@ public class LikesScrapResponseDTO {
     private Long likeCount;
     private Long viewCount;
     private LocalDateTime createdAt;
-    private String bankerName;
+    private String answerBanker;
 }
