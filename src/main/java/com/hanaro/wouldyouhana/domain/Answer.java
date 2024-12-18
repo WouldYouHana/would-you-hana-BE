@@ -29,5 +29,14 @@ public class Answer {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Long goodCount = 0L;;
+    private Long goodCount = 0L;
+
+    // 도움 수 증가
+    public void incrementGoodCount() {
+        this.goodCount++;
+    }
+    // 도움 수 증가
+    public void decrementGoodCount() {
+        this.goodCount--;
+    }
 }
