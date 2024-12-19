@@ -21,5 +21,10 @@ public class Location {
 
     private String location;
 
+    public Location(Customer customer, String location) {
+        this.customer = customer;
+        this.location = location;
+    }
+
     // Getters and Setters
 }

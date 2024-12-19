@@ -2,6 +2,11 @@ INSERT INTO customer (birth_date, created_at, email, experience_points, gender, 
 INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone) values ("2000-02-01", "2024-10-21 10:00:00", "two@example.com", 0, "M", "중구", "김은행", "은행", "root5678", "010-5678-1234");
 INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone) values ("2000-03-01", "2024-10-21 10:00:00", "three@example.com", 0, "M", "마포구", "김우주", "우주", "root1234", "010-3456-7890");
 
+-- Location
+insert into location(customer_id, location) values (1, "성동구");
+insert into location(customer_id, location) values (1, "광진구");
+
+
 -- QnACategories
 INSERT INTO category (name) values ("예금/적금");
 INSERT INTO category (name) values ("이체");
@@ -65,3 +70,6 @@ INSERT INTO banker_roles (banker_id, roles)VALUES (3, 'BANKER');
 INSERT INTO branch_location_mapping(branch_name, location)VALUES ("성수역지점", "성동구");
 INSERT INTO branch_location_mapping(branch_name, location)VALUES ("서울숲지점", "성동구");
 INSERT INTO branch_location_mapping(branch_name, location)VALUES ("구의역지점", "광진구");
+
+insert into scrap(customer_id, question_id) values (1, 1);
+insert into scrap(customer_id, question_id) values (1, 3);

@@ -94,8 +94,9 @@ public class BankerService {
         Long id = banker.getId();
         String location = banker.getLocation();
         String name = banker.getName();
+        String branchName = banker.getBranchName();
 
-        return new CustomerSignInReturnDTO(token, id, email, "B", location, name);
+        return new CustomerSignInReturnDTO(token, id, email, "B", location, name,branchName);
     }
 
 
