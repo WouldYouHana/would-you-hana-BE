@@ -10,5 +10,6 @@ public interface BankerRepository extends JpaRepository<Banker, Long> {
     boolean existsByEmail(String email);
     Optional<Banker> findByEmail(String email);
     List<Banker> findByLocation(String location);
+    Optional<Banker> findById(Long id);
 }
 
