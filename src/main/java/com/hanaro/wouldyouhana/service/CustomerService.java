@@ -1,10 +1,12 @@
 package com.hanaro.wouldyouhana.service;
 
 import com.hanaro.wouldyouhana.domain.Customer;
+import com.hanaro.wouldyouhana.domain.Location;
 import com.hanaro.wouldyouhana.forSignIn.JwtToken;
 import com.hanaro.wouldyouhana.forSignIn.JwtTokenProvider;
 import com.hanaro.wouldyouhana.forSignIn.dto.CustomerSignInReturnDTO;
 import com.hanaro.wouldyouhana.repository.CustomerRepository;
+import com.hanaro.wouldyouhana.repository.LocationRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -19,12 +21,14 @@ import java.util.Map;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final LocationRepository locationRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private EmailService emailService;
     private Map<String, String> verificationCodes = new HashMap<>();
 
-    public CustomerService(CustomerRepository customerRepository, BCryptPasswordEncoder passwordEncoder, AuthenticationManagerBuilder authenticationManagerBuilder, JwtTokenProvider jwtTokenProvider) {
+    public CustomerService(CustomerRepository customerRepository, LocationRepository locationRepository, BCryptPasswordEncoder passwordEncoder, AuthenticationManagerBuilder authenticationManagerBuilder, JwtTokenProvider jwtTokenProvider) {
         this.customerRepository = customerRepository;
+        this.locationRepository = locationRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -35,7 +39,13 @@ public class CustomerService {
         // 비밀번호 암호화
         //customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         customer.setPassword((customer.getPassword()));
-        return customerRepository.save(customer);
+
+        Customer saveCustomer = customerRepository.save(customer);
+
+        Location location = new Location(saveCustomer, saveCustomer.getLocation());
+        locationRepository.save(location);
+
+        return saveCustomer;
     }
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
