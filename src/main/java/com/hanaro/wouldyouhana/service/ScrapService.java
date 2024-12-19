@@ -78,9 +78,13 @@ public class ScrapService {
                 .sorted(Comparator.comparing(scrapQuestion -> scrapQuestion.getQuestion().getId(), Comparator.reverseOrder())) // ID 기준으로 내림차순 정렬
                 .map(scrapQuestion -> {
                     String customerNickname = customerRepository.getNicknameById(scrapQuestion.getQuestion().getCustomerId());
+                    String bankerName = "답변 대기 중";
+                    if(scrapQuestion.getQuestion().getAnswers() != null){
+                        bankerName = scrapQuestion.getQuestion().getAnswers().getBanker().getName();
+                    }
                     return new ScrapQuestionResponseDTO(scrapQuestion.getId(), scrapQuestion.getQuestion().getId(), scrapQuestion.getQuestion().getCategory().getName(),
                             scrapQuestion.getQuestion().getTitle(), customerNickname, scrapQuestion.getQuestion().getLikeCount(), scrapQuestion.getQuestion().getViewCount(),
-                            scrapQuestion.getQuestion().getCreatedAt(), scrapQuestion.getQuestion().getUpdatedAt(), scrapQuestion.getQuestion().getAnswers().getBanker().getName());
+                            scrapQuestion.getQuestion().getCreatedAt(), scrapQuestion.getQuestion().getUpdatedAt(), bankerName);
                 })
                 .toList(); // 변환된 DTO 리스트 반환
     }
