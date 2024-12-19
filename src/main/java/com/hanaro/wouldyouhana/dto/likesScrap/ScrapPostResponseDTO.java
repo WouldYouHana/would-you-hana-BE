@@ -16,7 +16,7 @@ public class ScrapPostResponseDTO {
 
     // 화면에 보여지는 내용
     private String categoryName;
-    private String postTitle;
+    private String title;
     private String customerName;
     private Long likeCount;
     private Long viewCount;

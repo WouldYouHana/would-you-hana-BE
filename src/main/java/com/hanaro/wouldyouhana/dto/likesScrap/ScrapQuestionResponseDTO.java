@@ -16,12 +16,12 @@ public class ScrapQuestionResponseDTO {
 
     // 화면에 보여지는 내용
     private String categoryName;
-    private String questionTitle;
+    private String title;
     private String customerName;
     private Long likeCount;
     private Long viewCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    private String bankerName;
+    private String answerBanker;
 }
