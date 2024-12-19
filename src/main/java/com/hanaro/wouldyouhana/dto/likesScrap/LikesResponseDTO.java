@@ -14,7 +14,7 @@ public class LikesResponseDTO {
     private Long id;
     private Long postId;
     private String categoryName;
-    private String nickname;
+    //private String nickname;
     private String title;
     private Long likeCount;
     private Long viewCount;
