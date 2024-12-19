@@ -29,6 +29,7 @@ public class Answer {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    @Builder.Default
     private Long goodCount = 0L;
 
     // 도움 수 증가

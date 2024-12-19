@@ -77,15 +77,18 @@ public class LikesService {
         Customer customer = customerRepository.findById(customer_id)
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
-        // 고객의 스크랩 조회
+        // 고객의 좋아요 누른 포스트 조회
         List<Likes> likes = likesRepository.findByCustomer(customer);
 
-        // Scrap 객체를 ScrapResponseDTO로 변환해서 최신순으로 정렬하여 반환
+        // Likes 객체를 LikesResponseDTO로 변환해서 최신순으로 정렬하여 반환
         return likes.stream()
                 .sorted(Comparator.comparing(like -> like.getPost().getId(), Comparator.reverseOrder())) // ID 기준으로 내림차순 정렬
-                .map(like -> new LikesResponseDTO(like.getId(), like.getPost().getId(),like.getPost().getCategory().getName(),
-                        like.getPost().getTitle(), like.getPost().getLikeCount(), like.getPost().getViewCount(),
-                        like.getPost().getCreatedAt()))
+                .map(like -> {
+                    String customerNickname = customerRepository.getNicknameById(like.getPost().getCustomerId());
+                    return new LikesResponseDTO(like.getId(), like.getPost().getId(),like.getPost().getCategory().getName(),
+                            customerNickname, like.getPost().getTitle(), like.getPost().getLikeCount(), like.getPost().getViewCount(),
+                            Integer.toUnsignedLong(like.getPost().getComments().size()), like.getPost().getCreatedAt());
+                })
                 .toList(); // 변환된 DTO 리스트 반환
     }
 }

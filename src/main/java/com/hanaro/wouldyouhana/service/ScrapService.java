@@ -84,7 +84,7 @@ public class ScrapService {
                     }
                     return new ScrapQuestionResponseDTO(scrapQuestion.getId(), scrapQuestion.getQuestion().getId(), scrapQuestion.getQuestion().getCategory().getName(),
                             scrapQuestion.getQuestion().getTitle(), customerNickname, scrapQuestion.getQuestion().getLikeCount(), scrapQuestion.getQuestion().getViewCount(),
-                            scrapQuestion.getQuestion().getCreatedAt(), scrapQuestion.getQuestion().getUpdatedAt(), bankerName);
+                            Integer.toUnsignedLong(scrapQuestion.getQuestion().getComments().size()),scrapQuestion.getQuestion().getCreatedAt(), scrapQuestion.getQuestion().getUpdatedAt(), bankerName);
                 })
                 .toList(); // 변환된 DTO 리스트 반환
     }
@@ -144,7 +144,7 @@ public class ScrapService {
                     String customerNickname = customerRepository.getNicknameById(scrapPost.getPost().getCustomerId());
                     return new ScrapPostResponseDTO(scrapPost.getId(), scrapPost.getPost().getId(), scrapPost.getPost().getCategory().getName(),
                             scrapPost.getPost().getTitle(), customerNickname, scrapPost.getPost().getLikeCount(), scrapPost.getPost().getViewCount(),
-                            scrapPost.getPost().getCreatedAt(), scrapPost.getPost().getUpdatedAt());
+                            Integer.toUnsignedLong(scrapPost.getPost().getComments().size()),scrapPost.getPost().getCreatedAt(), scrapPost.getPost().getUpdatedAt());
                 }).toList(); // 변환된 DTO 리스트 반환
     }
 }

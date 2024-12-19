@@ -20,6 +20,7 @@ public class ScrapQuestionResponseDTO {
     private String customerName;
     private Long likeCount;
     private Long viewCount;
+    private Long commentCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
