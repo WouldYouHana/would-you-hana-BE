@@ -15,7 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
@@ -80,7 +82,13 @@ public class CustomerService {
         String name = customer.getName();
         String branchName = "";
 
-        return new CustomerSignInReturnDTO(token, id, email, "C", location, name,branchName);
+        // 관심 있는 위치들에서 location String만 추출
+        List<String> interestLocationStrings = locationRepository.findByCustomer_Id(id)
+                .stream()
+                .map(Location::getLocation)  // 각 Location 객체의 location 필드를 추출
+                .collect(Collectors.toList());  // 리스트로 변환
+
+        return new CustomerSignInReturnDTO(token, id, email, "C", location, name,branchName, interestLocationStrings);
     }
 
 
