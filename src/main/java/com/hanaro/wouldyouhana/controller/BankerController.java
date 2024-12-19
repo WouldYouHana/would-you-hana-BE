@@ -47,10 +47,10 @@ public class BankerController {
     // 회원가입 처리하는 API
     @PostMapping("/signUp")
     public ResponseEntity<?> signup(@RequestBody BankerSignUpDto signupRequest) {
-        // 비밀번호 일치하는지 확인
-        if (!signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
-            return new ResponseEntity<>("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
+//        // 비밀번호 일치하는지 확인
+//        if (!signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
+//            return new ResponseEntity<>("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+//        }
 
         // 이메일 중복 확인
         if (bankerRepository.existsByEmail(signupRequest.getEmail())) {
@@ -63,6 +63,7 @@ public class BankerController {
                 .email(signupRequest.getEmail())
                 .password(signupRequest.getPassword())
                 .name(signupRequest.getName())
+                .location(signupRequest.getLocation())
                 .branchName(signupRequest.getBranchName())
                 .roles(new ArrayList<>(List.of("BANKER"))) // 기본 역할 'USER' 추가
                 .build();
