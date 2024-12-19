@@ -211,7 +211,7 @@ public class QuestionService {
         LocalDateTime endOfDay = today.atTime(23, 59, 59);  // 오늘 23:59:59
 
         // 오늘 날짜의 질문들 중에서 viewCount가 높은 6개 가져오기
-        List<Question> foundQuestionList = questionRepository.findTop6ByCreatedAtTodayOrderByViewCountDesc(location, startOfDay, endOfDay, PageRequest.of(0, 6));
+        List<Question> foundQuestionList = questionRepository.findTop6OrderByViewCountDesc(location, PageRequest.of(0, 6));
 
         // Question -> TodayQnaListDTO로 변환
         return foundQuestionList.stream()
