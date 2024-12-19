@@ -4,7 +4,10 @@ import com.hanaro.wouldyouhana.domain.Answer;
 import com.hanaro.wouldyouhana.domain.Banker;
 import com.hanaro.wouldyouhana.domain.Specialization;
 import com.hanaro.wouldyouhana.dto.banker.BankerMyPageReturnDTO;
+import com.hanaro.wouldyouhana.dto.myPage.BankerInfoResponseDTO;
+import com.hanaro.wouldyouhana.dto.myPage.BankerInfoUpdateDTO;
 import com.hanaro.wouldyouhana.repository.BankerRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -59,5 +62,30 @@ public class BankerMyPageService {
         return banker.getAnswers().stream()
                 .mapToLong(Answer::getGoodCount)
                 .sum();
+    }
+
+    // 행원의 개인정보 수정 전 필드에 데이터 채우기
+    public BankerInfoResponseDTO getInfoBeforeUpdateInfo(Long bankerId){
+        Banker banker = bankerRepository.findById(bankerId)
+                .orElseThrow(() -> new EntityNotFoundException("Banker not found"));
+
+        BankerInfoResponseDTO info = BankerInfoResponseDTO.builder()
+                .bankerName(banker.getName())
+                .bankerEmail(banker.getEmail())
+                .branchName(banker.getBranchName())
+                .build();
+
+        return info;
+    }
+
+    public String updateBankerInfo(BankerInfoUpdateDTO bankerInfoUpdateDTO, Long bankerId){
+        Banker banker = bankerRepository.findById(bankerId)
+                .orElseThrow(()->new EntityNotFoundException("Banker not found"));
+
+        banker.setPassword(bankerInfoUpdateDTO.getPassword());
+        banker.setBranchName(bankerInfoUpdateDTO.getBranchName());
+
+        bankerRepository.save(banker);
+        return "Banker updated successfully";
     }
 }

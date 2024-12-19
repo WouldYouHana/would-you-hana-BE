@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class BankerInfoUpdateDTO {
-
-    private String password;
+public class BankerInfoResponseDTO {
+    private String bankerName;
+    private String bankerEmail;
     private String branchName;
 }

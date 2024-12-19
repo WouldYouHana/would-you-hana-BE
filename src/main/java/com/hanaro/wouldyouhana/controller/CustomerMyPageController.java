@@ -52,6 +52,7 @@ public class CustomerMyPageController {
         return new ResponseEntity<>(customerInfoResponseDTO, HttpStatus.OK);
     }
 
+    // 일반회원 개인정보 수정 제출
     @PutMapping("/edit/info/submit")
     public ResponseEntity<String> editInfo(@RequestBody CustomerInfoUpdateDTO customerInfoUpdateDTO, @RequestParam Long customerId) {
         String result = customerMyPageService.updateCustomerInfo(customerInfoUpdateDTO, customerId);

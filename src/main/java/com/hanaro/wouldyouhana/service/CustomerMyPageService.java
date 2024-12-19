@@ -73,6 +73,7 @@ public class CustomerMyPageService {
         return "Customer not found";
     }
 
+    // 일반회원 개인정보 수정 전 필드에 데이터 채우기
     public CustomerInfoResponseDTO getInfoBeforeUpdateInfo(Long customerId) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(()-> new EntityNotFoundException("Customer not found"));
@@ -90,6 +91,7 @@ public class CustomerMyPageService {
         return info;
     }
 
+    // 일반회원 개인정보 수정 제출
     public String updateCustomerInfo(CustomerInfoUpdateDTO customerInfoUpdateDTO, Long customerId) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(()-> new EntityNotFoundException("Customer not found"));
