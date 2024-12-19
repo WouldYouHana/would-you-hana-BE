@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,4 +18,5 @@ public class CustomerSignInReturnDTO {
     private String location; // customer 테이블의 location
     private String nickName; //사용자 이름
     private String branchName; // (행원의 경우 사용할 지점명)
+    private List<String> interestLocations;
 }

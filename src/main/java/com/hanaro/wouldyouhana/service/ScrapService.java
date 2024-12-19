@@ -78,10 +78,13 @@ public class ScrapService {
                 .sorted(Comparator.comparing(scrapQuestion -> scrapQuestion.getQuestion().getId(), Comparator.reverseOrder())) // ID 기준으로 내림차순 정렬
                 .map(scrapQuestion -> {
                     String customerNickname = customerRepository.getNicknameById(scrapQuestion.getQuestion().getCustomerId());
+                    String bankerName = "답변 대기 중";
+                    if(scrapQuestion.getQuestion().getAnswers() != null){
+                        bankerName = scrapQuestion.getQuestion().getAnswers().getBanker().getName();
+                    }
                     return new ScrapQuestionResponseDTO(scrapQuestion.getId(), scrapQuestion.getQuestion().getId(), scrapQuestion.getQuestion().getCategory().getName(),
                             scrapQuestion.getQuestion().getTitle(), customerNickname, scrapQuestion.getQuestion().getLikeCount(), scrapQuestion.getQuestion().getViewCount(),
-                            Integer.toUnsignedLong(scrapQuestion.getQuestion().getComments().size()), scrapQuestion.getQuestion().getCreatedAt(), scrapQuestion.getQuestion().getUpdatedAt(),
-                            scrapQuestion.getQuestion().getAnswers().getBanker().getName());
+                            scrapQuestion.getQuestion().getCreatedAt(), scrapQuestion.getQuestion().getUpdatedAt(), bankerName);
                 })
                 .toList(); // 변환된 DTO 리스트 반환
     }
@@ -141,7 +144,7 @@ public class ScrapService {
                     String customerNickname = customerRepository.getNicknameById(scrapPost.getPost().getCustomerId());
                     return new ScrapPostResponseDTO(scrapPost.getId(), scrapPost.getPost().getId(), scrapPost.getPost().getCategory().getName(),
                             scrapPost.getPost().getTitle(), customerNickname, scrapPost.getPost().getLikeCount(), scrapPost.getPost().getViewCount(),
-                            Integer.toUnsignedLong(scrapPost.getPost().getComments().size()), scrapPost.getPost().getCreatedAt(), scrapPost.getPost().getUpdatedAt());
+                            scrapPost.getPost().getCreatedAt(), scrapPost.getPost().getUpdatedAt());
                 }).toList(); // 변환된 DTO 리스트 반환
     }
 }
