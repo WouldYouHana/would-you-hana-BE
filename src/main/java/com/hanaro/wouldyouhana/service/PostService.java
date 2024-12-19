@@ -168,8 +168,8 @@ public class PostService {
     }
 
     // 카테고리별 게시글 조회
-    public List<PostListDTO> getAllPostsByCategory(String categoryName, String location) {
-        List<Post> foundPostList = postRepository.findByLocationAndCategory_Name(location, categoryName);
+    public List<PostListDTO> getAllPostsByCategory(Long categoryId, String location) {
+        List<Post> foundPostList = postRepository.findByLocationAndCategoryId(location, categoryId);
         return makePostListDTO(foundPostList);
     }
 

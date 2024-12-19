@@ -13,6 +13,7 @@ import com.hanaro.wouldyouhana.forSignIn.SecurityUtil;
 import com.hanaro.wouldyouhana.service.CommentService;
 import com.hanaro.wouldyouhana.service.PostService;
 import com.hanaro.wouldyouhana.service.QuestionService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -77,6 +78,13 @@ public class PostController {
         return new ResponseEntity<>(postResponseDTO, HttpStatus.OK);
     }
 
+    // 게시글 찾기 실패시 예외 처리
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException ex) {
+        // 에러 메시지를 반환하거나 커스터마이징하여 응답
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
     // 커뮤니티 게시글 전체 조회
 
     @GetMapping("/postList")
@@ -86,16 +94,16 @@ public class PostController {
     }
 
     // 카테고리 별 게시글 전체 조회
-    @GetMapping("/postList/{category}")
-    public ResponseEntity<List<PostListDTO>> getAllPostsByCategory(@PathVariable("category") String category, @RequestParam String location) {
-        List<PostListDTO> postByCategoryList = postService.getAllPostsByCategory(category, location);
+    @GetMapping("/postList/{categoryId}")
+    public ResponseEntity<List<PostListDTO>> getAllPostsByCategory(@PathVariable("categoryId") Long categoryId, @RequestParam String location) {
+        List<PostListDTO> postByCategoryList = postService.getAllPostsByCategory(categoryId, location);
         return new ResponseEntity<>(postByCategoryList, HttpStatus.OK);
     }
 
+    // 댓글 달기
     @PostMapping("/comment/{postId}")
     public ResponseEntity<CommentResponseDTO> addComment(@PathVariable("postId") Long postId, @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
-        String userEmail = SecurityUtil.getCurrentUsername();
-        CommentResponseDTO addedComment = commentService.addCommentForPost(postId, userEmail, commentAddRequestDTO);
+        CommentResponseDTO addedComment = commentService.addCommentForPost(postId, commentAddRequestDTO);
         return new ResponseEntity<>(addedComment, HttpStatus.OK);
 
     }

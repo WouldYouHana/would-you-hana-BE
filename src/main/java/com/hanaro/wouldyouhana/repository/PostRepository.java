@@ -9,5 +9,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findByLocation(String location);
 
-    List<Post> findByLocationAndCategory_Name(String location, String categoryName);
+    List<Post> findByLocationAndCategoryId(String location, Long categoryId);
 }

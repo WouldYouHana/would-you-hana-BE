@@ -9,14 +9,17 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LikesResponseDTO {
+public class ScrapPostResponseDTO {
 
-    private Long id;
+    private Long requestId;
     private Long postId;
+
+    // 화면에 보여지는 내용
     private String categoryName;
-    private String nickname;
-    private String title;
+    private String postTitle;
+    private String customerName;
     private Long likeCount;
     private Long viewCount;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

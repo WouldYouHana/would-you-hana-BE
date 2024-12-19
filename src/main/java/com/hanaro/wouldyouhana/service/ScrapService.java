@@ -1,9 +1,7 @@
 package com.hanaro.wouldyouhana.service;
 
 import com.hanaro.wouldyouhana.domain.*;
-import com.hanaro.wouldyouhana.dto.likesScrap.LikesScrapResponseDTO;
-import com.hanaro.wouldyouhana.dto.likesScrap.ScrapPostRequestDTO;
-import com.hanaro.wouldyouhana.dto.likesScrap.ScrapQuestionRequestDTO;
+import com.hanaro.wouldyouhana.dto.likesScrap.*;
 import com.hanaro.wouldyouhana.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +65,7 @@ public class ScrapService {
     /**
      * qna 스크랩 조회 (최신순)
      * */
-    public List<LikesScrapResponseDTO> getScrapForQuestion(Long customer_id){
+    public List<ScrapQuestionResponseDTO> getScrapForQuestion(Long customer_id){
 
         Customer customer = customerRepository.findById(customer_id)
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
@@ -78,9 +76,12 @@ public class ScrapService {
         // Scrap 객체를 ScrapResponseDTO로 변환해서 최신순으로 정렬하여 반환
         return scrapQuestions.stream()
                 .sorted(Comparator.comparing(scrapQuestion -> scrapQuestion.getQuestion().getId(), Comparator.reverseOrder())) // ID 기준으로 내림차순 정렬
-                .map(scrapQuestion -> new LikesScrapResponseDTO(scrapQuestion.getId(), scrapQuestion.getQuestion().getId(), scrapQuestion.getQuestion().getCategory().getName(),
-                        scrapQuestion.getQuestion().getTitle(), scrapQuestion.getQuestion().getLikeCount(), scrapQuestion.getQuestion().getViewCount(),
-                        scrapQuestion.getQuestion().getCreatedAt(), scrapQuestion.getQuestion().getUpdatedAt()))
+                .map(scrapQuestion -> {
+                    String customerNickname = customerRepository.getNicknameById(scrapQuestion.getQuestion().getCustomerId());
+                    return new ScrapQuestionResponseDTO(scrapQuestion.getId(), scrapQuestion.getQuestion().getId(), scrapQuestion.getQuestion().getCategory().getName(),
+                            scrapQuestion.getQuestion().getTitle(), customerNickname, scrapQuestion.getQuestion().getLikeCount(), scrapQuestion.getQuestion().getViewCount(),
+                            scrapQuestion.getQuestion().getCreatedAt(), scrapQuestion.getQuestion().getUpdatedAt(), scrapQuestion.getQuestion().getAnswers().getBanker().getName());
+                })
                 .toList(); // 변환된 DTO 리스트 반환
     }
 
@@ -124,7 +125,7 @@ public class ScrapService {
     /**
      * 커뮤니티 포스트 스크랩 조회 (최신순)
      * */
-    public List<LikesScrapResponseDTO> getScrapForPost(Long customer_id){
+    public List<ScrapPostResponseDTO> getScrapForPost(Long customer_id){
 
         Customer customer = customerRepository.findById(customer_id)
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
@@ -135,8 +136,11 @@ public class ScrapService {
         // Scrap 객체를 ScrapResponseDTO로 변환해서 최신순으로 정렬하여 반환
         return scrapPosts.stream()
                 .sorted(Comparator.comparing(scrapPost -> scrapPost.getPost().getId(), Comparator.reverseOrder())) // ID 기준으로 내림차순 정렬
-                .map(scrapPost -> new LikesScrapResponseDTO(scrapPost.getId(), scrapPost.getPost().getId(), scrapPost.getPost().getCategory().getName(),
-                        scrapPost.getPost().getTitle(), scrapPost.getPost().getLikeCount(), scrapPost.getPost().getViewCount(),
-                        scrapPost.getPost().getCreatedAt(), scrapPost.getPost().getUpdatedAt())).toList(); // 변환된 DTO 리스트 반환
+                .map(scrapPost -> {
+                    String customerNickname = customerRepository.getNicknameById(scrapPost.getPost().getCustomerId());
+                    return new ScrapPostResponseDTO(scrapPost.getId(), scrapPost.getPost().getId(), scrapPost.getPost().getCategory().getName(),
+                            scrapPost.getPost().getTitle(), customerNickname, scrapPost.getPost().getLikeCount(), scrapPost.getPost().getViewCount(),
+                            scrapPost.getPost().getCreatedAt(), scrapPost.getPost().getUpdatedAt());
+                }).toList(); // 변환된 DTO 리스트 반환
     }
 }

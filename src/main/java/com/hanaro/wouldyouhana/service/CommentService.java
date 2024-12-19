@@ -61,11 +61,11 @@ public class CommentService {
     }
 
     // 커뮤니티 포스트에 댓글 추가
-    public CommentResponseDTO addCommentForPost(Long postId, String userEmail, CommentAddRequestDTO commentAddRequestDTO) {
+    public CommentResponseDTO addCommentForPost(Long postId, CommentAddRequestDTO commentAddRequestDTO) {
         Post foundPost = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
 
-        Customer foundCustomer = customerRepository.findByEmail(userEmail)
+        Customer foundCustomer = customerRepository.findById(commentAddRequestDTO.getCustomerId())
                 .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
         Comment comment = Comment.builder()
