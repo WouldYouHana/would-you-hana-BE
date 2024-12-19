@@ -78,8 +78,9 @@ public class CustomerService {
         Long id = customer.getId();
         String location = customer.getLocation();
         String name = customer.getName();
+        String branchName = "";
 
-        return new CustomerSignInReturnDTO(token, id, email, "C", location, name);
+        return new CustomerSignInReturnDTO(token, id, email, "C", location, name,branchName);
     }
 
 

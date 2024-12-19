@@ -15,4 +15,5 @@ public class CustomerSignInReturnDTO {
     private String role; //role: 행원인 경우 “B” 일반회원: “C”
     private String location; // customer 테이블의 location
     private String nickName; //사용자 이름
+    private String branchName; // (행원의 경우 사용할 지점명)
 }
