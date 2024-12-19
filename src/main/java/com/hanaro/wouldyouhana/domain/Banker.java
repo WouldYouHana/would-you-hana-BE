@@ -30,9 +30,11 @@ public class Banker implements UserDetails {
     private String location;
     private String branchName;
     private String content;
+    private Long viewCount;
+    private String filePath;
 
-    @OneToMany(mappedBy = "id")
-    private List<Comment> answers;
+    @OneToMany(mappedBy = "banker")
+    private List<Answer> answers;
 
     @ManyToMany
     @JoinTable(

@@ -33,9 +33,9 @@ INSERT INTO category (name) values ("신용점수 올리기");
 INSERT INTO category (name) values ("세금/납부");
 INSERT INTO category (name) values ("학자금대출");
 
-INSERT INTO banker (branch_name, email, name, password, content, location) values ("성수역지점", "banker1@example.com", "문보경", "root1234!", "이것은 행원 소개", "광진구");
-INSERT INTO banker (branch_name, email, name, password, content, location) values ("서울숲지점", "banker2@example.com", "홍창기", "root1234!","이것은 행원 소개", "성동구");
-INSERT INTO banker (branch_name, email, name, password, content, location) values ("구의역지점", "banker3@example.com", "박해민", "root1234!","이것은 행원 소개", "광진구");
+INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("성수역지점", "banker1@example.com", "문보경", "root1234!", "이것은 행원 소개", "광진구", 12);
+INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("서울숲지점", "banker2@example.com", "홍창기", "root1234!","이것은 행원 소개", "성동구", 0);
+INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("구의역지점", "banker3@example.com", "박해민", "root1234!","이것은 행원 소개", "광진구", 0);
 
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (1, 1, "안녕하세요!", "안녕하세요, 처음 가입했습니다. 반가워요!!", "성동구", "2024-12-17 10:00:00", null, 3, 0, 0);
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 2, "주택청약종합저축에 대해 여쭈어볼게 있습니다.", "이번에 주택청약종합저축 월 납입 한도가 25만원으로 올랐잖아요? ... ", "성동구", "2024-12-17 14:00:00", null, 2, 0, 5);
@@ -48,7 +48,7 @@ INSERT INTO post (customer_id, title, category_id, location, content, created_at
 INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (2, "다들 예금 얼마나 하고 계시나요?", 2, "서울시 광진구", "궁금합니다!", "2024-12-19 15:30:00", null, 7, 0, 7 );
 INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (3, "다들 예금 얼마나 하고 계시나요?", 3, "서울시 서초구", "궁금합니다!", "2024-12-20 15:30:00", null, 8, 0, 6 );
 
-INSERT INTO answer (banker_id, question_id, content, created_at, updated_at, good_count) VALUES (1, 1, 'This is an answer', "2024-10-21 10:00:00", "2024-10-21 10:00:00", 0);
+INSERT INTO answer (banker_id, question_id, content, created_at, updated_at, good_count) VALUES (1, 1, 'This is an answer', "2024-10-21 10:00:00", "2024-10-21 10:00:00", 3);
 INSERT INTO answer (banker_id, question_id, content, created_at, updated_at, good_count) VALUES (1, 2, 'This is an answer', "2024-10-21 10:00:00", "2024-10-21 10:00:00", 7);
 
 
@@ -71,5 +71,5 @@ INSERT INTO branch_location_mapping(branch_name, location)VALUES ("성수역지�
 INSERT INTO branch_location_mapping(branch_name, location)VALUES ("서울숲지점", "성동구");
 INSERT INTO branch_location_mapping(branch_name, location)VALUES ("구의역지점", "광진구");
 
-insert into scrap(customer_id, question_id) values (1, 1);
-insert into scrap(customer_id, question_id) values (1, 3);
+insert into Scrap_question(customer_id, question_id) values (1, 1);
+insert into Scrap_question(customer_id, question_id) values (1, 3);
