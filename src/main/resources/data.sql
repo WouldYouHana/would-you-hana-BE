@@ -71,5 +71,5 @@ INSERT INTO branch_location_mapping(branch_name, location)VALUES ("성수역지�
 INSERT INTO branch_location_mapping(branch_name, location)VALUES ("서울숲지점", "성동구");
 INSERT INTO branch_location_mapping(branch_name, location)VALUES ("구의역지점", "광진구");
 
-insert into Scrap_question(customer_id, question_id) values (1, 1);
-insert into Scrap_question(customer_id, question_id) values (1, 3);
+insert into scrap_question(customer_id, question_id) values (1, 1);
+insert into scrap_question(customer_id, question_id) values (1, 3);
