@@ -359,4 +359,17 @@ public class QuestionService {
         }
     }
 
+    // 도움돼요 체크 여부 확인
+    public boolean isAnswerGoodChecked(AnswerGoodRequestDTO answerGoodRequestDTO) {
+        Question question = questionRepository.findById(answerGoodRequestDTO.getQuestionId())
+                .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+        Customer customer = customerRepository.findById(answerGoodRequestDTO.getCustomerId())
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+
+        Answer answer = question.getAnswers();
+
+        return answerGoodRepository.existsByAnswerAndCustomer(answer, customer);
+    }
+
+
 }

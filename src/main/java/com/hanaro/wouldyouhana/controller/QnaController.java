@@ -8,6 +8,7 @@ import com.hanaro.wouldyouhana.dto.comment.CommentAddRequestDTO;
 import com.hanaro.wouldyouhana.dto.comment.CommentResponseDTO;
 import com.hanaro.wouldyouhana.dto.question.*;
 import com.hanaro.wouldyouhana.forSignIn.SecurityUtil;
+import com.hanaro.wouldyouhana.repository.AnswerGoodRepository;
 import com.hanaro.wouldyouhana.repository.AnswerRepository;
 import com.hanaro.wouldyouhana.service.AnswerService;
 import com.hanaro.wouldyouhana.service.CommentService;
@@ -36,14 +37,16 @@ public class QnaController {
     private final CommentService commentService;
     private final AnswerService answerService;
     private final AnswerRepository answerRepository;
+    private final AnswerGoodRepository answerGoodRepository;
 
     @Autowired
-    public QnaController(QuestionService questionService, ImageService imageService, CommentService commentService, AnswerService answerService, AnswerRepository answerRepository) {
+    public QnaController(QuestionService questionService, ImageService imageService, CommentService commentService, AnswerService answerService, AnswerRepository answerRepository, AnswerGoodRepository answerGoodRepository) {
         this.questionService = questionService;
         this.imageService = imageService;
         this.commentService = commentService;
         this.answerService = answerService;
         this.answerRepository = answerRepository;
+        this.answerGoodRepository = answerGoodRepository;
     }
 
     /**
@@ -188,6 +191,13 @@ public class QnaController {
         return new ResponseEntity<>(questionResponseDTO, HttpStatus.OK);
     }
 
+    // 지역별 게시물 전체 조회 (최신순)
+    @GetMapping("/qnaList/latest/branch")
+    public ResponseEntity<List<QnaListDTO>> getLatestBranchQuestions(@RequestParam String branch) {
+        List<QnaListDTO> questionList = questionService.getAllQuestionsSortedByLatestBranchMapping(branch);
+        return new ResponseEntity<>(questionList, HttpStatus.OK);
+    }
+
     // 답변 도움돼요 등록
     @PostMapping("/answerLike")
     public ResponseEntity<String> goodRequest(@RequestBody AnswerGoodRequestDTO answerGoodRequestDTO){
@@ -195,10 +205,10 @@ public class QnaController {
         return ResponseEntity.ok("answerLike Success");
     }
 
-    // 지역별 게시물 전체 조회 (최신순)
-    @GetMapping("/qnaList/latest/branch")
-    public ResponseEntity<List<QnaListDTO>> getLatestBranchQuestions(@RequestParam String branch) {
-        List<QnaListDTO> questionList = questionService.getAllQuestionsSortedByLatestBranchMapping(branch);
-        return new ResponseEntity<>(questionList, HttpStatus.OK);
+    // 도움돼요 체크 여부 확인
+    @PostMapping("/answerLikeCheck")
+    public ResponseEntity<Boolean> isCheckedGood(@RequestBody AnswerGoodRequestDTO answerGoodRequestDTO) {
+       Boolean b = questionService.isAnswerGoodChecked(answerGoodRequestDTO);
+       return new ResponseEntity<>(b, HttpStatus.OK);
     }
 }
