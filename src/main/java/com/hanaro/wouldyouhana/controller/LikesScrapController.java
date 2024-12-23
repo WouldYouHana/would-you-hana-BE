@@ -29,7 +29,7 @@ public class LikesScrapController {
     /**
      * 좋아요 요청 (저장, 취소)
      * */
-    @PostMapping("post/like")
+    @PostMapping("/post/like")
     public ResponseEntity<String> likesRequest(@RequestBody LikesRequestDTO likesRequestDTO){
         likesService.saveLikes(likesRequestDTO);
         return ResponseEntity.ok("Likes Success");
@@ -38,7 +38,7 @@ public class LikesScrapController {
     /**
      * 좋아요 게시글 조회 (최신순)
      * */
-    @GetMapping("my/post/likeList/{customerId}")
+    @GetMapping("/my/post/likeList/{customerId}")
     public ResponseEntity<List<LikesResponseDTO>> getLikes(@PathVariable Long customerId){
 
         return ResponseEntity.ok(likesService.getLikes(customerId));
@@ -47,7 +47,7 @@ public class LikesScrapController {
     /**
      * qna 스크랩 요청 (저장, 취소)
      * */
-    @PostMapping("qna/scrap")
+    @PostMapping("/qna/scrap")
     public ResponseEntity<String> scrapQuestionRequest(@RequestBody ScrapQuestionRequestDTO scrapQuestionRequestDTO){
         scrapService.saveScrapForQuestion(scrapQuestionRequestDTO);
         return ResponseEntity.ok("Scrap Success");
@@ -56,7 +56,7 @@ public class LikesScrapController {
     /**
      * 커뮤니티 게시글 스크랩 요청 (저장, 취소)
      * */
-    @PostMapping("post/scrap")
+    @PostMapping("/post/scrap")
     public ResponseEntity<String> scrapPostRequest(@RequestBody ScrapPostRequestDTO scrapPostRequestDTO){
         scrapService.saveScrapForPost(scrapPostRequestDTO);
         return ResponseEntity.ok("Scrap Success");
@@ -66,7 +66,7 @@ public class LikesScrapController {
     /**
      * 스크랩한 qna 조회 (최신순)
      * */
-    @GetMapping("my/qna/scrapList/{customerId}")
+    @GetMapping("/my/qna/scrapList/{customerId}")
     public ResponseEntity<List<ScrapQuestionResponseDTO>> getQuestionScrap(@PathVariable Long customerId){
         return ResponseEntity.ok(scrapService.getScrapForQuestion(customerId));
     }
@@ -75,7 +75,7 @@ public class LikesScrapController {
     /**
      * 스크랩한 커뮤니티 게시글 조회 (최신순)
      * */
-    @GetMapping("my/post/scrapList/{customerId}")
+    @GetMapping("/my/post/scrapList/{customerId}")
     public ResponseEntity<List<ScrapPostResponseDTO>> getPostScrap(@PathVariable Long customerId){
 
         return ResponseEntity.ok(scrapService.getScrapForPost(customerId));
