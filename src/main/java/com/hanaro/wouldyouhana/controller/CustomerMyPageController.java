@@ -1,6 +1,8 @@
 package com.hanaro.wouldyouhana.controller;
 
 
+import com.hanaro.wouldyouhana.dto.myPage.CustomerInfoResponseDTO;
+import com.hanaro.wouldyouhana.dto.myPage.CustomerInfoUpdateDTO;
 import com.hanaro.wouldyouhana.dto.myPage.InterestLocationRequestDTO;
 import com.hanaro.wouldyouhana.service.CustomerMyPageService;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +42,20 @@ public class CustomerMyPageController {
     @DeleteMapping("/delete/interest")
     public ResponseEntity<String> deleteInterestLocation(@RequestBody InterestLocationRequestDTO interestLocationRequestDTO){
         String result = customerMyPageService.deleteInterestLocation(interestLocationRequestDTO);;
+        return ResponseEntity.ok(result);
+    }
+
+    // 일반회원 개인정보 수정 전 필드에 표시할 기존 정보 불러오기
+    @GetMapping("/edit/info")
+    public ResponseEntity<CustomerInfoResponseDTO> getPrevInfo(@RequestParam Long customerId) {
+        CustomerInfoResponseDTO customerInfoResponseDTO = customerMyPageService.getInfoBeforeUpdateInfo(customerId);
+        return new ResponseEntity<>(customerInfoResponseDTO, HttpStatus.OK);
+    }
+
+    // 일반회원 개인정보 수정 제출
+    @PutMapping("/edit/info/submit")
+    public ResponseEntity<String> editInfo(@RequestBody CustomerInfoUpdateDTO customerInfoUpdateDTO, @RequestParam Long customerId) {
+        String result = customerMyPageService.updateCustomerInfo(customerInfoUpdateDTO, customerId);
         return ResponseEntity.ok(result);
     }
 }

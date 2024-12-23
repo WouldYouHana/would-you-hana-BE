@@ -2,9 +2,12 @@ package com.hanaro.wouldyouhana.service;
 
 import com.hanaro.wouldyouhana.domain.Customer;
 import com.hanaro.wouldyouhana.domain.Location;
+import com.hanaro.wouldyouhana.dto.myPage.CustomerInfoResponseDTO;
+import com.hanaro.wouldyouhana.dto.myPage.CustomerInfoUpdateDTO;
 import com.hanaro.wouldyouhana.dto.myPage.InterestLocationRequestDTO;
 import com.hanaro.wouldyouhana.repository.CustomerRepository;
 import com.hanaro.wouldyouhana.repository.LocationRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -68,6 +71,42 @@ public class CustomerMyPageService {
         }
 
         return "Customer not found";
+    }
+
+    // 일반회원 개인정보 수정 전 필드에 데이터 채우기
+    public CustomerInfoResponseDTO getInfoBeforeUpdateInfo(Long customerId) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(()-> new EntityNotFoundException("Customer not found"));
+
+        CustomerInfoResponseDTO info = CustomerInfoResponseDTO.builder()
+                .customerName(customer.getName())
+                .customerEmail(customer.getEmail())
+                .nickname(customer.getNickname())
+                .birthDate(customer.getBirthDate())
+                .gender(customer.getGender())
+                .location(customer.getLocation())
+                .phone(customer.getPhone())
+                .build();
+
+        return info;
+    }
+
+    // 일반회원 개인정보 수정 제출
+    public String updateCustomerInfo(CustomerInfoUpdateDTO customerInfoUpdateDTO, Long customerId) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(()-> new EntityNotFoundException("Customer not found"));
+
+        customer.setPassword(customerInfoUpdateDTO.getPassword());
+        customer.setNickname(customerInfoUpdateDTO.getNickname());
+        customer.setBirthDate(customerInfoUpdateDTO.getBirthDate());
+        customer.setGender(customerInfoUpdateDTO.getGender());
+        customer.setLocation(customerInfoUpdateDTO.getLocation());
+        customer.setPhone(customerInfoUpdateDTO.getPhone());
+
+        customerRepository.save(customer);
+        return "Customer updated successfully";
+
+
     }
 
 }
