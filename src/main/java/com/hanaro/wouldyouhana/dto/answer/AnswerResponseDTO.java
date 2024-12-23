@@ -22,4 +22,6 @@ public class AnswerResponseDTO {
     private LocalDateTime updatedAt;
 
     private Long goodCount;
+
+    //private boolean answerGoodChecked;
 }

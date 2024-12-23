@@ -16,6 +16,7 @@ public class PostListDTO {
     private String nickname;
     private String categoryName;
     private String title;
+    private String content;
     private String location;
     private LocalDateTime createdAt;
     private int commentCount;

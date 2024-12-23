@@ -149,6 +149,7 @@ public class PostService {
             postListDTO.setNickname(customer.getNickname());
             postListDTO.setCategoryName(post.getCategory().getName());
             postListDTO.setTitle(post.getTitle());
+            postListDTO.setContent(post.getContent());
             postListDTO.setLocation(post.getLocation());
             postListDTO.setCreatedAt(post.getCreatedAt());
             postListDTO.setCommentCount(post.getComments().size());

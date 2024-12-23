@@ -1,9 +1,13 @@
 package com.hanaro.wouldyouhana.controller;
 
 
+import com.hanaro.wouldyouhana.domain.Question;
+import com.hanaro.wouldyouhana.dto.likesScrap.LikesResponseDTO;
 import com.hanaro.wouldyouhana.dto.myPage.CustomerInfoResponseDTO;
 import com.hanaro.wouldyouhana.dto.myPage.CustomerInfoUpdateDTO;
 import com.hanaro.wouldyouhana.dto.myPage.InterestLocationRequestDTO;
+import com.hanaro.wouldyouhana.dto.question.QnaListDTO;
+import com.hanaro.wouldyouhana.repository.QuestionRepository;
 import com.hanaro.wouldyouhana.service.CustomerMyPageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +24,7 @@ import java.util.List;
 public class CustomerMyPageController {
 
     private final CustomerMyPageService customerMyPageService;
+    private final QuestionRepository questionRepository;
 
     // 일반회원 관심지역 목록 불러오기 ("my/interestList")
     @GetMapping("/interestList")
@@ -58,4 +63,5 @@ public class CustomerMyPageController {
         String result = customerMyPageService.updateCustomerInfo(customerInfoUpdateDTO, customerId);
         return ResponseEntity.ok(result);
     }
+
 }
