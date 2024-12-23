@@ -165,6 +165,7 @@ public class QuestionService {
         Customer customer = customerRepository.findById(foundQuestion.getCustomerId()).get();
         AnswerResponseDTO answerResponseDTO = answerRepository.findByQuestionId(questionId)
                 .map(answer -> new AnswerResponseDTO(
+                        answer.getBanker().getId(),
                         answer.getBanker().getName(),
                         answer.getId(),
                         answer.getContent(),
