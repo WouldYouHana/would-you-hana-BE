@@ -166,6 +166,7 @@ public class QuestionService {
         //AnswerGood
         AnswerResponseDTO answerResponseDTO = answerRepository.findByQuestionId(questionId)
                 .map(answer -> new AnswerResponseDTO(
+                        answer.getBanker().getId(),
                         answer.getBanker().getName(),
                         answer.getId(),
                         answer.getContent(),
