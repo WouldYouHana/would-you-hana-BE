@@ -191,6 +191,7 @@ public class QuestionService {
 
         return new QuestionResponseDTO(
                 foundQuestion.getId(),
+                foundQuestion.getCustomerId(),
                 customer.getNickname(),
                 foundQuestion.getCategory().getName(),
                 foundQuestion.getTitle(),

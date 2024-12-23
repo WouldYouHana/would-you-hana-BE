@@ -32,4 +32,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     // 오늘 날짜의 시작 시간과 끝 시간을 계산하여 조회
     @Query("SELECT q FROM Question q WHERE q.location = :location ORDER BY q.viewCount DESC")
     List<Question> findTop6OrderByViewCountDesc(String location, PageRequest pageable);
+
+
 }

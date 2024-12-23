@@ -16,6 +16,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class QuestionResponseDTO {
     private Long questionId;
+    private Long customerId;
     private String nickname;
     private String categoryName;
     private String title;
