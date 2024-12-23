@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 public class AnswerResponseDTO {
 
     @NotNull
+    private Long bankerId;
+    @NotNull
     private String bankerName;
     @NotNull
     private Long questionId;
@@ -22,4 +24,6 @@ public class AnswerResponseDTO {
     private LocalDateTime updatedAt;
 
     private Long goodCount;
+
+    //private boolean answerGoodChecked;
 }

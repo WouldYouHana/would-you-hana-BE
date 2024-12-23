@@ -4,7 +4,9 @@ package com.hanaro.wouldyouhana.controller;
 import com.hanaro.wouldyouhana.dto.myPage.CustomerInfoResponseDTO;
 import com.hanaro.wouldyouhana.dto.myPage.CustomerInfoUpdateDTO;
 import com.hanaro.wouldyouhana.dto.myPage.InterestLocationRequestDTO;
+import com.hanaro.wouldyouhana.dto.question.QnaListDTO;
 import com.hanaro.wouldyouhana.service.CustomerMyPageService;
+import com.hanaro.wouldyouhana.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import java.util.List;
 public class CustomerMyPageController {
 
     private final CustomerMyPageService customerMyPageService;
+    private final QuestionService questionService;
 
     // 일반회원 관심지역 목록 불러오기 ("my/interestList")
     @GetMapping("/interestList")
@@ -58,4 +61,12 @@ public class CustomerMyPageController {
         String result = customerMyPageService.updateCustomerInfo(customerInfoUpdateDTO, customerId);
         return ResponseEntity.ok(result);
     }
+
+    // 고객별 게시물 전체 조회
+    @GetMapping("/questions/{customerId}")
+    public ResponseEntity<List<QnaListDTO>> getAllQuestionsByCustomer(@PathVariable Long customerId) {
+        List<QnaListDTO> questionByCustomerList = questionService.getAllQuestionsByCustomerId(customerId);
+        return new ResponseEntity<>(questionByCustomerList, HttpStatus.OK);
+    }
+
 }

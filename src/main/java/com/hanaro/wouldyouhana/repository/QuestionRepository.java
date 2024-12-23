@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     Optional<List<Question>> findByCategory_id(Long categoryId);
-    Optional<List<Question>> findByCustomerId(Long customerId);
+    Optional<List<Question>> findAllByCustomerId(Long customerId);
 
     // location을 기준으로 최신순 (createdAt)으로 질문 목록을 가져오는 메서드
     @Query("SELECT q FROM Question q WHERE q.location = :location ORDER BY q.createdAt DESC")

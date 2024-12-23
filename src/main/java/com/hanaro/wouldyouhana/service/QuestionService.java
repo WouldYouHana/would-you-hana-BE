@@ -163,8 +163,10 @@ public class QuestionService {
         Question foundQuestion = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
         Customer customer = customerRepository.findById(foundQuestion.getCustomerId()).get();
+        //AnswerGood
         AnswerResponseDTO answerResponseDTO = answerRepository.findByQuestionId(questionId)
                 .map(answer -> new AnswerResponseDTO(
+                        answer.getBanker().getId(),
                         answer.getBanker().getName(),
                         answer.getId(),
                         answer.getContent(),
@@ -320,7 +322,7 @@ public class QuestionService {
 
     // 고객별 질문 전체 목록
     public List<QnaListDTO> getAllQuestionsByCustomerId(Long customerId) {
-        List<Question> foundQuestionList = questionRepository.findByCustomerId(customerId)
+        List<Question> foundQuestionList = questionRepository.findAllByCustomerId(customerId)
                 .orElseThrow(() -> new EntityNotFoundException("No Question for this customer"));
         return makeQnaListDTO(foundQuestionList);
     }
