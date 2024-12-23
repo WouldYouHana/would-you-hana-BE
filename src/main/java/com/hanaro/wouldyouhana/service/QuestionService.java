@@ -182,6 +182,7 @@ public class QuestionService {
             commentDTO.setId(comment.getId());
             commentDTO.setContent(comment.getContent());
             commentDTO.setCustomerId(comment.getCustomer().getId());
+            commentDTO.setNickname(comment.getCustomer().getNickname());
             commentDTO.setCreatedAt(LocalDateTime.now());
             return commentDTO;
         }).collect(Collectors.toList());

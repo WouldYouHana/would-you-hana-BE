@@ -16,6 +16,7 @@ public class CommentDTO {
     private Long id;
     private String content;
     private Long customerId;
+    private String nickname;
     private LocalDateTime createdAt;
 
 }
