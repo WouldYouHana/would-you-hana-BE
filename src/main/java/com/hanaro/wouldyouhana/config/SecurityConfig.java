@@ -62,8 +62,10 @@ public class SecurityConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("https://main.ds0n0kac0bnoe.amplifyapp.com/")
-                        .allowedOrigins("https://wouldyouhana.site")
-                        .allowedOrigins("https://localhost:5173")
+                        .allowedOrigins(
+                                "https://main.ds0n0kac0bnoe.amplifyapp.com", // 정적 URL
+                                "https://localhost:5173" // 로컬 개발 환경
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .exposedHeaders("Authorization")
