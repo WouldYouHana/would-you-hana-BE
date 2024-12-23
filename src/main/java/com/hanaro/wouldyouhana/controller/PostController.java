@@ -1,39 +1,30 @@
 package com.hanaro.wouldyouhana.controller;
 
-import com.hanaro.wouldyouhana.domain.Question;
 import com.hanaro.wouldyouhana.dto.comment.CommentAddRequestDTO;
 import com.hanaro.wouldyouhana.dto.comment.CommentResponseDTO;
 import com.hanaro.wouldyouhana.dto.post.PostAddRequestDTO;
-import com.hanaro.wouldyouhana.dto.post.PostAllResponseDTO;
 import com.hanaro.wouldyouhana.dto.post.PostListDTO;
 import com.hanaro.wouldyouhana.dto.post.PostResponseDTO;
-import com.hanaro.wouldyouhana.dto.question.QuestionAddRequestDTO;
-import com.hanaro.wouldyouhana.dto.question.QuestionAllResponseDTO;
-import com.hanaro.wouldyouhana.forSignIn.SecurityUtil;
 import com.hanaro.wouldyouhana.service.CommentService;
 import com.hanaro.wouldyouhana.service.PostService;
-import com.hanaro.wouldyouhana.service.QuestionService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.util.List;
 
-@Controller
+@RestController
+@RequiredArgsConstructor
 @RequestMapping("/post")
 public class PostController {
 
-    @Autowired
-    PostService postService;
-    @Autowired
-    CommentService commentService;
+    private final PostService postService;
+    private final CommentService commentService;
 
     // 커뮤니티 게시글 등록
     @PostMapping("/register")

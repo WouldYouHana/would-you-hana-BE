@@ -2,11 +2,14 @@ package com.hanaro.wouldyouhana.service;
 
 import com.hanaro.wouldyouhana.domain.Customer;
 import com.hanaro.wouldyouhana.domain.Reservation;
-import com.hanaro.wouldyouhana.dto.ReservationRequestDTO;
+import com.hanaro.wouldyouhana.dto.reservation.ReservationRequestDTO;
+import com.hanaro.wouldyouhana.dto.reservation.ReservationResponseDTO;
 import com.hanaro.wouldyouhana.repository.CustomerRepository;
 import com.hanaro.wouldyouhana.repository.ReservationRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
@@ -19,6 +22,7 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
+    // 예약 등록
     public Long makeReservation(ReservationRequestDTO reservationRequestDTO) {
         Customer customer = customerRepository.findById(reservationRequestDTO.getCustomerId()).get();
 
@@ -31,4 +35,18 @@ public class ReservationService {
         Reservation reservation = reservationRepository.save(newReservation);
         return reservation.getId();
     }
+
+    // 고객의 예약 목록 확인
+    public List<ReservationResponseDTO> getAllReservations(Long customerId) {
+
+        List<Reservation> foundReservations = reservationRepository.findAllByCustomerId(customerId);
+        List<ReservationResponseDTO> reservationResponseDTOS = foundReservations.stream().map((reservation) -> {
+            ReservationResponseDTO responseDTO = new ReservationResponseDTO();
+            responseDTO.setBranchName(reservation.getBranchName());
+            responseDTO.setRdayTime(reservation.getRdayTime());
+            return responseDTO;
+        }).collect(Collectors.toList());
+        return reservationResponseDTOS;
+    }
+
 }

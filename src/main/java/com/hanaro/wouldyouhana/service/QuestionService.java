@@ -39,19 +39,6 @@ public class QuestionService {
     private final AnswerGoodRepository answerGoodRepository;
     private final BranchLocationMappingRepository branchLocationMappingRepository;
 
-//    @Autowired
-//    public QuestionService(QuestionRepository questionRepository, CustomerRepository customerRepository, CategoryRepository categoryRepository, CommentRepository commentRepository,
-//                           ImageRepository imageRepository, FileStorageService fileStorageService, LikesRepository likesRepository, AmazonS3Client amazonS3Client) {
-//        this.questionRepository = questionRepository;
-//        this.customerRepository = customerRepository;
-//        this.categoryRepository = categoryRepository;
-//        this.commentRepository = commentRepository;
-//        this.imageRepository = imageRepository;
-//        this.fileStorageService = fileStorageService;
-//        this.likesRepository = likesRepository;
-//        this.amazonS3Client = amazonS3Client;
-//    }
-
     /**
      * 질문(게시글) 등록
      * */

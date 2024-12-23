@@ -8,12 +8,14 @@ import com.hanaro.wouldyouhana.dto.answer.AnswerResponseDTO;
 import com.hanaro.wouldyouhana.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 @Service
+@RequiredArgsConstructor
 public class AnswerService {
 
     private final CommentRepository commentRepository;
@@ -21,15 +23,6 @@ public class AnswerService {
     private final CustomerRepository customerRepository;
     private final BankerRepository bankerRepository;
     private final AnswerRepository answerRepository;
-
-    @Autowired
-    public AnswerService(CustomerRepository customerRepository, QuestionRepository questionRepository, CommentRepository commentRepository, BankerRepository bankerRepository, AnswerRepository answerRepository) {
-        this.customerRepository = customerRepository;
-        this.questionRepository = questionRepository;
-        this.commentRepository = commentRepository;
-        this.bankerRepository = bankerRepository;
-        this.answerRepository = answerRepository;
-    }
 
     // 답변 추가
     public AnswerResponseDTO addAnswer(Long questionId, @Valid AnswerAddRequestDTO answerAddRequestDTO) {
