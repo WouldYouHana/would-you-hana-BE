@@ -53,7 +53,7 @@ public class CommentService {
         Comment addedComment = commentRepository.save(comment);
 
         return new CommentResponseDTO(
-                addedComment.getCustomer().getName(),
+                addedComment.getCustomer().getNickname(),
                 addedComment.getQuestion().getId(),
                 addedComment.getContent(),
                 addedComment.getCreatedAt()
