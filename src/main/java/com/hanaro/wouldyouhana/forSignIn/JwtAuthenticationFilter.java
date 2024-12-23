@@ -69,4 +69,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return null; // 토큰이 없거나 형식이 잘못된 경우
     }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return "OPTIONS".equalsIgnoreCase(request.getMethod());
+    }
 }
