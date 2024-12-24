@@ -17,5 +17,6 @@ public class BankerListReturnDTO {
     private String bankerName;
     private String branchName;
     private String content;
+    private String filePath;
     private List<SpecializationResponseDTO> specializations;
 }
