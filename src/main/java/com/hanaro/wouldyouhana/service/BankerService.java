@@ -87,6 +87,7 @@ public class BankerService {
                         banker.getName(),
                         banker.getBranchName(),
                         banker.getContent(),
+                        banker.getFilePath(),
                         // Specialization -> SpecializationResponseDTO로 변환
                         banker.getSpecializations().stream()
                                 .map(specialization -> new SpecializationResponseDTO(
