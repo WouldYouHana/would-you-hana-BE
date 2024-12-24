@@ -297,6 +297,16 @@ public class QuestionService {
         return makeQnaListDTO(latestQuestions);
     }
 
+    // 지역구 랜딩페이지에서 검색 
+    public List<QnaListDTO> searchTermFromQuestion(String location, String searchTerm){
+        // 지역과 검색어에 맞는 QnA 질문 목록을 조회
+        List<Question> foundQuestionList = questionRepository
+                .findByLocationAndTitleContainingOrLocationAndContentContaining(location, searchTerm, location, searchTerm);
+
+        // Question을 QnaListDTO로 변환하여 반환
+        return makeQnaListDTO(foundQuestionList);
+    }
+
     // 지역별 좋아요 순 게시글 조회
     public List<QnaListDTO> getAllQuestionsSortedByLikes(String location) {
         List<Question> foundQuestionList;
