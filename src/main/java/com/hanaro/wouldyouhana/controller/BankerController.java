@@ -28,7 +28,7 @@ public class BankerController {
     private final BankerService bankerService;
     private final BankerRepository bankerRepository;
 
-    @GetMapping("/getList")
+    @GetMapping("/profileList")
     public ResponseEntity<List<BankerListReturnDTO>> getBankerList(@RequestParam String location) {
         List<BankerListReturnDTO> bankerList = bankerService.getBankerList(location);
         return new ResponseEntity<>(bankerList, HttpStatus.OK);

@@ -6,6 +6,17 @@ INSERT INTO customer (birth_date, created_at, email, experience_points, gender, 
 insert into location(customer_id, location) values (1, "성동구");
 insert into location(customer_id, location) values (1, "광진구");
 
+-- specialization 테이블에 데이터 삽입
+INSERT INTO specialization (name) VALUES ('예금/적금');
+INSERT INTO specialization (name) VALUES ('이체');
+INSERT INTO specialization (name) VALUES ('자산관리');
+INSERT INTO specialization (name) VALUES ('퇴직연금');
+INSERT INTO specialization (name) VALUES ('펀드');
+INSERT INTO specialization (name) VALUES ('신탁');
+INSERT INTO specialization (name) VALUES ('ISA');
+INSERT INTO specialization (name) VALUES ('대출');
+
+
 
 -- QnACategories
 INSERT INTO category (name) values ("예금/적금");
@@ -36,6 +47,29 @@ INSERT INTO category (name) values ("학자금대출");
 INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("성수역지점", "banker1@example.com", "문보경", "root1234!", "이것은 행원 소개", "광진구", 12);
 INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("서울숲지점", "banker2@example.com", "홍창기", "root1234!","이것은 행원 소개", "성동구", 0);
 INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("구의역지점", "banker3@example.com", "박해민", "root1234!","이것은 행원 소개", "광진구", 0);
+INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("구의역지점", "banker4@example.com", "박해민2", "root1234!","이것은 행원 소개", "광진구", 0);
+INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("구의역지점", "banker5@example.com", "박해민3", "root1234!","이것은 행원 소개", "광진구", 0);
+INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("구의역지점", "banker6@example.com", "박해민4", "root1234!","이것은 행원 소개", "광진구", 0);
+
+
+
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (1, 1);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (1, 2);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (1, 4);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (2, 3);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (2, 5);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (2, 2);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (3, 6);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (4, 1);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (4, 2);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (4, 4);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (5, 1);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (5, 2);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (5, 4);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (6, 1);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (6, 2);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (6, 4);
+
 
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (1, 1, "안녕하세요!", "안녕하세요, 처음 가입했습니다. 반가워요!!", "성동구", "2024-12-17 10:00:00", null, 3, 0, 0);
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 2, "주택청약종합저축에 대해 여쭈어볼게 있습니다.", "이번에 주택청약종합저축 월 납입 한도가 25만원으로 올랐잖아요? ... ", "성동구", "2024-12-17 14:00:00", null, 2, 0, 5);

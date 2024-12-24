@@ -2,6 +2,7 @@ package com.hanaro.wouldyouhana.service;
 
 import com.hanaro.wouldyouhana.domain.Banker;
 import com.hanaro.wouldyouhana.domain.Customer;
+import com.hanaro.wouldyouhana.dto.SpecializationResponseDTO;
 import com.hanaro.wouldyouhana.dto.banker.BankerListReturnDTO;
 import com.hanaro.wouldyouhana.forSignIn.JwtToken;
 import com.hanaro.wouldyouhana.forSignIn.JwtTokenProvider;
@@ -14,9 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,13 +72,27 @@ public class BankerService {
         System.out.println("지역: "+ location);
         List<Banker> bankers = bankerRepository.findByLocation(location);
 
+        // Banker가 5명 이상일 경우, 랜덤으로 최대 4명만 선택
+        if (bankers.size() > 4) {
+            // 리스트를 무작위로 섞음
+            Collections.shuffle(bankers, new Random());
+            // 상위 4명만 선택
+            bankers = bankers.subList(0, 4);
+        }
+
         // Banker -> BankerListReturnDTO로 변환
         return bankers.stream()
                 .map(banker -> new BankerListReturnDTO(
                         banker.getId(),
                         banker.getName(),
                         banker.getBranchName(),
-                        banker.getContent()))
+                        banker.getContent(),
+                        // Specialization -> SpecializationResponseDTO로 변환
+                        banker.getSpecializations().stream()
+                                .map(specialization -> new SpecializationResponseDTO(
+                                        specialization.getId(),
+                                        specialization.getName()))
+                                .collect(Collectors.toList())))
                 .collect(Collectors.toList());
     }
 
