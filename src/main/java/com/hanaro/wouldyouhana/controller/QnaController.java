@@ -15,6 +15,7 @@ import com.hanaro.wouldyouhana.service.CommentService;
 import com.hanaro.wouldyouhana.service.ImageService;
 import com.hanaro.wouldyouhana.service.QuestionService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,8 +28,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-@Controller
+@RestController
 @Slf4j
+@RequiredArgsConstructor
 @RequestMapping("/qna")
 public class QnaController {
 
@@ -38,16 +40,6 @@ public class QnaController {
     private final AnswerService answerService;
     private final AnswerRepository answerRepository;
     private final AnswerGoodRepository answerGoodRepository;
-
-    @Autowired
-    public QnaController(QuestionService questionService, ImageService imageService, CommentService commentService, AnswerService answerService, AnswerRepository answerRepository, AnswerGoodRepository answerGoodRepository) {
-        this.questionService = questionService;
-        this.imageService = imageService;
-        this.commentService = commentService;
-        this.answerService = answerService;
-        this.answerRepository = answerRepository;
-        this.answerGoodRepository = answerGoodRepository;
-    }
 
     /**
      * 질문(게시글) 등록

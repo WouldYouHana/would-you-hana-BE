@@ -14,6 +14,7 @@ import com.hanaro.wouldyouhana.repository.CategoryRepository;
 import com.hanaro.wouldyouhana.repository.CustomerRepository;
 import com.hanaro.wouldyouhana.repository.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,16 +26,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PostService {
 
-    @Autowired
-    private PostRepository postRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private FileStorageService fileStorageService;
-    @Autowired
-    private CustomerRepository customerRepository;
+    private final PostRepository postRepository;
+    private final CategoryRepository categoryRepository;
+    private final FileStorageService fileStorageService;
+    private final CustomerRepository customerRepository;
 
     // 커뮤니티 게시글 작성
     public int addPost(PostAddRequestDTO postAddRequestDTO, List<MultipartFile> files) {
