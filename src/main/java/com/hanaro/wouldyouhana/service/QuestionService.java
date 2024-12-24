@@ -279,10 +279,7 @@ public class QuestionService {
             foundQuestionList = questionRepository.findByLocationOrderByCreatedAtDesc(location);
         }
 
-        // 최신순으로 최대 3개만 가져오기
-        List<Question> latestQuestions = foundQuestionList.size() > 3 ? foundQuestionList.subList(0, 3) : foundQuestionList;
-
-        return makeQnaListDTO(latestQuestions);
+        return makeQnaListDTO(foundQuestionList);
     }
 
     // 지역별 최신순 게시글 3개 조회
@@ -293,7 +290,11 @@ public class QuestionService {
         }else{
             foundQuestionList = questionRepository.findByLocationOrderByCreatedAtDesc(location);
         }
-        return makeQnaListDTO(foundQuestionList);
+
+        // 최신순으로 최대 3개만 가져오기
+        List<Question> latestQuestions = foundQuestionList.size() > 3 ? foundQuestionList.subList(0, 3) : foundQuestionList;
+
+        return makeQnaListDTO(latestQuestions);
     }
 
     // 지역별 좋아요 순 게시글 조회
