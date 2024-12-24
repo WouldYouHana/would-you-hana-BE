@@ -37,6 +37,17 @@ services:
     networks:
       - app-network
 
+  fastapi:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - ENV=development
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
