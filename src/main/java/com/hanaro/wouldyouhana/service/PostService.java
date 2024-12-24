@@ -123,6 +123,7 @@ public class PostService {
 
         return new PostResponseDTO(
                 foundPost.getId(),
+                customer.getId(),
                 customer.getNickname(),
                 foundPost.getLocation(),
                 foundPost.getCategory().getName(),
