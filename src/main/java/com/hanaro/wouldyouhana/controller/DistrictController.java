@@ -1,6 +1,8 @@
 package com.hanaro.wouldyouhana.controller;
 
+import com.hanaro.wouldyouhana.dto.post.PostListDTO;
 import com.hanaro.wouldyouhana.dto.question.QnaListDTO;
+import com.hanaro.wouldyouhana.service.PostService;
 import com.hanaro.wouldyouhana.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,12 +19,23 @@ import java.util.List;
 public class DistrictController {
 
     private final QuestionService questionService;
+    private final PostService postService;
+
 
     // 지역구별 가장 최근에 작성된 qna 3개 반환
     // /district/{지역구}/recentQna
     @GetMapping("/{location}/recentQna")
-    public ResponseEntity<List<QnaListDTO>> getLatestBranchQuestions(@PathVariable String location) {
+    public ResponseEntity<List<QnaListDTO>> getLatest3Questions(@PathVariable String location) {
         List<QnaListDTO> questionList = questionService.get3QuestionsSortedByLatest(location);
         return new ResponseEntity<>(questionList, HttpStatus.OK);
     }
+
+    // 지역구별 조회수 많은 (커뮤니티)게시물 3개 반환
+    // /district/{지역구}/hotPost
+    @GetMapping("/{location}/hotPost")
+    public ResponseEntity<List<PostListDTO>> getLatest3Post(@PathVariable String location) {
+        List<PostListDTO> questionList = postService.get3PostSortedByLatest(location);
+        return new ResponseEntity<>(questionList, HttpStatus.OK);
+    }
+
 }

@@ -16,6 +16,7 @@ import com.hanaro.wouldyouhana.repository.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -172,6 +173,21 @@ public class PostService {
         Category category = categoryRepository.findByName(categoryName);
         List<Post> foundPostList = postRepository.findByLocationAndCategoryId(location, category.getId());
         return makePostListDTO(foundPostList);
+    }
+
+    public List<PostListDTO> get3PostSortedByLatest(String location) {
+        List<Post> foundPostList;
+        // location이 비어 있으면 모든 게시글을 조회수(viewCount) 기준 내림차순으로 정렬
+        if(location.isEmpty()){
+            foundPostList = postRepository.findAll(Sort.by(Sort.Order.desc("viewCount")));
+        } else {
+            foundPostList = postRepository.findByLocationOrderByViewCountDesc(location);
+        }
+
+        // 조회수가 높은 상위 3개만 선택
+        List<Post> top3Posts = foundPostList.size() > 3 ? foundPostList.subList(0, 3) : foundPostList;
+
+        return makePostListDTO(top3Posts);
     }
 
 

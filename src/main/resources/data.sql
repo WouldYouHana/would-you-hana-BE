@@ -81,6 +81,11 @@ INSERT INTO question (customer_id, category_id, title, content, location, create
 INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (1, "다들 예금 얼마나 하고 계시나요?", 14, "성동구", "궁금합니다!", "2024-12-18 15:30:00", null, 6, 0, 8 );
 INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (2, "다들 예금 얼마나 하고 계시나요?", 15, "광진구", "궁금합니다!", "2024-12-19 15:30:00", null, 7, 0, 7 );
 INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (3, "다들 예금 얼마나 하고 계시나요?", 16, "서초구", "궁금합니다!", "2024-12-20 15:30:00", null, 8, 0, 6 );
+INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (2, "다들 예금 얼마나 하고 계시나요?", 15, "광진구", "궁금합니다!", "2024-12-19 15:30:00", null, 7, 0, 0 );
+INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (2, "다들 예금 얼마나 하고 계시나요?", 15, "광진구", "궁금합니다!", "2024-12-19 15:30:00", null, 7, 0, 3 );
+INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (2, "다들 예금 얼마나 하고 계시나요?", 15, "광진구", "궁금합니다!", "2024-12-19 15:30:00", null, 7, 0, 4 );
+
+
 
 INSERT INTO answer (banker_id, question_id, content, created_at, updated_at, good_count) VALUES (1, 1, 'This is an answer', "2024-10-21 10:00:00", "2024-10-21 10:00:00", 3);
 INSERT INTO answer (banker_id, question_id, content, created_at, updated_at, good_count) VALUES (1, 2, 'This is an answer', "2024-10-21 10:00:00", "2024-10-21 10:00:00", 7);
