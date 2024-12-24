@@ -14,4 +14,5 @@ public class ReservationRequestDTO {
     private Long customerId;
     private String branchName;
     private LocalDateTime reservationDate;
+    private String bankerName;
 }
