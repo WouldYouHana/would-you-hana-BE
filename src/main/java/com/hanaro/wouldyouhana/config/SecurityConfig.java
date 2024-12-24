@@ -64,6 +64,7 @@ public class SecurityConfig {
                         .allowedOrigins(
                                 "https://main.ds0n0kac0bnoe.amplifyapp.com", // 정적 URL
                                 "https://localhost:5174",// 로컬 개발 환경
+                                "https://localhost:5173",// 로컬 개발 환경
                                 "https://wouldyouhana.site",
                                 "https://www.wouldyouhana.site"
                         )

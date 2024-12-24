@@ -113,6 +113,7 @@ public class PostService {
             commentDTO.setId(comment.getId());
             commentDTO.setContent(comment.getContent());
             commentDTO.setCustomerId(comment.getCustomer().getId());
+            commentDTO.setNickname(comment.getCustomer().getNickname());
             commentDTO.setCreatedAt(comment.getCreatedAt());
             return commentDTO;
         }).collect(Collectors.toList());
@@ -167,8 +168,9 @@ public class PostService {
     }
 
     // 카테고리별 게시글 조회
-    public List<PostListDTO> getAllPostsByCategory(Long categoryId, String location) {
-        List<Post> foundPostList = postRepository.findByLocationAndCategoryId(location, categoryId);
+    public List<PostListDTO> getAllPostsByCategory(String categoryName, String location) {
+        Category category = categoryRepository.findByName(categoryName);
+        List<Post> foundPostList = postRepository.findByLocationAndCategoryId(location, category.getId());
         return makePostListDTO(foundPostList);
     }
 

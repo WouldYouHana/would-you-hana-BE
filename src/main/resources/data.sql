@@ -73,14 +73,14 @@ INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (6, 4);
 
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (1, 1, "안녕하세요!", "안녕하세요, 처음 가입했습니다. 반가워요!!", "성동구", "2024-12-17 10:00:00", null, 3, 0, 0);
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 2, "주택청약종합저축에 대해 여쭈어볼게 있습니다.", "이번에 주택청약종합저축 월 납입 한도가 25만원으로 올랐잖아요? ... ", "성동구", "2024-12-17 14:00:00", null, 2, 0, 5);
-INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (3, 3, "제 대략적인 대출 한도가 궁금합니다.", "재직중인 26살 남자입니다. ...", "서울시 성동구", "2024-10-23 15:00:00", null, 0, 0, 3);
+INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (3, 3, "제 대략적인 대출 한도가 궁금합니다.", "재직중인 26살 남자입니다. ...", "성동구", "2024-10-23 15:00:00", null, 0, 0, 3);
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 2, "주택청약종합저축에 대해 여쭈어볼게 있습니다.2", "이번에 주택청약종합저축 월 납입 한도가 25만원으로 올랐잖아요? ... ", "성동구", "2024-12-17 14:00:00", null, 6, 0, 5);
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 2, "주택청약종합저축에 대해 여쭈어볼게 있습니다.3", "이번에 주택청약종합저축 월 납입 한도가 25만원으로 올랐잖아요? ... ", "광진구", "2024-12-17 14:00:00", null, 3, 0, 8);
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 2, "주택청약종합저축에 대해 여쭈어볼게 있습니다.4", "이번에 주택청약종합저축 월 납입 한도가 25만원으로 올랐잖아요? ... ", "성동구", "2024-12-17 14:00:00", null, 0, 0, 1);
 
-INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (1, "다들 예금 얼마나 하고 계시나요?", 1, "서울시 성동구", "궁금합니다!", "2024-12-18 15:30:00", null, 6, 0, 8 );
-INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (2, "다들 예금 얼마나 하고 계시나요?", 2, "서울시 광진구", "궁금합니다!", "2024-12-19 15:30:00", null, 7, 0, 7 );
-INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (3, "다들 예금 얼마나 하고 계시나요?", 3, "서울시 서초구", "궁금합니다!", "2024-12-20 15:30:00", null, 8, 0, 6 );
+INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (1, "다들 예금 얼마나 하고 계시나요?", 14, "성동구", "궁금합니다!", "2024-12-18 15:30:00", null, 6, 0, 8 );
+INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (2, "다들 예금 얼마나 하고 계시나요?", 15, "광진구", "궁금합니다!", "2024-12-19 15:30:00", null, 7, 0, 7 );
+INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (3, "다들 예금 얼마나 하고 계시나요?", 16, "서초구", "궁금합니다!", "2024-12-20 15:30:00", null, 8, 0, 6 );
 
 INSERT INTO answer (banker_id, question_id, content, created_at, updated_at, good_count) VALUES (1, 1, 'This is an answer', "2024-10-21 10:00:00", "2024-10-21 10:00:00", 3);
 INSERT INTO answer (banker_id, question_id, content, created_at, updated_at, good_count) VALUES (1, 2, 'This is an answer', "2024-10-21 10:00:00", "2024-10-21 10:00:00", 7);
@@ -92,6 +92,13 @@ INSERT INTO comment (customer_id, question_id, content, created_at) values (1, 2
 INSERT INTO comment (customer_id, question_id, content, created_at) values (2, 2,"자세히 알려주실 분 계신가요?","2024-10-21 14:15:00" );
 INSERT INTO comment (customer_id, question_id, content, created_at) values (1, 3,"실례지만 대략적인 연봉이 어떻게 되시나요?","2024-10-21 15:23:00" );
 INSERT INTO comment (customer_id, question_id, content, created_at) values (2, 3,"저도 궁금합니다!","2024-10-21 15:31:00" );
+
+INSERT INTO comment (customer_id, post_id, content, created_at) values (1, 1,"반갑습니다!","2024-10-21 10:05:00" );
+INSERT INTO comment (customer_id, post_id, content, created_at) values (2, 1,"어서오세요!","2024-10-21 10:07:00" );
+INSERT INTO comment (customer_id, post_id, content, created_at) values (1, 2,"저도 헷갈리네요...","2024-10-21 14:05:00" );
+INSERT INTO comment (customer_id, post_id, content, created_at) values (2, 2,"자세히 알려주실 분 계신가요?","2024-10-21 14:15:00" );
+INSERT INTO comment (customer_id, post_id, content, created_at) values (1, 3,"실례지만 대략적인 연봉이 어떻게 되시나요?","2024-10-21 15:23:00" );
+INSERT INTO comment (customer_id, post_id, content, created_at) values (2, 3,"저도 궁금합니다!","2024-10-21 15:31:00" );
 
 INSERT INTO customer_roles (customer_id, roles)VALUES (1, 'USER');
 INSERT INTO customer_roles (customer_id, roles)VALUES (2, 'USER');

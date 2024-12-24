@@ -86,8 +86,8 @@ public class PostController {
 
     // 카테고리 별 게시글 전체 조회
     @GetMapping("/postList/{categoryId}")
-    public ResponseEntity<List<PostListDTO>> getAllPostsByCategory(@PathVariable("categoryId") Long categoryId, @RequestParam String location) {
-        List<PostListDTO> postByCategoryList = postService.getAllPostsByCategory(categoryId, location);
+    public ResponseEntity<List<PostListDTO>> getAllPostsByCategory(@PathVariable("categoryId") String category, @RequestParam String location) {
+        List<PostListDTO> postByCategoryList = postService.getAllPostsByCategory(category, location);
         return new ResponseEntity<>(postByCategoryList, HttpStatus.OK);
     }
 
