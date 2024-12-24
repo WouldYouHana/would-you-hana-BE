@@ -268,8 +268,25 @@ public class QuestionService {
         return makeQnaListDTO(foundQuestionList);
     }
 
-    // 지역별 최신순 게시글 조회
+    // 지역별 최신순 모든 게시글 조회
     public List<QnaListDTO> getAllQuestionsSortedByLatest(String location) {
+        List<Question> foundQuestionList;
+
+        // location이 비어 있지 않으면 해당 location에 맞는 질문을 최신순으로 조회
+        if(location.isEmpty()){
+            foundQuestionList = questionRepository.findAll(Sort.by(Sort.Order.desc("createdAt")));
+        } else {
+            foundQuestionList = questionRepository.findByLocationOrderByCreatedAtDesc(location);
+        }
+
+        // 최신순으로 최대 3개만 가져오기
+        List<Question> latestQuestions = foundQuestionList.size() > 3 ? foundQuestionList.subList(0, 3) : foundQuestionList;
+
+        return makeQnaListDTO(latestQuestions);
+    }
+
+    // 지역별 최신순 게시글 3개 조회
+    public List<QnaListDTO> get3QuestionsSortedByLatest(String location) {
         List<Question> foundQuestionList;
         if(location.isEmpty()){
             foundQuestionList = questionRepository.findAll(Sort.by(Sort.Order.desc("createdAt")));
