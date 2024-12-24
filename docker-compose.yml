@@ -39,8 +39,9 @@ services:
 
   fastapi:
     build: .
+    container_name: wyhnchatbot
     ports:
-      - "8082:8000"
+      - "8000:8000"
     volumes:
       - .:/app
     environment:
