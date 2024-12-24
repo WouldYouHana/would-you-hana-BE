@@ -22,5 +22,7 @@ public class Reservation {
     @JoinColumn(name="customer_id")
     private Customer customer;
     private String branchName;
+
+    private String bankerName;
     private LocalDateTime rdayTime;
 }
