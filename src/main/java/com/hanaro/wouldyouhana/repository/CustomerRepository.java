@@ -14,5 +14,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query("SELECT c.nickname FROM Customer c WHERE c.id = :customerId")
     String getNicknameById(@Param("customerId") Long customerId);
+
+    boolean existsByNickname(String nickname);
 }
 
