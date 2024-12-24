@@ -33,5 +33,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query("SELECT q FROM Question q WHERE q.location = :location ORDER BY q.viewCount DESC")
     List<Question> findTop6OrderByViewCountDesc(String location, PageRequest pageable);
 
-
+    // 지역(location)과 검색어(searchTerm)을 이용한 조건으로 질문 찾기
+    List<Question> findByLocationAndTitleContainingOrLocationAndContentContaining(String location, String title, String location2, String content);
 }

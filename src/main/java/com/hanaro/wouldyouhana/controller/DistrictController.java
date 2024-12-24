@@ -38,4 +38,13 @@ public class DistrictController {
         return new ResponseEntity<>(questionList, HttpStatus.OK);
     }
 
+    // 지역구 랜딩페이지에서 검색 -> 지역구 qna 페이지에서 검색
+    // /district/{지역구}/{searchTerm}
+    @GetMapping("/qna/{location}/{searchTerm}")
+    public ResponseEntity<List<QnaListDTO>> searchTermFromQuestion(@PathVariable String location,
+                                                                   @PathVariable String searchTerm){
+        List<QnaListDTO> questionList = questionService.searchTermFromQuestion(location, searchTerm);
+        return new ResponseEntity<>(questionList, HttpStatus.OK);
+    }
+
 }
