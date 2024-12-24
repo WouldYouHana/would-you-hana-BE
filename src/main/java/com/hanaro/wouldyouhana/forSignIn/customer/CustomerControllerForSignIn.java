@@ -4,6 +4,7 @@ import com.hanaro.wouldyouhana.forSignIn.JwtToken;
 import com.hanaro.wouldyouhana.forSignIn.SecurityUtil;
 import com.hanaro.wouldyouhana.forSignIn.dto.CustomerSignInDto;
 import com.hanaro.wouldyouhana.forSignIn.dto.CustomerSignInReturnDTO;
+import com.hanaro.wouldyouhana.forSignIn.dto.NickDupCheckDTO;
 import com.hanaro.wouldyouhana.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomerControllerForSignIn {
 
     private final CustomerService customerService;
+
+    @PostMapping("/signIn/nickDupCheck")
+    public ResponseEntity<String> nickDupCheck(@RequestBody NickDupCheckDTO nickDupCheckDTO){
+        System.out.println("닉네임 "+nickDupCheckDTO.getNickname());
+        String result = customerService.nickDupCheck(nickDupCheckDTO);
+        System.out.println("결과 "+result);
+        return ResponseEntity.ok(result);
+    }
 
     @PostMapping("/signIn")
     public ResponseEntity<CustomerSignInReturnDTO> signIn(@RequestBody CustomerSignInDto signInDto) {
