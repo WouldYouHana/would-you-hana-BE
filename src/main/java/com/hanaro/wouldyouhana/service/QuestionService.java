@@ -39,19 +39,6 @@ public class QuestionService {
     private final AnswerGoodRepository answerGoodRepository;
     private final BranchLocationMappingRepository branchLocationMappingRepository;
 
-//    @Autowired
-//    public QuestionService(QuestionRepository questionRepository, CustomerRepository customerRepository, CategoryRepository categoryRepository, CommentRepository commentRepository,
-//                           ImageRepository imageRepository, FileStorageService fileStorageService, LikesRepository likesRepository, AmazonS3Client amazonS3Client) {
-//        this.questionRepository = questionRepository;
-//        this.customerRepository = customerRepository;
-//        this.categoryRepository = categoryRepository;
-//        this.commentRepository = commentRepository;
-//        this.imageRepository = imageRepository;
-//        this.fileStorageService = fileStorageService;
-//        this.likesRepository = likesRepository;
-//        this.amazonS3Client = amazonS3Client;
-//    }
-
     /**
      * 질문(게시글) 등록
      * */
@@ -182,6 +169,7 @@ public class QuestionService {
             commentDTO.setId(comment.getId());
             commentDTO.setContent(comment.getContent());
             commentDTO.setCustomerId(comment.getCustomer().getId());
+            commentDTO.setNickname(comment.getCustomer().getNickname());
             commentDTO.setCreatedAt(LocalDateTime.now());
             return commentDTO;
         }).collect(Collectors.toList());
@@ -190,6 +178,7 @@ public class QuestionService {
 
         return new QuestionResponseDTO(
                 foundQuestion.getId(),
+                foundQuestion.getCustomerId(),
                 customer.getNickname(),
                 foundQuestion.getCategory().getName(),
                 foundQuestion.getTitle(),
@@ -279,14 +268,42 @@ public class QuestionService {
         return makeQnaListDTO(foundQuestionList);
     }
 
-    // 지역별 최신순 게시글 조회
+    // 지역별 최신순 모든 게시글 조회
     public List<QnaListDTO> getAllQuestionsSortedByLatest(String location) {
+        List<Question> foundQuestionList;
+
+        // location이 비어 있지 않으면 해당 location에 맞는 질문을 최신순으로 조회
+        if(location.isEmpty()){
+            foundQuestionList = questionRepository.findAll(Sort.by(Sort.Order.desc("createdAt")));
+        } else {
+            foundQuestionList = questionRepository.findByLocationOrderByCreatedAtDesc(location);
+        }
+
+        return makeQnaListDTO(foundQuestionList);
+    }
+
+    // 지역별 최신순 게시글 3개 조회
+    public List<QnaListDTO> get3QuestionsSortedByLatest(String location) {
         List<Question> foundQuestionList;
         if(location.isEmpty()){
             foundQuestionList = questionRepository.findAll(Sort.by(Sort.Order.desc("createdAt")));
         }else{
             foundQuestionList = questionRepository.findByLocationOrderByCreatedAtDesc(location);
         }
+
+        // 최신순으로 최대 3개만 가져오기
+        List<Question> latestQuestions = foundQuestionList.size() > 3 ? foundQuestionList.subList(0, 3) : foundQuestionList;
+
+        return makeQnaListDTO(latestQuestions);
+    }
+
+    // 지역구 랜딩페이지에서 검색 
+    public List<QnaListDTO> searchTermFromQuestion(String location, String searchTerm){
+        // 지역과 검색어에 맞는 QnA 질문 목록을 조회
+        List<Question> foundQuestionList = questionRepository
+                .findByLocationAndTitleContainingOrLocationAndContentContaining(location, searchTerm, location, searchTerm);
+
+        // Question을 QnaListDTO로 변환하여 반환
         return makeQnaListDTO(foundQuestionList);
     }
 
@@ -356,5 +373,18 @@ public class QuestionService {
 
         }
     }
+
+    // 도움돼요 체크 여부 확인
+    public boolean isAnswerGoodChecked(AnswerGoodRequestDTO answerGoodRequestDTO) {
+        Question question = questionRepository.findById(answerGoodRequestDTO.getQuestionId())
+                .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+        Customer customer = customerRepository.findById(answerGoodRequestDTO.getCustomerId())
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+
+        Answer answer = question.getAnswers();
+
+        return answerGoodRepository.existsByAnswerAndCustomer(answer, customer);
+    }
+
 
 }

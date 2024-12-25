@@ -14,7 +14,9 @@ import com.hanaro.wouldyouhana.repository.CategoryRepository;
 import com.hanaro.wouldyouhana.repository.CustomerRepository;
 import com.hanaro.wouldyouhana.repository.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,16 +27,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PostService {
 
-    @Autowired
-    private PostRepository postRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private FileStorageService fileStorageService;
-    @Autowired
-    private CustomerRepository customerRepository;
+    private final PostRepository postRepository;
+    private final CategoryRepository categoryRepository;
+    private final FileStorageService fileStorageService;
+    private final CustomerRepository customerRepository;
 
     // 커뮤니티 게시글 작성
     public int addPost(PostAddRequestDTO postAddRequestDTO, List<MultipartFile> files) {
@@ -115,6 +114,7 @@ public class PostService {
             commentDTO.setId(comment.getId());
             commentDTO.setContent(comment.getContent());
             commentDTO.setCustomerId(comment.getCustomer().getId());
+            commentDTO.setNickname(comment.getCustomer().getNickname());
             commentDTO.setCreatedAt(comment.getCreatedAt());
             return commentDTO;
         }).collect(Collectors.toList());
@@ -123,6 +123,7 @@ public class PostService {
 
         return new PostResponseDTO(
                 foundPost.getId(),
+                customer.getId(),
                 customer.getNickname(),
                 foundPost.getLocation(),
                 foundPost.getCategory().getName(),
@@ -169,9 +170,25 @@ public class PostService {
     }
 
     // 카테고리별 게시글 조회
-    public List<PostListDTO> getAllPostsByCategory(Long categoryId, String location) {
-        List<Post> foundPostList = postRepository.findByLocationAndCategoryId(location, categoryId);
+    public List<PostListDTO> getAllPostsByCategory(String categoryName, String location) {
+        Category category = categoryRepository.findByName(categoryName);
+        List<Post> foundPostList = postRepository.findByLocationAndCategoryId(location, category.getId());
         return makePostListDTO(foundPostList);
+    }
+
+    public List<PostListDTO> get3PostSortedByLatest(String location) {
+        List<Post> foundPostList;
+        // location이 비어 있으면 모든 게시글을 조회수(viewCount) 기준 내림차순으로 정렬
+        if(location.isEmpty()){
+            foundPostList = postRepository.findAll(Sort.by(Sort.Order.desc("viewCount")));
+        } else {
+            foundPostList = postRepository.findByLocationOrderByViewCountDesc(location);
+        }
+
+        // 조회수가 높은 상위 3개만 선택
+        List<Post> top3Posts = foundPostList.size() > 3 ? foundPostList.subList(0, 3) : foundPostList;
+
+        return makePostListDTO(top3Posts);
     }
 
 

@@ -1,5 +1,6 @@
 package com.hanaro.wouldyouhana.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,9 +21,11 @@ public class Specialization {
     private String name;
 
     @ManyToMany(mappedBy = "specializations")
+    @JsonIgnore
     private List<Banker> bankers;
 
     @ManyToMany(mappedBy = "specializations")
+    @JsonIgnore
     private List<Customer> customers;
 
     // Getters and Setters

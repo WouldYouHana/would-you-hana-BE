@@ -15,4 +15,5 @@ public class ReservationResponseDTO {
 
     private String branchName;
     private LocalDateTime rdayTime;
+    private String bankerName;
 }

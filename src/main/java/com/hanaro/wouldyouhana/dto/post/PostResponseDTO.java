@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PostResponseDTO {
     private Long postId;
+    private Long customerId;
     private String nickname;
     private String location;
     private String categoryName;

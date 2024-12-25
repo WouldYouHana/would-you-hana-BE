@@ -4,6 +4,7 @@ import com.hanaro.wouldyouhana.domain.Customer;
 import com.hanaro.wouldyouhana.dto.CustomerSignUpDto;
 import com.hanaro.wouldyouhana.repository.CustomerRepository;
 import com.hanaro.wouldyouhana.service.CustomerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,16 +16,12 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/members")
 public class CustomerController {
 
     private final CustomerService customerService;
     private final CustomerRepository customerRepository;
-
-    public CustomerController(CustomerService customerService, CustomerRepository customerRepository) {
-        this.customerService = customerService;
-        this.customerRepository = customerRepository;
-    }
 
     // 회원가입 처리하는 API
     @PostMapping("/signUp")

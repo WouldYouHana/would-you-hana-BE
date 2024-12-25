@@ -5,6 +5,7 @@ import com.hanaro.wouldyouhana.domain.Location;
 import com.hanaro.wouldyouhana.forSignIn.JwtToken;
 import com.hanaro.wouldyouhana.forSignIn.JwtTokenProvider;
 import com.hanaro.wouldyouhana.forSignIn.dto.CustomerSignInReturnDTO;
+import com.hanaro.wouldyouhana.forSignIn.dto.NickDupCheckDTO;
 import com.hanaro.wouldyouhana.repository.CustomerRepository;
 import com.hanaro.wouldyouhana.repository.LocationRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,6 +36,15 @@ public class CustomerService {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.jwtTokenProvider = jwtTokenProvider;
         this.emailService = emailService;
+    }
+
+    public String nickDupCheck(NickDupCheckDTO nickDupCheckDTO){
+        String nickName = nickDupCheckDTO.getNickname();
+
+        if(!customerRepository.existsByNickname(nickName))
+            return "success";
+
+        return "fail";
     }
 
     public Customer registerCustomer(Customer customer) {

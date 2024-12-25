@@ -1,4 +1,4 @@
-package com.hanaro.wouldyouhana.dto;
+package com.hanaro.wouldyouhana.dto.reservation;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,4 +14,5 @@ public class ReservationRequestDTO {
     private Long customerId;
     private String branchName;
     private LocalDateTime reservationDate;
+    private String bankerName;
 }

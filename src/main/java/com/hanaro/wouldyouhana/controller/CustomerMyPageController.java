@@ -5,8 +5,10 @@ import com.hanaro.wouldyouhana.dto.myPage.CustomerInfoResponseDTO;
 import com.hanaro.wouldyouhana.dto.myPage.CustomerInfoUpdateDTO;
 import com.hanaro.wouldyouhana.dto.myPage.InterestLocationRequestDTO;
 import com.hanaro.wouldyouhana.dto.question.QnaListDTO;
+import com.hanaro.wouldyouhana.dto.reservation.ReservationResponseDTO;
 import com.hanaro.wouldyouhana.service.CustomerMyPageService;
 import com.hanaro.wouldyouhana.service.QuestionService;
+import com.hanaro.wouldyouhana.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ public class CustomerMyPageController {
 
     private final CustomerMyPageService customerMyPageService;
     private final QuestionService questionService;
+    private final ReservationService reservationService;
 
     // 일반회원 관심지역 목록 불러오기 ("my/interestList")
     @GetMapping("/interestList")
@@ -67,6 +70,13 @@ public class CustomerMyPageController {
     public ResponseEntity<List<QnaListDTO>> getAllQuestionsByCustomer(@PathVariable Long customerId) {
         List<QnaListDTO> questionByCustomerList = questionService.getAllQuestionsByCustomerId(customerId);
         return new ResponseEntity<>(questionByCustomerList, HttpStatus.OK);
+    }
+
+    // 예약 목록
+    @GetMapping("/rsvList/{customerId}")
+    public ResponseEntity<List<ReservationResponseDTO>> getReservations(@PathVariable Long customerId) {
+        List<ReservationResponseDTO> foundReservations = reservationService.getAllReservations(customerId);
+        return new ResponseEntity<>(foundReservations, HttpStatus.OK);
     }
 
 }

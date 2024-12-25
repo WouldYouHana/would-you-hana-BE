@@ -6,6 +6,7 @@ import com.hanaro.wouldyouhana.dto.likesScrap.*;
 import com.hanaro.wouldyouhana.service.LikesService;
 import com.hanaro.wouldyouhana.service.ScrapService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class LikesScrapController {
 
     private final LikesService likesService;
     private final ScrapService scrapService;
-
-    @Autowired
-    public LikesScrapController(LikesService likesService, ScrapService scrapService) {
-        this.likesService = likesService;
-        this.scrapService = scrapService;
-    }
 
     /**
      * 좋아요 요청 (저장, 취소)
