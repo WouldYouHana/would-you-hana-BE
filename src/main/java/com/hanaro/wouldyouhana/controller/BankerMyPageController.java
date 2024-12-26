@@ -1,6 +1,5 @@
 package com.hanaro.wouldyouhana.controller;
 
-import com.hanaro.wouldyouhana.dto.banker.BankerMyPageEditInfoDTO;
 import com.hanaro.wouldyouhana.dto.banker.BankerMyPageReturnDTO;
 import com.hanaro.wouldyouhana.dto.banker.BankerProfileModifyDTO;
 import com.hanaro.wouldyouhana.dto.myPage.BankerInfoResponseDTO;
@@ -26,6 +25,7 @@ public class BankerMyPageController {
     private final BankerMyPageService bankerMyPageService;
     private final ReservationService reservationService;
 
+    // 행원 프로필 조회
     @GetMapping("/bankers/mypage")
     public ResponseEntity<BankerMyPageReturnDTO> getBankerMyPage(@RequestParam Long bankerId){
 
@@ -33,6 +33,7 @@ public class BankerMyPageController {
         return new ResponseEntity<>(bankerMyPage, HttpStatus.OK);
     }
 
+    // 행원 프로필 수정
     @GetMapping("/bankers/mypage/modifyProfile")
     public ResponseEntity<String> modifyBankerProfile(@RequestPart("profile") BankerProfileModifyDTO modifyInfoDTO,
                                                       @RequestPart(value="file", required=false) MultipartFile file) {

@@ -3,20 +3,17 @@ package com.hanaro.wouldyouhana.service;
 import com.hanaro.wouldyouhana.domain.Answer;
 import com.hanaro.wouldyouhana.domain.Banker;
 import com.hanaro.wouldyouhana.domain.Specialization;
-import com.hanaro.wouldyouhana.dto.banker.BankerMyPageEditInfoDTO;
 import com.hanaro.wouldyouhana.dto.banker.BankerMyPageReturnDTO;
 import com.hanaro.wouldyouhana.dto.banker.BankerProfileModifyDTO;
 import com.hanaro.wouldyouhana.dto.myPage.BankerInfoResponseDTO;
 import com.hanaro.wouldyouhana.dto.myPage.BankerInfoUpdateDTO;
 import com.hanaro.wouldyouhana.repository.BankerRepository;
-import com.hanaro.wouldyouhana.repository.BankerSpecializationRepository;
 import com.hanaro.wouldyouhana.repository.SpecializationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +24,6 @@ public class BankerMyPageService {
 
     private final BankerRepository bankerRepository;
     private final FileStorageService fileStorageService;
-    private final BankerSpecializationRepository bankerSpecializationRepository;
     private final SpecializationRepository specializationRepository;
 
     /*
@@ -40,6 +36,7 @@ public class BankerMyPageService {
     private Long totalViewCount;
     * */
 
+    // 행원 프로필 조회
     public BankerMyPageReturnDTO getBankerMyPage(Long banker_id){
 
         Optional<Banker> optionalBanker = bankerRepository.findById(banker_id);
@@ -63,6 +60,7 @@ public class BankerMyPageService {
         return null;
     }
 
+    // 행원 프로필 수정
     public String modifyBankerProfile(BankerProfileModifyDTO bankerProfileModifyDTO, MultipartFile file) {
         Optional<Banker> optionalBanker = bankerRepository.findById(bankerProfileModifyDTO.getBankerId());
         if(optionalBanker.isPresent()) {
@@ -116,6 +114,7 @@ public class BankerMyPageService {
         return info;
     }
 
+    // 행원 개인정보 수정
     public String updateBankerInfo(BankerInfoUpdateDTO bankerInfoUpdateDTO, Long bankerId){
         Banker banker = bankerRepository.findById(bankerId)
                 .orElseThrow(()->new EntityNotFoundException("Banker not found"));
