@@ -1,7 +1,9 @@
 package com.hanaro.wouldyouhana.controller;
 
+import com.hanaro.wouldyouhana.dto.customer.CustomerResponseDTO;
 import com.hanaro.wouldyouhana.dto.post.PostListDTO;
 import com.hanaro.wouldyouhana.dto.question.QnaListDTO;
+import com.hanaro.wouldyouhana.service.CommentService;
 import com.hanaro.wouldyouhana.service.PostService;
 import com.hanaro.wouldyouhana.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,7 @@ public class DistrictController {
 
     private final QuestionService questionService;
     private final PostService postService;
-
+    private final CommentService commentService;
 
     // 지역구별 가장 최근에 작성된 qna 3개 반환
     // /district/{지역구}/recentQna
@@ -45,6 +47,16 @@ public class DistrictController {
                                                                    @PathVariable String searchTerm){
         List<QnaListDTO> questionList = questionService.searchTermFromQuestion(location, searchTerm);
         return new ResponseEntity<>(questionList, HttpStatus.OK);
+    }
+
+    // 지역구별 댓글 수 많은 유저 3명 반환
+    // /district/{지역구}/activeUser
+    @GetMapping("/{location}/activeUser")
+    public ResponseEntity<List<CustomerResponseDTO>> getTop3Customer(@PathVariable String location){
+
+        List<CustomerResponseDTO> customerList = commentService.getTop3Customer(location);
+
+        return new ResponseEntity<>(customerList, HttpStatus.OK);
     }
 
 }

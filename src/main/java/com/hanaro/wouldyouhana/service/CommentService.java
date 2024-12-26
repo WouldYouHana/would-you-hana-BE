@@ -6,6 +6,7 @@ import com.hanaro.wouldyouhana.domain.Post;
 import com.hanaro.wouldyouhana.domain.Question;
 import com.hanaro.wouldyouhana.dto.comment.CommentAddRequestDTO;
 import com.hanaro.wouldyouhana.dto.comment.CommentResponseDTO;
+import com.hanaro.wouldyouhana.dto.customer.CustomerResponseDTO;
 import com.hanaro.wouldyouhana.repository.CommentRepository;
 import com.hanaro.wouldyouhana.repository.CustomerRepository;
 import com.hanaro.wouldyouhana.repository.PostRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
@@ -118,6 +120,38 @@ public class CommentService {
 
         post.removeComments(comment);
         commentRepository.delete(comment);
+    }
+
+    // 지역구별 오늘 날짜 기준 댓글 수 많은 유저 3명 반환
+    public List<CustomerResponseDTO> getTop3Customer(String location){
+        // 오늘 날짜 기준 시작 시간 (00:00:00)
+        LocalDateTime startOfDay = LocalDateTime.now().toLocalDate().atStartOfDay();
+
+        // 댓글을 작성한 유저의 댓글 수를 지역구별로 집계
+        List<Object[]> topCustomers = commentRepository.findTop3CommentingUsers(location, startOfDay);
+
+        // 댓글 수를 기준으로 유저 DTO 생성
+        return topCustomers.stream()
+                .map(result -> {
+                    Long customerId = (Long) result[0];  // 유저 ID
+                    Long commentCount = (Long) result[1]; // 댓글 수
+
+                    // Customer 정보를 가져오기
+                    Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Customer not found"));
+
+                    // CustomerResponseDTO에 데이터 설정
+                    CustomerResponseDTO dto = new CustomerResponseDTO();
+                    dto.setNickname(customer.getNickname());
+                    dto.setExperiencePoints(customer.getExperiencePoints());
+                    dto.setTodayCommentCount(commentCount);  // 오늘 댓글 수
+                    dto.setFilepath(customer.getFilepath());  // 프로필 이미지 경로 설정
+                    long count = 0;
+                    count += questionRepository.countByCustomerIdAndLocationAndCreatedAt(customer.getId(), location, startOfDay);
+                    count += postRepository.countByCustomerIdAndLocationAndCreatedAt(customer.getId(), location, startOfDay);
+                    dto.setQnaPostCount(count);
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
 }
