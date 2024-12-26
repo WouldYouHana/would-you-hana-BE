@@ -33,21 +33,20 @@ services:
       SPRING_DATASOURCE_PASSWORD: tiger
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID} # app 서비스에도 AWS 키 전달
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY} # app 서비스에도 AWS 키 전달
-
     networks:
       - app-network
 
-#  fastapi:
-#    build: .
-#    container_name: wyhnchatbot
-#    ports:
-#      - "8000:8000"
-#    volumes:
-#      - .:/app
-#    environment:
-#      - ENV=development
-#    networks:
-#      - app-network
+  fastapi:
+    build: .
+    container_name: wyhnchatbot
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - ENV=development
+    networks:
+      - app-network
 
 networks:
   app-network:
