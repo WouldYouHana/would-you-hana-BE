@@ -146,3 +146,6 @@ INSERT INTO branch_location_mapping(branch_name, location)VALUES ("구의역지�
 
 insert into scrap_question(customer_id, question_id) values (1, 1);
 insert into scrap_question(customer_id, question_id) values (1, 3);
+
+insert into reservation(customer_id, id, rday_time, banker_name, branch_name) values(1, 1, '2024-12-26 15:00:00.000000', '문보경', '성수역지점');
+insert into reservation(customer_id, id, rday_time, banker_name, branch_name) values(1, 2, '2024-12-26 15:30:00.000000', '문보경', '성수역지점');
