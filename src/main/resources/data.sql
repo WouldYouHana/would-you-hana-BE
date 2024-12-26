@@ -1,9 +1,9 @@
-INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone) values ("2000-01-01", "2024-10-21 10:00:00", "one@example.com", 0, "M", "성동구", "김하나", "달달하나", "root1234", "010-1234-5678");
-INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone) values ("2000-02-01", "2024-10-21 10:00:00", "two@example.com", 0, "M", "광진구", "김우주", "별돌이", "root5678", "010-5678-1234");
-INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone) values ("2000-03-01", "2024-10-21 10:00:00", "three@example.com", 0, "M", "마포구", "김은행", "별송이", "root1234", "010-3456-7890");
-INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone) values ("2001-05-04", "2024-10-21 10:00:00", "four@example.com", 0, "M", "성동구", "안유진", "안유진", "root1234", "010-1234-5678");
-INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone) values ("2001-09-13", "2024-10-21 10:00:00", "five@example.com", 0, "M", "성동구", "손흥민", "국가대표7번", "root1234", "010-1234-5678");
-INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone) values ("2001-09-13", "2024-10-21 10:00:00", "six@example.com", 0, "M", "광진구", "김가을", "가을선배", "root1234", "010-1234-5678");
+INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone, filepath) values ("2000-01-01", "2024-10-21 10:00:00", "one@example.com", 0, "M", "성동구", "김하나", "달달하나", "root1234", "010-1234-5678", null);
+INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone, filepath) values ("2000-02-01", "2024-10-21 10:00:00", "two@example.com", 0, "M", "광진구", "김우주", "별돌이", "root5678", "010-5678-1234", null);
+INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone, filepath) values ("2000-03-01", "2024-10-21 10:00:00", "three@example.com", 0, "M", "마포구", "김은행", "별송이", "root1234", "010-3456-7890", null);
+INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone, filepath) values ("2001-05-04", "2024-10-21 10:00:00", "four@example.com", 0, "M", "성동구", "안유진", "안유진", "root1234", "010-1234-5678", null);
+INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone, filepath) values ("2001-09-13", "2024-10-21 10:00:00", "five@example.com", 0, "M", "성동구", "손흥민", "국가대표7번", "root1234", "010-1234-5678", null);
+INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone, filepath) values ("2001-09-13", "2024-10-21 10:00:00", "six@example.com", 0, "M", "광진구", "김가을", "가을선배", "root1234", "010-1234-5678", null);
 
 -- Location
 insert into location(customer_id, location) values (1, "성동구");
@@ -73,10 +73,10 @@ INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (6, 2);
 INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (6, 4);
 
 
-INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (1, 1, "안녕하세요!", "안녕하세요, 처음 가입했습니다. 반가워요!!", "성동구", "2024-12-17 10:00:00", null, 3, 0, 5524);
-INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 1, "주택청약종합저축에 대해 여쭈어볼게 있습니다.", "이번에 주택청약종합저축 월 납입 한도가 25만원으로 올랐잖아요? ... ", "성동구", "2024-12-21 14:00:00", null, 243, 62, 2314);
-INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (3, 9, "제 대략적인 대출 한도가 궁금합니다.", "재직중인 26살 남자입니다. ...", "성동구", "2024-12-08 15:00:00", null, 132, 0, 3551);
-INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 4, "ISA가 무엇인가요?", "그냥 저축 상품과는 어떤 점이 다른가요?? 주변에서 추천하던데 무엇인지 몰라서 여쭙습니다!!", "성동구", "2024-12-22 16:25:00", null, 255, 75, 6854);
+INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (1, 1, "안녕하세요!", "안녕하세요, 처음 가입했습니다. 반가워요!!", "성동구", "2024-12-26 10:00:00", null, 3, 0, 5524);
+INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 1, "주택청약종합저축에 대해 여쭈어볼게 있습니다.", "이번에 주택청약종합저축 월 납입 한도가 25만원으로 올랐잖아요? ... ", "성동구", "2024-12-26 14:00:00", null, 243, 62, 2314);
+INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (3, 9, "제 대략적인 대출 한도가 궁금합니다.", "재직중인 26살 남자입니다. ...", "성동구", "2024-12-26 15:00:00", null, 132, 0, 3551);
+INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 4, "ISA가 무엇인가요?", "그냥 저축 상품과는 어떤 점이 다른가요?? 주변에서 추천하던데 무엇인지 몰라서 여쭙습니다!!", "성동구", "2024-12-26 16:25:00", null, 255, 75, 6854);
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (3, 5, "미성년자 펀드 가입 관련", "미성년자는 인터넷이나 하나원큐 앱으로 펀드 가입이 가능한지 궁금합니다.", "성동구", "2024-12-22 16:25:00", null, 315, 24, 4426);
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (2, 6, "분할매수형 ETF", "투자 시에 기준을 정한다고 하는데, 그 기준에는 어떤 것들이 있고 기준을 달성하면 바로 환매가 가능한가요? 자세히 설명 부탁드립니다.", "성동구", "2024-12-25 13:49:00", null, 201, 36, 5225);
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (3, 8, "마이데이터에 연결된 자산 관련", "마이데이터에 다른 금융 자산도 연결하여 조회하고 있는데요, 갑자기 타 은행 계좌 하나가 조회가 되지 않습니다. 이렇게 갑자기 사라지기도 하나요??", "성동구", "2024-12-22 16:25:00", null, 1265, 102, 12885);
@@ -110,9 +110,9 @@ INSERT INTO answer (banker_id, question_id, content, created_at, updated_at, goo
 --INSERT INTO answer (banker_id, question_id, content, created_at, updated_at, good_count) VALUES (2, 5, '안녕하세요! 별송이 님, 미성년자는 하나원큐 앱이나 인터넷으로 펀드 가입이 불가합니다. 가까운 지점 직접 방문하시면 친절히 도와드리겠습니다.', "2024-12-23 16:12:00", "2024-12-23 17:53:00", 10);
 INSERT INTO answer (banker_id, question_id, content, created_at, updated_at, good_count) VALUES (2, 14, '안녕하세요! 가을선배 님, 일반 예약이체의 경우 9-10시, 12-13시, 15-16시, 18-19시에 이체가 수행되도록 지정하실 수 있습니다. 요청하신 날짜 및 시간에 1회만 이체 의뢰가 진행되므로 출금계좌의 잔액이 충분한지 확인해 주시면 감사하겠습니다!', "2024-12-26 10:09:00", "2024-12-26 10:12:00", 8);
 
-INSERT INTO comment (customer_id, question_id, content, created_at) values (1, 1,"반갑습니다!","2024-12-18 10:05:00" );
-INSERT INTO comment (customer_id, question_id, content, created_at) values (2, 1,"어서오세요!","2024-12-19 19:07:00" );
-INSERT INTO comment (customer_id, question_id, content, created_at) values (1, 2,"저도 헷갈리네요...","2024-12-21 14:05:00" );
+INSERT INTO comment (customer_id, question_id, content, created_at) values (1, 1,"반갑습니다!","2024-12-26 10:05:00" );
+INSERT INTO comment (customer_id, question_id, content, created_at) values (2, 1,"어서오세요!","2024-12-26 19:07:00" );
+INSERT INTO comment (customer_id, question_id, content, created_at) values (1, 2,"저도 헷갈리네요...","2024-12-26 14:05:00" );
 INSERT INTO comment (customer_id, question_id, content, created_at) values (2, 2,"자세히 알려주실 분 계신가요?","2024-12-21 14:15:00" );
 INSERT INTO comment (customer_id, question_id, content, created_at) values (1, 3,"실례지만 대략적인 연봉이 어떻게 되시나요?","2024-12-21 15:23:00" );
 INSERT INTO comment (customer_id, question_id, content, created_at) values (2, 3,"저도 궁금합니다!","2024-12-21 15:31:00" );
