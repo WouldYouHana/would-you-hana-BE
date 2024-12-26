@@ -95,7 +95,7 @@ INSERT INTO post (customer_id, title, category_id, location, content, created_at
 
 
 INSERT INTO answer (banker_id, question_id, content, created_at, updated_at, good_count) VALUES (1, 1, '반갑습니다! 달달하나 님!', "2024-12-21 10:00:00", "2024-12-21 10:00:00", 12);
-INSERT INTO answer (banker_id, question_id, content, created_at, updated_at, good_count) VALUES (1, 2, '안녕하세요! 별돌이 님, 기존 주택청약종합저축 계좌에서도 상향된 한도가 적용됩니다! 감사합니다.', "2024-12-21 20:00:00", "2024-12-21 21:00:00", 15);
+INSERT INTO answer (banker_id, question_id, content, created_at, updated_at, good_count) VALUES (2, 2, '안녕하세요! 별돌이 님, 기존 주택청약종합저축 계좌에서도 상향된 한도가 적용됩니다! 감사합니다.', "2024-12-21 20:00:00", "2024-12-21 21:00:00", 15);
 
 
 INSERT INTO comment (customer_id, question_id, content, created_at) values (1, 1,"반갑습니다!","2024-10-21 10:05:00" );
