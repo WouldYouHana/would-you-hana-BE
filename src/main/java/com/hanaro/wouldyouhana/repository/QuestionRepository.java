@@ -4,6 +4,7 @@ import com.hanaro.wouldyouhana.domain.Question;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,6 +13,14 @@ import java.util.Optional;
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     Optional<List<Question>> findByCategory_id(Long categoryId);
     Optional<List<Question>> findAllByCustomerId(Long customerId);
+
+    @Query("SELECT COUNT(q) FROM Question q WHERE q.customerId = :customerId " +
+            "AND q.location = :location " +
+            "AND q.createdAt >= :createdAt")
+    Long countByCustomerIdAndLocationAndCreatedAt(
+            @Param("customerId") Long customerId,
+            @Param("location") String location,
+            @Param("createdAt") LocalDateTime createdAt);
 
     // location을 기준으로 최신순 (createdAt)으로 질문 목록을 가져오는 메서드
     @Query("SELECT q FROM Question q WHERE q.location = :location ORDER BY q.createdAt DESC")
@@ -32,6 +41,9 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     // 오늘 날짜의 시작 시간과 끝 시간을 계산하여 조회
     @Query("SELECT q FROM Question q WHERE q.location = :location ORDER BY q.viewCount DESC")
     List<Question> findTop6OrderByViewCountDesc(String location, PageRequest pageable);
+
+    // 지역을 기준으로 모든 Question을 가져오되, answer의 createdAt을 기준으로 정렬
+    List<Question> findByLocationOrderByAnswersCreatedAtDesc(String location);
 
     // 지역(location)과 검색어(searchTerm)을 이용한 조건으로 질문 찾기
     List<Question> findByLocationAndTitleContainingOrLocationAndContentContaining(String location, String title, String location2, String content);

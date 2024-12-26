@@ -29,8 +29,8 @@ public class PostController {
     // 커뮤니티 게시글 등록
     @PostMapping("/register")
     public ResponseEntity<Void> addNewPost(@Valid
-                                                                 @RequestPart("question") PostAddRequestDTO postAddRequestDTO,
-                                                                 @RequestPart(value = "file", required = false) List<MultipartFile> files) throws IOException {
+                                               @RequestPart("question") PostAddRequestDTO postAddRequestDTO,
+                                           @RequestPart(value = "file", required = false) List<MultipartFile> files) throws IOException {
         int result = postService.addPost(postAddRequestDTO, files);
         if(result == 1) {
             return new ResponseEntity<>(HttpStatus.OK);

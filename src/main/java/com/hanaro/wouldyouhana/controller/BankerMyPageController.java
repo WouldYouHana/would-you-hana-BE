@@ -1,6 +1,7 @@
 package com.hanaro.wouldyouhana.controller;
 
 import com.hanaro.wouldyouhana.dto.banker.BankerMyPageReturnDTO;
+import com.hanaro.wouldyouhana.dto.banker.BankerProfileModifyDTO;
 import com.hanaro.wouldyouhana.dto.myPage.BankerInfoResponseDTO;
 import com.hanaro.wouldyouhana.dto.myPage.BankerInfoUpdateDTO;
 import com.hanaro.wouldyouhana.dto.reservation.ReservationResponseDTO;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,11 +25,20 @@ public class BankerMyPageController {
     private final BankerMyPageService bankerMyPageService;
     private final ReservationService reservationService;
 
+    // 행원 프로필 조회
     @GetMapping("/bankers/mypage")
     public ResponseEntity<BankerMyPageReturnDTO> getBankerMyPage(@RequestParam Long bankerId){
 
         BankerMyPageReturnDTO bankerMyPage = bankerMyPageService.getBankerMyPage(bankerId);
         return new ResponseEntity<>(bankerMyPage, HttpStatus.OK);
+    }
+
+    // 행원 프로필 수정
+    @GetMapping("/bankers/mypage/modifyProfile")
+    public ResponseEntity<String> modifyBankerProfile(@RequestPart("profile") BankerProfileModifyDTO modifyInfoDTO,
+                                                      @RequestPart(value="file", required=false) MultipartFile file) {
+        String result = bankerMyPageService.modifyBankerProfile(modifyInfoDTO, file);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     // 행원 개인정보 수정 전 필드에 표시할 기존 정보 불러오기

@@ -81,6 +81,9 @@ public class Customer implements UserDetails {
     )
     private List<Specialization> specializations;
 
+    @Column
+    private String filepath;
+
 
     /**
      * 토큰 로그인 구현용 코드
