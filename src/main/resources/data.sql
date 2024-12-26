@@ -1,7 +1,9 @@
-INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone, filepath) values ("2000-01-01", "2024-10-21 10:00:00", "one@example.com", 0, "M", "성동구", "김하나", "달달하나", "root1234", "010-1234-5678", null);
-INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone, filepath) values ("2000-02-01", "2024-10-21 10:00:00", "two@example.com", 0, "M", "광진구", "김우주", "별돌이", "root5678", "010-5678-1234", null);
-INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone, filepath) values ("2000-03-01", "2024-10-21 10:00:00", "three@example.com", 0, "M", "마포구", "김은행", "별송이", "root1234", "010-3456-7890", null);
-
+INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone) values ("2000-01-01", "2024-10-21 10:00:00", "one@example.com", 0, "M", "성동구", "김하나", "달달하나", "root1234", "010-1234-5678");
+INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone) values ("2000-02-01", "2024-10-21 10:00:00", "two@example.com", 0, "M", "광진구", "김우주", "별돌이", "root5678", "010-5678-1234");
+INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone) values ("2000-03-01", "2024-10-21 10:00:00", "three@example.com", 0, "M", "마포구", "김은행", "별송이", "root1234", "010-3456-7890");
+INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone) values ("2001-05-04", "2024-10-21 10:00:00", "four@example.com", 0, "M", "성동구", "안유진", "안유진", "root1234", "010-1234-5678");
+INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone) values ("2001-09-13", "2024-10-21 10:00:00", "five@example.com", 0, "M", "성동구", "손흥민", "국가대표7번", "root1234", "010-1234-5678");
+INSERT INTO customer (birth_date, created_at, email, experience_points, gender, location, name, nickname, password, phone) values ("2001-09-13", "2024-10-21 10:00:00", "six@example.com", 0, "M", "광진구", "김가을", "가을선배", "root1234", "010-1234-5678");
 -- Location
 insert into location(customer_id, location) values (1, "성동구");
 insert into location(customer_id, location) values (1, "광진구");
