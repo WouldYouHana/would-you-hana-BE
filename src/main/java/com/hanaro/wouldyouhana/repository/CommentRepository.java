@@ -12,7 +12,7 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByQuestion(Question question);
 
-    // 지역구(location)별로 오늘 작성된 댓글을 기준으로 유저별 댓글 수를 구함
+    // 지역구(location)별로 오늘 작성된 댓글을 기준으로 유저별 댓글 수를 구함 // question
     @Query("SELECT c.customer.id AS customerId, COUNT(c) AS commentCount " +
             "FROM Comment c " +
             "JOIN c.question q " + // 질문과 연관된 지역구를 찾기 위해 join
@@ -20,6 +20,17 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             "AND c.createdAt >= :startOfDay " + // 오늘 날짜 기준 필터링
             "GROUP BY c.customer.id " +
             "ORDER BY commentCount DESC")
-    List<Object[]> findTop3CommentingUsers(@Param("location") String location,
+    List<Object[]> findTop3CommentingUsersQuestion(@Param("location") String location,
                                            @Param("startOfDay") LocalDateTime startOfDay);
+
+    // 지역구(location)별로 오늘 작성된 댓글을 기준으로 유저별 댓글 수를 구함 // post
+    @Query("SELECT c.customer.id AS customerId, COUNT(c) AS commentCount " +
+            "FROM Comment c " +
+            "JOIN c.post q " + // 질문과 연관된 지역구를 찾기 위해 join
+            "WHERE q.location = :location " +
+            "AND c.createdAt >= :startOfDay " + // 오늘 날짜 기준 필터링
+            "GROUP BY c.customer.id " +
+            "ORDER BY commentCount DESC")
+    List<Object[]> findTop3CommentingUsersPost(@Param("location") String location,
+                                                   @Param("startOfDay") LocalDateTime startOfDay);
 }
