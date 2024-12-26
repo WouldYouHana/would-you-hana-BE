@@ -17,9 +17,12 @@ INSERT INTO specialization (name) VALUES ('퇴직연금');
 INSERT INTO specialization (name) VALUES ('펀드');
 INSERT INTO specialization (name) VALUES ('신탁');
 INSERT INTO specialization (name) VALUES ('ISA');
+INSERT INTO specialization (name) VALUES ('전자금융');
 INSERT INTO specialization (name) VALUES ('대출');
-
-
+INSERT INTO specialization (name) VALUES ('외환');
+INSERT INTO specialization (name) VALUES ('보험');
+INSERT INTO specialization (name) VALUES ('카드');
+INSERT INTO specialization (name) VALUES ('기타');
 
 -- QnACategories
 INSERT INTO category (name) values ("예금/적금"); -- 1

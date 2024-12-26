@@ -3,14 +3,20 @@ package com.hanaro.wouldyouhana.service;
 import com.hanaro.wouldyouhana.domain.Answer;
 import com.hanaro.wouldyouhana.domain.Banker;
 import com.hanaro.wouldyouhana.domain.Specialization;
+import com.hanaro.wouldyouhana.dto.banker.BankerMyPageEditInfoDTO;
 import com.hanaro.wouldyouhana.dto.banker.BankerMyPageReturnDTO;
+import com.hanaro.wouldyouhana.dto.banker.BankerProfileModifyDTO;
 import com.hanaro.wouldyouhana.dto.myPage.BankerInfoResponseDTO;
 import com.hanaro.wouldyouhana.dto.myPage.BankerInfoUpdateDTO;
 import com.hanaro.wouldyouhana.repository.BankerRepository;
+import com.hanaro.wouldyouhana.repository.BankerSpecializationRepository;
+import com.hanaro.wouldyouhana.repository.SpecializationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +26,9 @@ import java.util.Optional;
 public class BankerMyPageService {
 
     private final BankerRepository bankerRepository;
-
+    private final FileStorageService fileStorageService;
+    private final BankerSpecializationRepository bankerSpecializationRepository;
+    private final SpecializationRepository specializationRepository;
 
     /*
     *
@@ -31,6 +39,7 @@ public class BankerMyPageService {
     private Long totalCommentCount;
     private Long totalViewCount;
     * */
+
     public BankerMyPageReturnDTO getBankerMyPage(Long banker_id){
 
         Optional<Banker> optionalBanker = bankerRepository.findById(banker_id);
@@ -53,6 +62,35 @@ public class BankerMyPageService {
 
         return null;
     }
+
+    public String modifyBankerProfile(BankerProfileModifyDTO bankerProfileModifyDTO, MultipartFile file) {
+        Optional<Banker> optionalBanker = bankerRepository.findById(bankerProfileModifyDTO.getBankerId());
+        if(optionalBanker.isPresent()) {
+            Banker banker = optionalBanker.get();
+
+            banker.setContent(bankerProfileModifyDTO.getContent());
+            List<Specialization> s12nList = new ArrayList<>();
+            for(String s12n : bankerProfileModifyDTO.getSpecializations()){
+                Optional<Specialization> foundS12n = specializationRepository.findByName(s12n);
+                if(foundS12n.isPresent()) {
+                    Specialization presentS12n = foundS12n.get();
+                    s12nList.add(presentS12n);
+                }
+            }
+            banker.setSpecializations(s12nList);
+
+            if(file != null){
+                String filePath = fileStorageService.saveFile(file); // S3 버킷 내 저장된 이미지의 링크 반환
+                banker.setFilePath(filePath);
+            }
+
+            bankerRepository.save(banker);
+            return "Banker Profile Modified Successfully";
+
+        }
+        return "Banker Profile Not Found";
+    }
+    
     // 행원의 총 도움돼요 수 구하기
     public Long calTotalGoodCount(Banker banker){
         if (banker == null || banker.getAnswers() == null) {
