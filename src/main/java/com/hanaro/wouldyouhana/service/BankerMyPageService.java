@@ -54,7 +54,7 @@ public class BankerMyPageService {
             Long totalViewCount = banker.getViewCount();
 
             return new BankerMyPageReturnDTO(banker.getName(), specializations,
-                    banker.getContent(), banker.getFilePath(), totalGoodCount, totalCommentCount, totalViewCount);
+                    banker.getContent(), banker.getBranchName(), banker.getFilePath(), totalGoodCount, totalCommentCount, totalViewCount);
         }
 
         return null;
