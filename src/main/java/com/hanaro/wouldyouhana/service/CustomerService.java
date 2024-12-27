@@ -29,7 +29,7 @@ public class CustomerService {
     private EmailService emailService;
     private Map<String, String> verificationCodes = new HashMap<>();
 
-    public CustomerService(CustomerRepository customerRepository, LocationRepository locationRepository, BCryptPasswordEncoder passwordEncoder, AuthenticationManagerBuilder authenticationManagerBuilder, JwtTokenProvider jwtTokenProvider) {
+    public CustomerService(CustomerRepository customerRepository, LocationRepository locationRepository, BCryptPasswordEncoder passwordEncoder, AuthenticationManagerBuilder authenticationManagerBuilder, JwtTokenProvider jwtTokenProvider, EmailService emailService) {
         this.customerRepository = customerRepository;
         this.locationRepository = locationRepository;
         this.passwordEncoder = passwordEncoder;
