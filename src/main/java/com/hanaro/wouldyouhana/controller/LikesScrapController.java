@@ -85,4 +85,24 @@ public class LikesScrapController {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * 커뮤니티 특정 게시글 스크랩 여부 조회
+     * */
+    @GetMapping("/my/qna/scrap/{customerId}/{questionId}")
+    public ResponseEntity<Boolean> getIsQuestionScrapChecked(@PathVariable Long customerId, @PathVariable Long questionId){
+
+        return ResponseEntity.ok(scrapService.isQuestionScrapChecked(customerId, questionId));
+    }
+
+    /**
+     * 커뮤니티 특정 게시글 스크랩 여부 조회
+     * */
+    @GetMapping("/my/post/scrap/{customerId}/{postId}")
+    public ResponseEntity<Boolean> getIsPostScrapChecked(@PathVariable Long customerId, @PathVariable Long postId){
+
+        return ResponseEntity.ok(scrapService.isPostScrapChecked(customerId, postId));
+    }
+
+
+
 }
