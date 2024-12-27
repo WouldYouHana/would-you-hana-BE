@@ -46,7 +46,9 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-	implementation 'com.sun.mail:javax.mail:1.6.2'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.eclipse.angus:jakarta.mail:2.0.3' // jakarta.mail 버전
+//	implementation 'com.sun.mail:javax.mail:1.6.2'
 
     // AWS S3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'

@@ -27,7 +27,7 @@ public class EmailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setTo(toEmail);
-            helper.setSubject("이메일 인증 코드");
+            helper.setSubject("Email Verification Code");
             helper.setText("인증 코드: " + code);
 
             mailSender.send(message);
