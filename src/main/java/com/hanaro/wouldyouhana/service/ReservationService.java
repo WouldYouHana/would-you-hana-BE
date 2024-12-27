@@ -59,12 +59,20 @@ public class ReservationService {
     public List<ReservationResponseDTO> getAllReservationsForBanker(Long bankerId) {
         Banker foundBanker = bankerRepository.findById(bankerId).get();
         String bankerName = foundBanker.getName();
-        List<Reservation> foundReservations = reservationRepository.findAllByBankerName(bankerName);
-        List<ReservationResponseDTO> reservationResponseDTOS = foundReservations.stream().map((reservation) -> {
+
+        // 행원 앞으로 신청된 예약 목록
+        List<Reservation> foundReservationsForBanker = reservationRepository.findAllByBankerName(bankerName);
+        // 행원 없이 지점 이름으로만 신청된 예약 목록
+        List<Reservation> notDesignatedReservations = reservationRepository.findAllByBranchAndNoBanker(foundBanker.getBranchName());
+        // 두 예약 목록 병합
+        foundReservationsForBanker.addAll(notDesignatedReservations);
+        List<ReservationResponseDTO> reservationResponseDTOS = foundReservationsForBanker.stream().map((reservation) -> {
             ReservationResponseDTO responseDTO = new ReservationResponseDTO();
+            responseDTO.setCustomerName(reservation.getCustomer().getName());
+            responseDTO.setNickName(reservation.getCustomer().getNickname());
             responseDTO.setBranchName(reservation.getBranchName());
-            responseDTO.setBankerName(reservation.getBankerName());
             responseDTO.setRdayTime(reservation.getRdayTime());
+            responseDTO.setBankerName(reservation.getBankerName());
             return responseDTO;
         }).collect(Collectors.toList());
         return reservationResponseDTOS;

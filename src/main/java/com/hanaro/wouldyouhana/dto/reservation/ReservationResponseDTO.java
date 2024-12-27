@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 @Data
 public class ReservationResponseDTO {
 
+    private String customerName;
+    private String nickName;
     private String branchName;
     private LocalDateTime rdayTime;
     private String bankerName;
