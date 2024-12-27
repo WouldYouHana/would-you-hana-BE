@@ -9,6 +9,6 @@ import java.util.List;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     List<Reservation> findAllByCustomerId(Long customerId);
     List<Reservation> findAllByBankerName(String bankerName);
-    @Query("SELECT r FROM Reservation r WHERE r.bankerName == null AND r.branchName = :branchName")
+    @Query("SELECT r FROM Reservation r WHERE r.bankerName IS NULL AND r.branchName = :branchName")
     List<Reservation> findAllByBranchAndNoBanker(String branchName);
 }
