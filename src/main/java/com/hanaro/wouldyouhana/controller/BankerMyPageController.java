@@ -34,7 +34,7 @@ public class BankerMyPageController {
     }
 
     // 행원 프로필 수정
-    @GetMapping("/bankers/mypage/modifyProfile")
+    @PostMapping("/bankers/mypage/modifyProfile")
     public ResponseEntity<String> modifyBankerProfile(@RequestPart("profile") BankerProfileModifyDTO modifyInfoDTO,
                                                       @RequestPart(value="file", required=false) MultipartFile file) {
         String result = bankerMyPageService.modifyBankerProfile(modifyInfoDTO, file);
