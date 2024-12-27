@@ -33,6 +33,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: tiger
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID} # app 서비스에도 AWS 키 전달
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY} # app 서비스에도 AWS 키 전달
+      MAIL_USER_NAME: ${MAIL_USER_NAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
     networks:
       - app-network
 
