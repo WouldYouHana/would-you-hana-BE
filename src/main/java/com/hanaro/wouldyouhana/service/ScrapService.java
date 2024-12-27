@@ -62,6 +62,21 @@ public class ScrapService {
             scrapQuestionRepository.delete(scrapQuestion);
         }
     }
+
+    /**
+     * qna 특정 게시글 스크랩 여부 조회
+     * */
+    public boolean isQuestionScrapChecked(Long customer_id, Long question_id) {
+
+        Customer customer = customerRepository.findById(customer_id)
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+
+        Question question = questionRepository.findById(question_id)
+                .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+
+        return scrapQuestionRepository.existsByQuestionAndCustomer(question, customer);
+    }
+
     /**
      * qna 스크랩 조회 (최신순)
      * */
@@ -124,6 +139,20 @@ public class ScrapService {
             // Scrap 객체 삭제
             scrapPostRepository.delete(scrapPost);
         }
+    }
+
+    /**
+     * 커뮤니티 특정 게시글 스크랩 여부 조회
+     * */
+    public boolean isPostScrapChecked(Long customer_id, Long post_id) {
+
+        Customer customer = customerRepository.findById(customer_id)
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+
+        Post post = postRepository.findById(post_id)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+
+        return scrapPostRepository.existsByPostAndCustomer(post, customer);
     }
 
     /**
