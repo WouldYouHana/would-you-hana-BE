@@ -1,9 +1,11 @@
 package com.hanaro.wouldyouhana.controller;
 
+import com.hanaro.wouldyouhana.dto.KeywordsResponseDTO;
 import com.hanaro.wouldyouhana.dto.customer.CustomerResponseDTO;
 import com.hanaro.wouldyouhana.dto.post.PostListDTO;
 import com.hanaro.wouldyouhana.dto.question.QnaListDTO;
 import com.hanaro.wouldyouhana.service.CommentService;
+import com.hanaro.wouldyouhana.service.KeywordsService;
 import com.hanaro.wouldyouhana.service.PostService;
 import com.hanaro.wouldyouhana.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class DistrictController {
     private final QuestionService questionService;
     private final PostService postService;
     private final CommentService commentService;
+    private final KeywordsService keywordsService;
 
     // 지역구별 가장 최근에 작성된 qna 3개 반환
     // /district/{지역구}/recentQna
@@ -57,6 +60,16 @@ public class DistrictController {
         List<CustomerResponseDTO> customerList = commentService.getTop3Customer(location);
 
         return new ResponseEntity<>(customerList, HttpStatus.OK);
+    }
+
+    // 지역구 별 키워드 반환
+    @GetMapping("/{location}/keywords")
+    public ResponseEntity<List<KeywordsResponseDTO>> getHotKeywords(@PathVariable String location){
+        List<KeywordsResponseDTO> keywordsResponseDTOS = keywordsService.getPopularKeywords(location);
+        if(keywordsResponseDTOS.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(keywordsResponseDTOS, HttpStatus.OK);
     }
 
 }
