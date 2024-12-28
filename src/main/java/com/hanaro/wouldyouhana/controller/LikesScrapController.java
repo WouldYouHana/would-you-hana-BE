@@ -26,9 +26,9 @@ public class LikesScrapController {
      * 좋아요 요청 (저장, 취소)
      * */
     @PostMapping("/post/dolike")
-    public ResponseEntity<String> likesRequest(@RequestBody LikesRequestDTO likesRequestDTO){
-        likesService.saveLikes(likesRequestDTO);
-        return ResponseEntity.ok("Likes Success");
+    public ResponseEntity<Long> likesRequest(@RequestBody LikesRequestDTO likesRequestDTO){
+        Long likeCount = likesService.saveLikes(likesRequestDTO);
+        return ResponseEntity.ok(likeCount);
     }
 
     /**

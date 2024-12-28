@@ -35,7 +35,7 @@ public class LikesService {
     /**
      * 좋아요 저장 - 커뮤니티 포스트 한정
      * */
-    public void saveLikes(LikesRequestDTO likesRequestDTO){
+    public Long saveLikes(LikesRequestDTO likesRequestDTO){
         Post post = postRepository.findById(likesRequestDTO.getPostId())
                 .orElseThrow(() -> new EntityNotFoundException("Post Not Found"));
         Customer customer = customerRepository.findById(likesRequestDTO.getCustomerId())
@@ -66,7 +66,9 @@ public class LikesService {
 
             // Likes 객체 삭제
             likesRepository.delete(likes);
+
         }
+        return post.getLikeCount();
     }
 
     /**
