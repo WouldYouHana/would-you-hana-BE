@@ -27,6 +27,7 @@ public class QuestionResponseDTO {
     private Long likeCount;
     private Long scrapCount;
     private Long viewCount;
+    private List<String> filePaths;
     private AnswerResponseDTO answer;
     private List<CommentDTO> commentList;
 
