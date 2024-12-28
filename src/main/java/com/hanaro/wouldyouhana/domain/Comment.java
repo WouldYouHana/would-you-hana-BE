@@ -37,5 +37,4 @@ public class Comment {
 
     private LocalDateTime createdAt;
 
-    // Getters and Setters
 }

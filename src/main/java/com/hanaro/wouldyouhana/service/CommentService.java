@@ -12,6 +12,7 @@ import com.hanaro.wouldyouhana.repository.CustomerRepository;
 import com.hanaro.wouldyouhana.repository.PostRepository;
 import com.hanaro.wouldyouhana.repository.QuestionRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,21 +23,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CommentService {
 
     private final CommentRepository commentRepository;
     private final QuestionRepository questionRepository;
     private final PostRepository postRepository;
     private final CustomerRepository customerRepository;
-
-    @Autowired
-    public CommentService(CustomerRepository customerRepository, QuestionRepository questionRepository,
-                          PostRepository postRepository, CommentRepository commentRepository) {
-        this.customerRepository = customerRepository;
-        this.questionRepository = questionRepository;
-        this.postRepository = postRepository;
-        this.commentRepository = commentRepository;
-    }
 
     // qna에 댓글 추가
     public CommentResponseDTO addCommentForQuestion(Long questionId, String userEmail, CommentAddRequestDTO commentAddRequestDTO) {

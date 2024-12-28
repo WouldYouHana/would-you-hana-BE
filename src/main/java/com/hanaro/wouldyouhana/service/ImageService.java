@@ -8,6 +8,7 @@ import com.hanaro.wouldyouhana.repository.CustomerRepository;
 import com.hanaro.wouldyouhana.repository.ImageRepository;
 import com.hanaro.wouldyouhana.repository.QuestionRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ImageService {
 
     private final String uploadDir = "path/to/your/upload/directory"; // 실제 경로로 변경
@@ -24,12 +26,6 @@ public class ImageService {
     private final ImageRepository imageRepository;
     private final QuestionRepository questionRepository;
     private final CustomerRepository customerRepository;
-
-    public ImageService(ImageRepository imageRepository, QuestionRepository questionRepository, CustomerRepository customerRepository) {
-        this.imageRepository = imageRepository;
-        this.questionRepository = questionRepository;
-        this.customerRepository = customerRepository;
-    }
 
     public List<ImageResponseDTO> saveImages(List<MultipartFile> files, Long questionId) throws IOException {
         List<ImageResponseDTO> responseDTOs = new ArrayList<>();

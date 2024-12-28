@@ -4,6 +4,7 @@ import com.hanaro.wouldyouhana.domain.*;
 import com.hanaro.wouldyouhana.dto.likesScrap.*;
 import com.hanaro.wouldyouhana.repository.*;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,18 +14,14 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Service
+@RequiredArgsConstructor
 public class ScrapService {
 
-    @Autowired
-    private ScrapQuestionRepository scrapQuestionRepository;
-    @Autowired
-    private ScrapPostRepository scrapPostRepository;
-    @Autowired
-    private QuestionRepository questionRepository;
-    @Autowired
-    private CustomerRepository customerRepository;
-    @Autowired
-    private PostRepository postRepository;
+    private final ScrapQuestionRepository scrapQuestionRepository;
+    private final ScrapPostRepository scrapPostRepository;
+    private final QuestionRepository questionRepository;
+    private final CustomerRepository customerRepository;
+    private final PostRepository postRepository;
 
     /**
      * qna 스크랩 저장 & 취소

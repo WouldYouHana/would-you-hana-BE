@@ -7,6 +7,7 @@ import com.hanaro.wouldyouhana.dto.likesScrap.LikesResponseDTO;
 import com.hanaro.wouldyouhana.dto.likesScrap.LikesScrapResponseDTO;
 import com.hanaro.wouldyouhana.repository.*;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,19 +19,12 @@ import java.util.List;
 @RestController
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class LikesService {
 
     private final LikesRepository likesRepository;
     private final CustomerRepository customerRepository;
     private final PostRepository postRepository;
-
-    @Autowired
-    public LikesService(LikesRepository likesRepository, CustomerRepository customerRepository, PostRepository postRepository) {
-        this.likesRepository = likesRepository;
-        this.customerRepository = customerRepository;
-        this.postRepository = postRepository;
-    }
-
 
     /**
      * 좋아요 저장 - 커뮤니티 포스트 한정

@@ -50,12 +50,12 @@ INSERT INTO category (name) values ("신용점수 올리기"); --21
 INSERT INTO category (name) values ("세금/납부");
 INSERT INTO category (name) values ("학자금대출");
 
-INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("성수역지점", "banker1@example.com", "문보경", "root1234!", "이것은 행원 소개", "광진구", 12);
-INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("서울숲지점", "banker2@example.com", "홍창기", "root1234!","이것은 행원 소개", "성동구", 0);
-INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("구의역지점", "banker3@example.com", "박해민", "root1234!","이것은 행원 소개", "광진구", 0);
-INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("구의역지점", "banker4@example.com", "박해민2", "root1234!","이것은 행원 소개", "광진구", 0);
-INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("구의역지점", "banker5@example.com", "박해민3", "root1234!","이것은 행원 소개", "광진구", 0);
-INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("구의역지점", "banker6@example.com", "박해민4", "root1234!","이것은 행원 소개", "광진구", 0);
+INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("성수역지점", "banker1@example.com", "문보경", "root1234!", "안녕하세요! 문보경입니다. ", "성동구", 12);
+INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("서울숲지점", "banker2@example.com", "홍창기", "root1234!","안녕하세요! 홍창기입니다. ", "성동구", 0);
+INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("구의역지점", "banker3@example.com", "박해민", "root1234!","안녕하세요! 박해민입니다. ", "광진구", 0);
+INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("화양동지점", "banker4@example.com", "임찬규", "root1234!","안녕하세요! 임찬규입니다. ", "광진구", 0);
+INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("행당역지점", "banker5@example.com", "손주영", "root1234!","안녕하세요! 손주영입니다. ", "성동구", 0);
+INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("구의역지점", "banker6@example.com", "정우영", "root1234!","안녕하세요! 정우영입니다. ", "광진구", 0);
 
 
 INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (1, 1);
@@ -94,7 +94,7 @@ INSERT INTO question (customer_id, category_id, title, content, location, create
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (6, 4, "퇴직연금의 종류", "퇴직연금도 종류가 여러가지 있다고 들었는데, 어떤 것들이 있나요? 알려주시면 감사하겠습니다.", "광진구", "2024-12-25 18:44:00", null, 312, 48, 5925);
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (5, 5, "대리인의 펀드 가입", "대리인이 영업점을 방문하여 펀드 가입이 가능한가요?", "광진구", "2024-12-22 10:36:00", null, 429, 28, 4176);
 
-INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (1, "다들 적금 얼마나 넣으셨나요?", 14, "성동구", "궁금합니다!", "2024-12-18 15:30:00", null, 335, 0, 4522 );
+INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (1, "다들 적금 얼마나 넣으셨나요?", 14, "성동구", "궁금합니다!", "2024-12-18 15:30:00", null, 335, 14, 4522 );
 INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (1, "여러분들 올해 연말정산 어떨 것 같으신가요?", 18, "성동구", "저는 오히려 토해내야 될지도 모르겠는데요 ㅠㅠ", "2024-12-24 17:21:15", null, 461, 43, 5391 );
 INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (2, "이번달 외식비가 너무 많이 나온 것 같은데요..", 19, "성동구", "수입의 20%은 식비로 나가는 것 같습니다. 제가 좀 많이 나오는 편인가요?? 궁금합니다.", "2024-12-25 11:47:30", null, 775, 51, 8336 );
 INSERT INTO post (customer_id, title, category_id, location, content, created_at, updated_at, like_count, scrap_count, view_count) values (2, "하나은행에서 IRP 가입하신분??", 20, "성동구", "여기도 많이 계시겠죠??", "2024-12-20 19:25:00", null, 247, 21, 3376 );

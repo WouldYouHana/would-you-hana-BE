@@ -18,9 +18,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AnswerService {
 
-    private final CommentRepository commentRepository;
     private final QuestionRepository questionRepository;
-    private final CustomerRepository customerRepository;
     private final BankerRepository bankerRepository;
     private final AnswerRepository answerRepository;
 

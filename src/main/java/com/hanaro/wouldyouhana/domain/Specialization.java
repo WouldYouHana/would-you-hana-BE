@@ -28,5 +28,4 @@ public class Specialization {
     @JsonIgnore
     private List<Customer> customers;
 
-    // Getters and Setters
 }

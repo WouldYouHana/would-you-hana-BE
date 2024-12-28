@@ -35,11 +35,8 @@ import java.util.List;
 public class QnaController {
 
     private final QuestionService questionService;
-    private final ImageService imageService;
     private final CommentService commentService;
     private final AnswerService answerService;
-    private final AnswerRepository answerRepository;
-    private final AnswerGoodRepository answerGoodRepository;
 
     /**
      * 질문(게시글) 등록

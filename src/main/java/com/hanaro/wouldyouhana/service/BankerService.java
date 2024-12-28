@@ -1,6 +1,7 @@
 package com.hanaro.wouldyouhana.service;
 
 import com.hanaro.wouldyouhana.domain.Banker;
+import com.hanaro.wouldyouhana.domain.BranchLocationMapping;
 import com.hanaro.wouldyouhana.domain.Customer;
 import com.hanaro.wouldyouhana.dto.SpecializationResponseDTO;
 import com.hanaro.wouldyouhana.dto.banker.BankerListReturnDTO;
@@ -8,6 +9,7 @@ import com.hanaro.wouldyouhana.forSignIn.JwtToken;
 import com.hanaro.wouldyouhana.forSignIn.JwtTokenProvider;
 import com.hanaro.wouldyouhana.forSignIn.dto.CustomerSignInReturnDTO;
 import com.hanaro.wouldyouhana.repository.BankerRepository;
+import com.hanaro.wouldyouhana.repository.BranchLocationMappingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -29,6 +31,7 @@ public class BankerService {
     private final EmailService emailService;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final BranchLocationMappingRepository branchLocationMappingRepository;
 
     private Map<String, String> verificationCodes = new HashMap<>();
 

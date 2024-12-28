@@ -8,23 +8,19 @@ import com.hanaro.wouldyouhana.dto.reservation.ReservationResponseDTO;
 import com.hanaro.wouldyouhana.repository.BankerRepository;
 import com.hanaro.wouldyouhana.repository.CustomerRepository;
 import com.hanaro.wouldyouhana.repository.ReservationRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ReservationService {
 
     private final CustomerRepository customerRepository;
     private final ReservationRepository reservationRepository;
     private final BankerRepository bankerRepository;
-
-    public ReservationService(CustomerRepository customerRepository, ReservationRepository reservationRepository, BankerRepository bankerRepository) {
-        this.customerRepository = customerRepository;
-        this.reservationRepository = reservationRepository;
-        this.bankerRepository = bankerRepository;
-    }
 
     // 예약 등록
     public Long makeReservation(ReservationRequestDTO reservationRequestDTO) {

@@ -26,5 +26,4 @@ public class Location {
         this.location = location;
     }
 
-    // Getters and Setters
 }

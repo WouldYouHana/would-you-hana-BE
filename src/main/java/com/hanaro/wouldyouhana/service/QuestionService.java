@@ -30,11 +30,7 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final CustomerRepository customerRepository;
     private final CategoryRepository categoryRepository;
-    private final CommentRepository commentRepository;
-    private final ImageRepository imageRepository;
     private final FileStorageService fileStorageService;
-    private final LikesRepository likesRepository;
-    private final AmazonS3Client amazonS3Client;
     private final AnswerRepository answerRepository;
     private final AnswerGoodRepository answerGoodRepository;
     private final BranchLocationMappingRepository branchLocationMappingRepository;
