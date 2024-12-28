@@ -9,4 +9,7 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
     void deleteAllByQuestion_Id(Long questionId);
 
     List<Image> findByQuestion_Id(Long questionId);
+
+    List<Image> findByPost_Id(Long postId);
+    void deleteAllByPost_Id(Long postId);
 }

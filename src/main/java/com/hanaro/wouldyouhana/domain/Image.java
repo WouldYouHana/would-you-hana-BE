@@ -24,4 +24,8 @@ public class Image {
     private Customer customer;
 
     private String filePath;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
 }
