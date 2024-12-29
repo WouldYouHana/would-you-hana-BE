@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,4 +24,5 @@ public class PostListDTO {
     private Long likeCount;
     private Long scrapCount;
     private Long viewCount;
+    private List<String> filePaths;
 }

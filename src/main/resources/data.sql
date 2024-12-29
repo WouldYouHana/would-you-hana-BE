@@ -50,12 +50,14 @@ INSERT INTO category (name) values ("신용점수 올리기"); --21
 INSERT INTO category (name) values ("세금/납부");
 INSERT INTO category (name) values ("학자금대출");
 
-INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("성수역지점", "banker1@example.com", "문보경", "root1234!", "안녕하세요! 문보경입니다. ", "성동구", 12);
-INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("서울숲지점", "banker2@example.com", "홍창기", "root1234!","안녕하세요! 홍창기입니다. ", "성동구", 0);
-INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("구의역지점", "banker3@example.com", "박해민", "root1234!","안녕하세요! 박해민입니다. ", "광진구", 0);
-INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("화양동지점", "banker4@example.com", "임찬규", "root1234!","안녕하세요! 임찬규입니다. ", "광진구", 0);
-INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("행당역지점", "banker5@example.com", "손주영", "root1234!","안녕하세요! 손주영입니다. ", "성동구", 0);
-INSERT INTO banker (branch_name, email, name, password, content, location, view_count) values ("구의역지점", "banker6@example.com", "정우영", "root1234!","안녕하세요! 정우영입니다. ", "광진구", 0);
+INSERT INTO banker (branch_name, email, name, password, content, location, file_path, view_count) values ("성수역지점", "banker1@example.com", "문보경", "root1234!", "안녕하세요! 문보경입니다. ", "성동구","https://wyhnbucket.s3.ap-northeast-2.amazonaws.com/bankers/banker4.png", 12);
+INSERT INTO banker (branch_name, email, name, password, content, location, file_path, view_count) values ("서울숲지점", "banker2@example.com", "홍창기", "root1234!","안녕하세요! 홍창기입니다. ", "성동구", "https://wyhnbucket.s3.ap-northeast-2.amazonaws.com/bankers/banker3.png",0);
+INSERT INTO banker (branch_name, email, name, password, content, location, file_path, view_count) values ("구의역지점", "banker3@example.com", "박해민", "root1234!","안녕하세요! 박해민입니다. ", "광진구", "https://wyhnbucket.s3.ap-northeast-2.amazonaws.com/bankers/banker1.png",0);
+INSERT INTO banker (branch_name, email, name, password, content, location, file_path, view_count) values ("화양동지점", "banker4@example.com", "임찬규", "root1234!","안녕하세요! 임찬규입니다. ", "광진구", "https://wyhnbucket.s3.ap-northeast-2.amazonaws.com/bankers/banker2.png",0);
+INSERT INTO banker (branch_name, email, name, password, content, location, file_path, view_count) values ("행당역지점", "banker5@example.com", "손주영", "root1234!","안녕하세요! 손주영입니다. ", "성동구", "https://wyhnbucket.s3.ap-northeast-2.amazonaws.com/bankers/banker2.png",0);
+INSERT INTO banker (branch_name, email, name, password, content, location, file_path, view_count) values ("구의역지점", "banker6@example.com", "정우영", "root1234!","안녕하세요! 정우영입니다. ", "광진구", "https://wyhnbucket.s3.ap-northeast-2.amazonaws.com/bankers/banker3.png",0);
+INSERT INTO banker (branch_name, email, name, password, content, location, file_path, view_count) values ("행당역지점", "banker7@example.com", "장도연", "root1234!","안녕하세요! 장도연입니다. ", "성동구", "https://wyhnbucket.s3.ap-northeast-2.amazonaws.com/bankers/banker1.png",0);
+
 
 
 INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (1, 1);
@@ -74,6 +76,9 @@ INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (5, 4);
 INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (6, 1);
 INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (6, 2);
 INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (6, 4);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (7, 3);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (7, 4);
+INSERT INTO banker_specialization (banker_id, specialization_id) VALUES (7, 6);
 
 
 INSERT INTO question (customer_id, category_id, title, content, location, created_at, updated_at, like_count, scrap_count, view_count) values (1, 1, "안녕하세요!", "안녕하세요, 처음 가입했습니다. 반가워요!!", "성동구", "2024-12-26 10:00:00", null, 3, 0, 5524);

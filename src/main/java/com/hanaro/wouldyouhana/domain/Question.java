@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Getter
@@ -49,9 +50,8 @@ public class Question {
     //@JoinColumn(name = "question_id")  // 외래 키 설정
     private List<Comment> comments;
 
-    //@OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JoinColumn(name = "question_id")  // 외래 키 설정
-    private List<String> filePaths;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Image> images = new ArrayList<>();
 
     // 조회수 증가
     public void incrementViewCount() {
