@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -59,7 +60,7 @@ public class PostService {
                 .title(postAddRequestDTO.getTitle())
                 .customerId(postAddRequestDTO.getCustomerId())
                 .content(postAddRequestDTO.getContent())
-                .createdAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
                 .filePaths(filePaths)
                 .build();
 
@@ -89,7 +90,7 @@ public class PostService {
         post.setTitle(postAddRequestDTO.getTitle());
         post.setContent(postAddRequestDTO.getContent());
         post.setCategory(category);
-        post.setUpdatedAt(LocalDateTime.now());
+        post.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
         post.setFilePaths(filePaths);
 
         Post modifiedPost = postRepository.save(post);

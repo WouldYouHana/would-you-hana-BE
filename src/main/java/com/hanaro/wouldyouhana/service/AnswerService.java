@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +36,7 @@ public class AnswerService {
                 .banker(foundBanker)
                 .question(foundQuestion)
                 .content(answerAddRequestDTO.getContent())
-                .createdAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
                 .build();
 
         foundQuestion.setAnswers(answer);
@@ -57,7 +58,7 @@ public class AnswerService {
         Answer foundAnswer = answerRepository.findById(answerId).orElseThrow(() -> new EntityNotFoundException("answer not found"));
 
         foundAnswer.setContent(answerAddRequestDTO.getContent());
-        foundAnswer.setUpdatedAt(LocalDateTime.now());
+        foundAnswer.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
 
         Answer updatedAnswer = answerRepository.save(foundAnswer);
 

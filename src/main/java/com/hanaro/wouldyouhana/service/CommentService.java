@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,7 @@ public class CommentService {
                 .question(foundQuestion)
                 .customer(foundCustomer)
                 .content(commentAddRequestDTO.getContent())
-                .createdAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
                 .build();
 
         foundQuestion.addComments(comment);
@@ -69,7 +70,7 @@ public class CommentService {
                 .post(foundPost)
                 .customer(foundCustomer)
                 .content(commentAddRequestDTO.getContent())
-                .createdAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
                 .build();
 
         foundPost.addComments(comment);

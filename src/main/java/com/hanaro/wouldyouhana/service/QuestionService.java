@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +70,7 @@ public class QuestionService {
                 .title(questionAddRequestDTO.getTitle())
                 .content(questionAddRequestDTO.getContent())
                 .location(questionAddRequestDTO.getLocation())
-                .createdAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
                 .filePaths(filePaths)
                 .build();
 
@@ -127,7 +128,7 @@ public class QuestionService {
         question.setContent(questionAddRequestDTO.getContent());
         question.setLocation(questionAddRequestDTO.getLocation());
         question.setCategory(category);
-        question.setUpdatedAt(LocalDateTime.now());
+        question.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
         question.setFilePaths(filePaths);
 
         // 질문 저장
