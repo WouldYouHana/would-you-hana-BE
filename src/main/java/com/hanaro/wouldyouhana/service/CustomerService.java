@@ -89,7 +89,7 @@ public class CustomerService {
 
         Long id = customer.getId();
         String location = customer.getLocation();
-        String name = customer.getName();
+        String name = customer.getNickname();
         String branchName = "";
 
         // 관심 있는 위치들에서 location String만 추출
