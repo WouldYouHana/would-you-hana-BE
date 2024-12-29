@@ -76,19 +76,6 @@ public class QnaController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    /**
-     * 질문(게시글) 사진 등록
-     * */
-//    @PostMapping("/qna/image/{questionId}")
-//    public ResponseEntity<List<ImageResponseDTO>> uploadImage(
-//            @PathVariable Long questionId,
-//            @RequestParam("file") List<MultipartFile> file) throws IOException {
-//
-//        List<ImageResponseDTO> savedImg = imageService.saveImages(file, questionId);
-//
-//        return new ResponseEntity<>(savedImg, HttpStatus.CREATED);
-//    }
-
     // 답변 등록 - 행원
     @PostMapping("/answer/{questionId}")
     public ResponseEntity<AnswerResponseDTO> addAnswer(@PathVariable Long questionId,
@@ -99,12 +86,6 @@ public class QnaController {
         return new ResponseEntity<>(addedAnswer, HttpStatus.CREATED);
     }
 
-//    @DeleteMapping("/post/answer/{questionId}/{answerId}")
-//    public ResponseEntity deleteAnswer(@PathVariable Long questionId, @PathVariable Long answerId) {
-//        questionService.
-//        answerService.deleteAnswer(answerId);
-//    }
-
     // 댓글 추가
     @PostMapping("/comment/{question_id}")
     public ResponseEntity<CommentResponseDTO> addComment(@PathVariable Long question_id,
@@ -114,13 +95,6 @@ public class QnaController {
         CommentResponseDTO addedComment = commentService.addCommentForQuestion(question_id, userEmail, commentAddRequestDTO);
         return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
     }
-
-    // 대댓글 추가
-//    @PostMapping("/post/replycomment/{questionId}/{parentCommentId}")
-//    public ResponseEntity<CommentResponseDTO> createReply(@PathVariable Long questionId, @PathVariable Long parentCommentId, @RequestBody CommentAddRequestDTO commentAddRequestDTO) {
-//        CommentResponseDTO addedComment = commentService.addComment(questionId, parentCommentId, commentAddRequestDTO);
-//        return new ResponseEntity<>(addedComment, HttpStatus.CREATED);
-//    }
 
     // 댓글 삭제
     @DeleteMapping("/comment/{questionId}/{commentId}")
