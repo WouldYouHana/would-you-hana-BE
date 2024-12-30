@@ -153,3 +153,11 @@ insert into scrap_question(customer_id, question_id) values (1, 3);
 
 insert into reservation(customer_id, id, rday_time, banker_name, branch_name) values(1, 1, '2024-12-26 15:00:00.000000', '문보경', '성수역지점');
 insert into reservation(customer_id, id, rday_time, banker_name, branch_name) values(1, 2, '2024-12-26 15:30:00.000000', '문보경', '성수역지점');
+
+insert into keyword(id, keyword, location) values(1, '주택청약종합저축', '성동구');
+insert into keyword(id, keyword, location) values(2, '퇴직연금', '성동구');
+insert into keyword(id, keyword, location) values(3, '하나원큐', '성동구');
+insert into keyword(id, keyword, location) values(4, '저축', '성동구');
+insert into keyword(id, keyword, location) values(5, '학자금대출', '광진구');
+insert into keyword(id, keyword, location) values(6, '적금', '광진구');
+insert into keyword(id, keyword, location) values(7, '학생증발급', '광진구');
