@@ -3,6 +3,7 @@ package com.hanaro.wouldyouhana.controller;
 import com.hanaro.wouldyouhana.dto.reservation.ReservationRequestDTO;
 import com.hanaro.wouldyouhana.dto.reservation.ReservationResponseDTO;
 import com.hanaro.wouldyouhana.service.ReservationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,15 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
+@RequiredArgsConstructor
 @RequestMapping("/reservation")
 public class ReservationController {
 
     private final ReservationService reservationService;
-
-    public ReservationController(ReservationService reservationService) {
-        this.reservationService = reservationService;
-    }
 
     // 예약 등록
     @PostMapping("/register")

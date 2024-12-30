@@ -13,6 +13,8 @@ import com.hanaro.wouldyouhana.dto.question.QnaListDTO;
 import com.hanaro.wouldyouhana.repository.CategoryRepository;
 import com.hanaro.wouldyouhana.repository.CustomerRepository;
 import com.hanaro.wouldyouhana.repository.PostRepository;
+import com.hanaro.wouldyouhana.repository.ImageRepository;
+import com.hanaro.wouldyouhana.domain.Image;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,24 +37,12 @@ public class PostService {
     private final CategoryRepository categoryRepository;
     private final FileStorageService fileStorageService;
     private final CustomerRepository customerRepository;
+    private final ImageRepository imageRepository;
 
     // 커뮤니티 게시글 작성
     public int addPost(PostAddRequestDTO postAddRequestDTO, List<MultipartFile> files) {
         // 카테고리 ID로 카테고리 객체 가져오기
         Category category = categoryRepository.findByName(postAddRequestDTO.getCategoryName());
-
-        // 업로드한 파일에 대한 s3 버킷 내 주소들를 저장
-        ArrayList<String> filePaths = new ArrayList<String>();
-
-        if (files != null) {
-
-            for (MultipartFile file : files) {
-
-                String filePath = fileStorageService.saveFile(file); // S3 버킷 내 저장된 이미지의 링크 반환
-                filePaths.add(filePath);
-
-            }
-        }
 
         Post newPost = Post.builder()
                 .location(postAddRequestDTO.getLocation())
@@ -59,11 +50,26 @@ public class PostService {
                 .title(postAddRequestDTO.getTitle())
                 .customerId(postAddRequestDTO.getCustomerId())
                 .content(postAddRequestDTO.getContent())
-                .createdAt(LocalDateTime.now())
-                .filePaths(filePaths)
+                .createdAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
                 .build();
 
-        postRepository.save(newPost);
+        Post savedPost = postRepository.save(newPost);
+
+        // 파일 처리
+        if (files != null && !files.isEmpty()) {
+            for (MultipartFile file : files) {
+                try {
+                    String fileUrl = fileStorageService.saveFile(file);
+                    Image image = Image.builder()
+                            .filePath(fileUrl)
+                            .post(savedPost)
+                            .build();
+                    imageRepository.save(image);
+                } catch (Exception e) {
+                    throw new RuntimeException("Failed to upload file to S3: " + file.getOriginalFilename(), e);
+                }
+            }
+        }
         return 1;
     }
 
@@ -75,27 +81,27 @@ public class PostService {
         // 카테고리 ID로 카테고리 객체 가져오기
         Category category = categoryRepository.findByName(postAddRequestDTO.getCategoryName());
 
-        List<String> filePaths = post.getFilePaths();
+        // 기존 이미지 삭제
+        imageRepository.deleteAllByPost_Id(postId);
 
         // 새로운 이미지 파일 처리
         if (files != null) {
             for (MultipartFile file : files) {
-                // 파일 시스템에 저장 로직 추가
-                String filePath = fileStorageService.saveFile(file); // 파일 저장 후 경로를 반환하는 메서드
-                filePaths.add(filePath);
+                String fileUrl = fileStorageService.saveFile(file);
+                Image image = Image.builder()
+                        .filePath(fileUrl)
+                        .post(post)
+                        .build();
+                imageRepository.save(image);
             }
         }
 
         post.setTitle(postAddRequestDTO.getTitle());
         post.setContent(postAddRequestDTO.getContent());
         post.setCategory(category);
-        post.setUpdatedAt(LocalDateTime.now());
-        post.setFilePaths(filePaths);
+        post.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
 
-        Post modifiedPost = postRepository.save(post);
-
-        return modifiedPost.getId();
-
+        return postRepository.save(post).getId();
     }
 
     // 커뮤니티 게시글 삭제
@@ -107,6 +113,11 @@ public class PostService {
                 .orElseThrow(() -> new EntityNotFoundException("Post not found"));
 
         Customer customer = customerRepository.findById(foundPost.getCustomerId()).get();
+
+        List<String> filePaths = imageRepository.findByPost_Id(postId)
+                .stream()
+                .map(Image::getFilePath)
+                .collect(Collectors.toList());
 
         List<CommentDTO> commentDTOS = foundPost.getComments().stream().map(comment ->
         {
@@ -134,6 +145,7 @@ public class PostService {
                 foundPost.getLikeCount(),
                 foundPost.getScrapCount(),
                 foundPost.getViewCount(),
+                filePaths,
                 commentDTOS
         );
     }
@@ -141,9 +153,14 @@ public class PostService {
     // 질문 글 목록 DTO(QnaListDTO) 만드는 공통 메서드
     // 질문 전체 목록, 카테고리별 질문 전체 목록, 고객별 질문 전체 목록에서 사용
     public List<PostListDTO> makePostListDTO(List<Post> fql) {
-
         List<PostListDTO> foundPostListDTO = fql.stream().map(post -> {
             Customer customer = customerRepository.findById(post.getCustomerId()).get();
+
+            // 이미지 URL 리스트 조회
+            List<String> filePaths = imageRepository.findByPost_Id(post.getId())
+                    .stream()
+                    .map(Image::getFilePath)
+                    .collect(Collectors.toList());
 
             PostListDTO postListDTO = new PostListDTO();
             postListDTO.setPostId(post.getId());
@@ -157,6 +174,7 @@ public class PostService {
             postListDTO.setLikeCount(post.getLikeCount());
             postListDTO.setScrapCount(post.getScrapCount());
             postListDTO.setViewCount(post.getViewCount());
+            postListDTO.setFilePaths(filePaths);
 
             return postListDTO;
         }).toList();
@@ -165,7 +183,7 @@ public class PostService {
 
     // 지역별 전체 게시글 조회
     public List<PostListDTO> getAllPosts(String location) {
-        List<Post> foundQuestionList = postRepository.findByLocation(location);
+        List<Post> foundQuestionList = postRepository.findByLocationOrderByCreatedAtDesc(location);
         return makePostListDTO(foundQuestionList);
     }
 

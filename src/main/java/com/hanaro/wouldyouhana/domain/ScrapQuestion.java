@@ -23,5 +23,4 @@ public class ScrapQuestion {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    // Getters and Setters
 }

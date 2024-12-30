@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class LikesScrapController {
 
@@ -26,9 +26,9 @@ public class LikesScrapController {
      * 좋아요 요청 (저장, 취소)
      * */
     @PostMapping("/post/dolike")
-    public ResponseEntity<String> likesRequest(@RequestBody LikesRequestDTO likesRequestDTO){
-        likesService.saveLikes(likesRequestDTO);
-        return ResponseEntity.ok("Likes Success");
+    public ResponseEntity<Long> likesRequest(@RequestBody LikesRequestDTO likesRequestDTO){
+        Long likeCount = likesService.saveLikes(likesRequestDTO);
+        return ResponseEntity.ok(likeCount);
     }
 
     /**
@@ -84,5 +84,25 @@ public class LikesScrapController {
         // 에러 메시지를 반환하거나 커스터마이징하여 응답
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    /**
+     * 커뮤니티 특정 게시글 스크랩 여부 조회
+     * */
+    @GetMapping("/my/qna/scrap/{customerId}/{questionId}")
+    public ResponseEntity<Boolean> getIsQuestionScrapChecked(@PathVariable Long customerId, @PathVariable Long questionId){
+
+        return ResponseEntity.ok(scrapService.isQuestionScrapChecked(customerId, questionId));
+    }
+
+    /**
+     * 커뮤니티 특정 게시글 스크랩 여부 조회
+     * */
+    @GetMapping("/my/post/scrap/{customerId}/{postId}")
+    public ResponseEntity<Boolean> getIsPostScrapChecked(@PathVariable Long customerId, @PathVariable Long postId){
+
+        return ResponseEntity.ok(scrapService.isPostScrapChecked(customerId, postId));
+    }
+
+
 
 }

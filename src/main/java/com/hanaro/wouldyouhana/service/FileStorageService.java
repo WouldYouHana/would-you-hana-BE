@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,16 +17,12 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class FileStorageService {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
     private final AmazonS3Client amazonS3Client;
-
-    public FileStorageService(AmazonS3Client amazonS3Client) {
-        this.amazonS3Client = amazonS3Client;
-
-    }
 
     @Value("${file.upload-dir}") // application.properties에서 경로를 가져옵니다.
     private String uploadDir;

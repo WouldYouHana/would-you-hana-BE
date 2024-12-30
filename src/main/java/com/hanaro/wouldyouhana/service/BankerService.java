@@ -1,6 +1,7 @@
 package com.hanaro.wouldyouhana.service;
 
 import com.hanaro.wouldyouhana.domain.Banker;
+import com.hanaro.wouldyouhana.domain.BranchLocationMapping;
 import com.hanaro.wouldyouhana.domain.Customer;
 import com.hanaro.wouldyouhana.dto.SpecializationResponseDTO;
 import com.hanaro.wouldyouhana.dto.banker.BankerListReturnDTO;
@@ -8,6 +9,8 @@ import com.hanaro.wouldyouhana.forSignIn.JwtToken;
 import com.hanaro.wouldyouhana.forSignIn.JwtTokenProvider;
 import com.hanaro.wouldyouhana.forSignIn.dto.CustomerSignInReturnDTO;
 import com.hanaro.wouldyouhana.repository.BankerRepository;
+import com.hanaro.wouldyouhana.repository.BranchLocationMappingRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -20,22 +23,17 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class BankerService {
 
     private final BankerRepository bankerRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private EmailService emailService;
-    private Map<String, String> verificationCodes = new HashMap<>();
+    private final EmailService emailService;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final BranchLocationMappingRepository branchLocationMappingRepository;
 
-    public BankerService(BankerRepository bankerRepository, BCryptPasswordEncoder passwordEncoder, AuthenticationManagerBuilder authenticationManagerBuilder, JwtTokenProvider jwtTokenProvider) {
-        this.bankerRepository = bankerRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.emailService = emailService;
-    }
+    private Map<String, String> verificationCodes = new HashMap<>();
 
     public Banker registerBanker(Banker banker) {
         // 비밀번호 암호화

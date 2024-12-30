@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,57 +31,63 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final CustomerRepository customerRepository;
     private final CategoryRepository categoryRepository;
-    private final CommentRepository commentRepository;
-    private final ImageRepository imageRepository;
     private final FileStorageService fileStorageService;
-    private final LikesRepository likesRepository;
-    private final AmazonS3Client amazonS3Client;
     private final AnswerRepository answerRepository;
     private final AnswerGoodRepository answerGoodRepository;
     private final BranchLocationMappingRepository branchLocationMappingRepository;
+    private final ImageRepository imageRepository;
 
     /**
      * 질문(게시글) 등록
      * */
+    @Transactional
     public QuestionAllResponseDTO addQuestion(QuestionAddRequestDTO questionAddRequestDTO, List<MultipartFile> files) {
 
         // 카테고리 ID로 카테고리 객체 가져오기
         Category category = categoryRepository.findByName(questionAddRequestDTO.getCategoryName());
 
         Customer customer = customerRepository.findById(questionAddRequestDTO.getCustomerId()).get();
-        // 업로드한 파일에 대한 s3 버킷 내 주소들를 저장
-        ArrayList<String> filePaths = new ArrayList<String>();
-
-        if (files != null) {
-
-            for (MultipartFile file : files) {
-
-                String filePath = fileStorageService.saveFile(file); // S3 버킷 내 저장된 이미지의 링크 반환
-                filePaths.add(filePath);
-
-//                Image image = Image.builder()
-//                        .filePath(filePath) // 파일 경로 설정
-//                        .question(savedQuestion) // 질문과 연결
-//                        .build();
-//                // 이미지 저장
-//                imageRepository.save(image);
-            }
-        }
-        // 질문 엔티티 생성
+        
+        // 먼저 Question 엔티티 생성 및 저장
         Question question = Question.builder()
                 .customerId(questionAddRequestDTO.getCustomerId())
                 .category(category)
                 .title(questionAddRequestDTO.getTitle())
                 .content(questionAddRequestDTO.getContent())
                 .location(questionAddRequestDTO.getLocation())
-                .createdAt(LocalDateTime.now())
-                .filePaths(filePaths)
+                .createdAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
                 .build();
 
         // 질문 저장
         Question savedQuestion = questionRepository.save(question);
 
-        // 최종적으로 반환할 DTO 생성
+        // 파일 처리
+        if (files != null && !files.isEmpty()) {
+            for (MultipartFile file : files) {
+                try {
+                    // S3에 파일 업로드하고 URL 받아오기
+                    String fileUrl = fileStorageService.saveFile(file);
+                    
+                    // Image 엔티티만 저장
+                    Image image = Image.builder()
+                        .filePath(fileUrl)
+                        .question(savedQuestion)
+                        .build();
+                    imageRepository.save(image);
+                    
+                } catch (Exception e) {
+                    // 실패 시 트랜잭션 롤백됨
+                    throw new RuntimeException("Failed to upload file to S3: " + file.getOriginalFilename(), e);
+                }
+            }
+        }
+
+        // 저장된 이미지 URL들 조회
+        List<String> fileUrls = imageRepository.findByQuestion_Id(savedQuestion.getId())
+                .stream()
+                .map(Image::getFilePath)
+                .collect(Collectors.toList());
+
         return new QuestionAllResponseDTO(
                 savedQuestion.getId(),
                 customer.getNickname(),
@@ -89,11 +96,11 @@ public class QuestionService {
                 savedQuestion.getContent(),
                 savedQuestion.getLocation(),
                 savedQuestion.getCreatedAt(),
-                savedQuestion.getUpdatedAt(), // 추가: 업데이트 시간
-                Integer.toUnsignedLong(0), // likeCount (초기값)
-                Integer.toUnsignedLong(0), // scrapCount (초기값)
-                Integer.toUnsignedLong(0), // viewCount (초기값)
-                filePaths
+                savedQuestion.getUpdatedAt(),
+                0L,
+                0L,
+                0L,
+                fileUrls
         );
     }
 
@@ -106,38 +113,30 @@ public class QuestionService {
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
         // 카테고리 ID로 카테고리 객체 가져오기
         Category category = categoryRepository.findByName(questionAddRequestDTO.getCategoryName());
-        Customer customer = customerRepository.findById(questionAddRequestDTO.getCustomerId()).get();
+        
         // 기존 이미지 삭제
-        //imageRepository.deleteAllByQuestionId(questionId);
-
-        List<String> filePaths = question.getFilePaths();
+        imageRepository.deleteAllByQuestion_Id(questionId);
 
         // 새로운 이미지 파일 처리
         if (files != null) {
             for (MultipartFile file : files) {
-                // 파일 시스템에 저장 로직 추가
-                String filePath = fileStorageService.saveFile(file); // 파일 저장 후 경로를 반환하는 메서드
-                filePaths.add(filePath);
-//                Image image = Image.builder()
-//                        .filePath(filePath) // 파일 경로 설정
-//                        .question(updatedQuestion) // 질문과 연결
-//                        .build();
-//                // 이미지 저장
-//                imageRepository.save(image);
+                String fileUrl = fileStorageService.saveFile(file);
+                Image image = Image.builder()
+                        .filePath(fileUrl)
+                        .question(question)
+                        .build();
+                imageRepository.save(image);
             }
         }
+
         // 질문 정보 수정
         question.setTitle(questionAddRequestDTO.getTitle());
         question.setContent(questionAddRequestDTO.getContent());
         question.setLocation(questionAddRequestDTO.getLocation());
         question.setCategory(category);
-        question.setUpdatedAt(LocalDateTime.now());
-        question.setFilePaths(filePaths);
+        question.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")));
 
-        // 질문 저장
-        Question modifiedQuestion = questionRepository.save(question);
-
-        return modifiedQuestion.getId();
+        return questionRepository.save(question).getId();
     }
 
     // 질문 삭제
@@ -149,6 +148,13 @@ public class QuestionService {
     public QuestionResponseDTO getOneQuestion(Long questionId) {
         Question foundQuestion = questionRepository.findById(questionId)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+        
+        // Image 엔티티로부터 파일 경로 리스트 가져오기
+        List<String> filePaths = imageRepository.findByQuestion_Id(questionId)
+                .stream()
+                .map(Image::getFilePath)
+                .collect(Collectors.toList());
+        
         Customer customer = customerRepository.findById(foundQuestion.getCustomerId()).get();
         //AnswerGood
         AnswerResponseDTO answerResponseDTO = answerRepository.findByQuestionId(questionId)
@@ -189,6 +195,7 @@ public class QuestionService {
                 foundQuestion.getLikeCount(),
                 foundQuestion.getScrapCount(),
                 foundQuestion.getViewCount(),
+                filePaths,
                 answerResponseDTO,
                 commentDTOS
         );

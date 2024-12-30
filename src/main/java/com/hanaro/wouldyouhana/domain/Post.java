@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Getter
@@ -39,7 +40,8 @@ public class Post {
     @JsonManagedReference // 순환 참조 방지
     private List<Comment> comments;
 
-    private List<String> filePaths;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Image> images = new ArrayList<>();
 
     // 조회수 증가
     public void incrementViewCount() {

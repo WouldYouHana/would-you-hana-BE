@@ -12,6 +12,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findByLocation(String location);
 
+    // location을 기준으로 최신순 (createdAt)으로 질문 목록을 가져오는 메서드
+    @Query("SELECT q FROM Post q WHERE q.location = :location ORDER BY q.createdAt DESC")
+    List<Post> findByLocationOrderByCreatedAtDesc(String location);
+
     List<Post> findByLocationAndCategoryId(String location, Long categoryId);
 
     // location을 기준으로 최신순 (createdAt)으로 질문 목록을 가져오는 메서드
