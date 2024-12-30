@@ -9,8 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "popular_keywords")
-public class PopularKeywords {
+@Table(name = "keyword")
+public class Keyword {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
