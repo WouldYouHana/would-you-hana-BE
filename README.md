@@ -7,7 +7,7 @@
 ![alt text](README_img/logo.png)
 
 ## 기술 스택
-
+- **"Java"**: "17"
 - **"Spring Boot"**: "^3.3.4"
   - **"Spring Security"**
   - **"Spring Data JPA"**
